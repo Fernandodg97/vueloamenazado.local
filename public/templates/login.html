@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ "Login"|gettext }}</title>
+    <!-- Vincular CSS de Bootstrap desde la carpeta bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                {% if session.error %}
+                <div class="alert alert-danger text-center" role="alert">
+                    {{ session.error }}
+                </div>
+                {% endif %}
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4>{{ "Iniciar sesión"|gettext }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Formulario de login -->
+                        <form action="login_process" method="post">
+                            <div class="form-group">
+                                <label for="username">{{ "Usuario"|gettext }}</label>
+                                <input type="text" id="username" name="username" class="form-control" required>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="password">{{ "Contraseña"|gettext }}</label>
+                                <input type="password" id="password" name="password" class="form-control" required>
+                            </div>
+                            <div class="form-group mt-4 d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary">{{ "Iniciar sesión"|gettext }}</button>
+                                <a href="register" class="btn btn-secondary">{{ "Registrarse"|gettext }}</a>
+                            </div>
+                        </form>
+                        <div class="form-group mt-3 text-center">
+                            <a href="forgot_password">{{ "¿Has olvidado tu contraseña?"|gettext }}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 text-center">
+                    <a href="?lang=es" class="btn btn-link">{{ "Español"|gettext }}</a>
+                    <a href="?lang=en" class="btn btn-link">{{ "English"|gettext }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vincular JS de Bootstrap desde la carpeta bootstrap -->
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

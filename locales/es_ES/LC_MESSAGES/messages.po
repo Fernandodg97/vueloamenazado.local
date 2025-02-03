@@ -1,0 +1,31 @@
+msgid "WikiAgapornis"
+msgstr "WikiAgapornis"
+
+msgid "Español"
+msgstr "Español"
+
+msgid "English"
+msgstr "Inglés"
+
+msgid "Hola mi nombre es,"
+msgstr "Hola mi nombre es,"
+
+msgid "Mi edad es de:"
+msgstr "Mi edad es de:"
+
+msgid "Login"
+msgstr "Iniciar sesión"
+
+msgid "Iniciar sesión"
+msgstr "Iniciar sesión"
+
+msgid "Usuario"
+msgstr "Usuario"
+
+msgid "Contraseña"
+msgstr "Contraseña"
+
+#Este no funciona :
+
+msgid "You've reached the end of Internet."
+msgstr "Has llegado al final de Internet."

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ "Registro"|gettext }}</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                {% if session.error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ session.error }}
+                </div>
+                {% endif %}
+                {% if session.success %}
+                <div class="alert alert-success" role="alert">
+                    {{ session.success }}
+                </div>
+                {% endif %}
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4>{{ "Crear cuenta"|gettext }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="register_process" method="post">
+                            <div class="form-group">
+                                <label for="username">{{ "Usuario"|gettext }}</label>
+                                <input type="text" id="username" name="username" class="form-control" required>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="email">{{ "Correo electrónico"|gettext }}</label>
+                                <input type="email" id="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="password">{{ "Contraseña"|gettext }}</label>
+                                <input type="password" id="password" name="password" class="form-control" required>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="confirm_password">{{ "Confirmar contraseña"|gettext }}</label>
+                                <input type="password" id="confirm_password" name="confirm_password"
+                                    class="form-control" required>
+                            </div>
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-primary btn-block">{{ "Registrarse"|gettext
+                                    }}</button>
+                            </div>
+                        </form>
+                        <div class="form-group mt-3 text-center">
+                            <a href="login">{{ "¿Ya tienes cuenta? Inicia sesión"|gettext }}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 text-center">
+                    <a href="?lang=es" class="btn btn-link">{{ "Español"|gettext }}</a>
+                    <a href="?lang=en" class="btn btn-link">{{ "English"|gettext }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+msgid "WikiAgapornis"
+msgstr "WikiAgapornis"
+
+msgid "Español"
+msgstr "Spanish"
+
+msgid "English"
+msgstr "English"
+
+msgid "Hola mi nombre es,"
+msgstr "Hello, my name is,"
+
+msgid "Mi edad es de:"
+msgstr "My age is:"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Iniciar sesión"
+msgstr "Log in"
+
+msgid "Usuario"
+msgstr "Username"
+
+msgid "Contraseña"
+msgstr "Password"
