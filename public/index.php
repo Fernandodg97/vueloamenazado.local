@@ -31,7 +31,11 @@ switch ($request) {
 
     case '/admin_dashboard':
         require __DIR__ . $viewDir . 'admin_dashboard.php';
-        break;      
+        break;
+
+    case '/pajaros':
+        require __DIR__ . $viewDir . 'cargar_pajaros.php';
+        break;    
     
     case '/register_process':
          require '../process/register_process.php';

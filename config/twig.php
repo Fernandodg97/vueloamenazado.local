@@ -7,10 +7,13 @@ use Twig\TwigFilter;
 // Iniciamos la sesión
 session_start();
 
+require_once '../vendor/autoload.php';
+
 //Cargamos twig
 $loader = new \Twig\Loader\FilesystemLoader('templates');
 $twig = new \Twig\Environment($loader, [
     'cache' => false,
+    'autoescape' => false, // Permitir PHP en la plantilla
 ]);
 
 //Filtro para usar gettext {{ "Texto a traducir"|gettext }}
@@ -32,3 +35,5 @@ function clearSessionMessages() {
     unset($_SESSION['error'], $_SESSION['success']);
 }
 clearSessionMessages();
+
+return $twig;
