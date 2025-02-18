@@ -16,16 +16,65 @@ msgstr "Mi edad es de:"
 msgid "Login"
 msgstr "Iniciar sesión"
 
-msgid "Iniciar sesión"
-msgstr "Iniciar sesión"
-
 msgid "Usuario"
 msgstr "Usuario"
 
 msgid "Contraseña"
 msgstr "Contraseña"
 
-#Este no funciona :
-
 msgid "You've reached the end of Internet."
 msgstr "Has llegado al final de Internet."
+
+msgid "vueloamenzado"
+msgstr "Vuelo Amenazado"
+
+msgid "Detalles del Pájaro"
+msgstr "Detalles del Pájaro"
+
+msgid "Nombre Científico"
+msgstr "Nombre Científico"
+
+msgid "No hay audio disponible."
+msgstr "No hay audio disponible."
+
+msgid "Datos"
+msgstr "Datos"
+
+msgid "Estado de Conservación"
+msgstr "Estado de Conservación"
+
+msgid "Dieta"
+msgstr "Dieta"
+
+msgid "Población Europea"
+msgstr "Población Europea"
+
+msgid "Pluma"
+msgstr "Pluma"
+
+msgid "Longitud"
+msgstr "Longitud"
+
+msgid "Peso"
+msgstr "Peso"
+
+msgid "Envergadura"
+msgstr "Envergadura"
+
+msgid "Hábitats"
+msgstr "Hábitats"
+
+msgid "Avistamientos"
+msgstr "Avistamientos"
+
+msgid "Volver a la lista de pájaros"
+msgstr "Volver a la lista de pájaros"
+
+msgid "No se han encontrado avistamientos."
+msgstr "No se han encontrado avistamientos."
+
+msgid "No hay datos disponibles."
+msgstr "No hay datos disponibles."
+
+msgid "No se encontraron registros"
+msgstr "No se encontraron registros"

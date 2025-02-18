@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ "Detalles del Pájaro" | gettext }} - {{ pajaro.nombre }}</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      /* ... tus estilos ... */
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5" id="birdDetailsContainer">
+      <div class="d-flex justify-content-between">
+        <a href="?lang=es" class="btn btn-primary">{{ "Español" | gettext }}</a>
+        <a href="?lang=en" class="btn btn-primary">{{ "English" | gettext }}</a>
+      </div>
+
+      <div class="mt-4" id="birdNameContainer"></div>
+      <div class="card mb-4" id="birdCardContainer"></div>
+      <div class="section-title">{{ "Datos" | gettext }}</div>
+      <ul id="birdDataContainer"></ul>
+      <div class="section-title">{{ "Avistamientos" | gettext }}</div>
+      <ul id="sightingsContainer"></ul>
+
+      <div class="text-center mt-4">
+        <a href="/" class="btn btn-secondary">{{ "Volver a la lista de pájaros" | gettext }}</a>
+      </div>
+    </div>
+
+    <script>
+      const birdId = window.location.pathname.split("/")[2];  // Obtener el ID del pájaro desde la URL
+      const apiUrl = `/api/pajaro/${birdId}`;  // La URL de la API para obtener los detalles del pájaro
+
+      // Función para cargar los datos desde la API
+      async function loadBirdDetails() {
+        try {
+          const response = await fetch(apiUrl);
+          const data = await response.json();
+
+          if (data.error) {
+            alert(data.error); // En caso de que la API devuelva un error
+            return;
+          }
+
+          // Actualizar la interfaz con los datos recibidos
+          document.getElementById('birdNameContainer').innerHTML = `
+            <h1 class="display-4">${data.pajaro.nombre}</h1>
+            <p class="lead">${{ "Nombre Científico" | gettext }}: <i>${data.pajaro.nombre_cientifico}</i></p>
+          `;
+
+          // Detalles del pájaro
+          document.getElementById('birdCardContainer').innerHTML = `
+            <img class="card-img-top" src="${data.pajaro.imagen}" alt="Imagen de ${data.pajaro.nombre}">
+            <div class="card-body">
+              <p class="card-text">${data.pajaro.como_identificar}</p>
+              ${data.pajaro.canto_audio ? `
+                <audio controls>
+                  <source src="${data.pajaro.canto_audio}" type="audio/mpeg" />
+                  Tu navegador no soporta el elemento de audio.
+                </audio>
+              ` : `<p>{{ "No hay audio disponible." | gettext }}</p>`}
+            </div>
+          `;
+
+          // Datos del pájaro
+          const birdDataList = document.getElementById('birdDataContainer');
+          if (data.datos) {
+            birdDataList.innerHTML = `
+              <li><strong>{{ "Estado de Conservación" | gettext }}:</strong> ${data.datos.estado_conservacion}</li>
+              <li><strong>{{ "Dieta" | gettext }}:</strong> ${data.datos.dieta}</li>
+              <li><strong>{{ "Población Europea" | gettext }}:</strong> ${data.datos.poblacion_europea}</li>
+              <li><strong>{{ "Pluma" | gettext }}:</strong> ${data.datos.pluma}</li>
+              <li><strong>{{ "Longitud" | gettext }}:</strong> ${data.datos.longitud}</li>
+              <li><strong>{{ "Peso" | gettext }}:</strong> ${data.datos.peso}</li>
+              <li><strong>{{ "Envergadura" | gettext }}:</strong> ${data.datos.envergadura}</li>
+              <li><strong>{{ "Hábitats" | gettext }}:</strong> ${data.datos.habitats}</li>
+            `;
+          } else {
+            birdDataList.innerHTML = "<li>No hay datos disponibles.</li>";
+          }
+
+          // Avistamientos
+          const sightingsList = document.getElementById('sightingsContainer');
+          if (data.avistamientos.length > 0) {
+            sightingsList.innerHTML = data.avistamientos.map(avistamiento => `
+              <li><strong>${avistamiento.nombre}</strong> - ${avistamiento.ubicacion}</li>
+            `).join('');
+          } else {
+            sightingsList.innerHTML = "<li>No se han encontrado avistamientos.</li>";
+          }
+        } catch (error) {
+          console.error("Error al cargar los detalles del pájaro:", error);
+          alert("Error al cargar los datos.");
+        }
+      }
+
+      // Llamar a la función para cargar los detalles del pájaro al cargar la página
+      window.onload = loadBirdDetails;
+    </script>
+
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -24,3 +24,57 @@ msgstr "Username"
 
 msgid "Contraseña"
 msgstr "Password"
+
+msgid "vueloamenzado"
+msgstr "Endangered Flight"
+
+msgid "Detalles del Pájaro"
+msgstr "Bird Details"
+
+msgid "Nombre Científico"
+msgstr "Scientific Name"
+
+msgid "No hay audio disponible."
+msgstr "No audio available."
+
+msgid "Datos"
+msgstr "Data"
+
+msgid "Estado de Conservación"
+msgstr "Conservation Status"
+
+msgid "Dieta"
+msgstr "Diet"
+
+msgid "Población Europea"
+msgstr "European Population"
+
+msgid "Pluma"
+msgstr "Feather"
+
+msgid "Longitud"
+msgstr "Length"
+
+msgid "Peso"
+msgstr "Weight"
+
+msgid "Envergadura"
+msgstr "Wingspan"
+
+msgid "Hábitats"
+msgstr "Habitats"
+
+msgid "Avistamientos"
+msgstr "Sightings"
+
+msgid "Volver a la lista de pájaros"
+msgstr "Back to Bird List"
+
+msgid "No se han encontrado avistamientos."
+msgstr "No sightings found."
+
+msgid "No hay datos disponibles."
+msgstr "No data available."
+
+msgid "No se encontraron registros"
+msgstr "No records found"

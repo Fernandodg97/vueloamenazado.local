@@ -19,12 +19,21 @@
         th {
             background-color: #f2f2f2;
         }
-        img {
+        /* img {
             max-width: 200px;
             height: auto;
-        }
+        } */
         audio {
             width: 200px;
+        }
+        .card-img {
+        width: 100%;
+        }
+        .card-body {
+        text-align: center;
+        }
+        .card {
+            cursor: pointer;
         }
     </style>
   </head>
@@ -41,7 +50,31 @@
         </h1>
         <p class="lead">{{ "Mi edad es de:" | gettext }} {{ age }}</p>
       </div>
-      <div>
+
+      <div class="row">
+        {% for pajaro in pajaros %}
+          <div class="col-md-4 mb-4">
+            <!-- Envolvemos la tarjeta en un enlace para redirigir -->
+            <a href="/pajaro/{{ pajaro.id_pajaro }}" class="card">
+              {% if pajaro.imagen %}
+                <img src="{{ pajaro.imagen }}" alt="Imagen de {{ pajaro.nombre }}" class="card-img-top">
+              {% else %}
+                <div class="card-img-top" style="height: 200px; background-color: #ccc;">Sin imagen</div>
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">{{ pajaro.nombre }}</h5>
+                <p class="card-text"><i>{{ pajaro.nombre_cientifico }}</i></p>
+              </div>
+            </a>
+          </div>
+        {% else %}
+          <div class="col-12">
+            <p>No se encontraron registros</p>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- <div>
         <h1>Lista de Pájaros</h1>
         <table>
           <tr>
@@ -85,7 +118,7 @@
           </tr>
           {% endfor %}
         </table>
-      </div>
+      </div> -->
     </div>
     <!-- Vincular JS de Bootstrap desde la carpeta bootstrap -->
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
