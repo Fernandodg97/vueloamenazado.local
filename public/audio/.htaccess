@@ -1,0 +1,5 @@
+# Denegar el acceso a la carpeta images
+<FilesMatch ".*">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>

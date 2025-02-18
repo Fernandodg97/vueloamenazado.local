@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ "vueloamenzado" | gettext }}</title>
+    <!-- Vincular CSS de Bootstrap desde la carpeta bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        img {
+            max-width: 200px;
+            height: auto;
+        }
+        audio {
+            width: 200px;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="d-flex justify-content-between">
+        <a href="?lang=es" class="btn btn-primary">{{ "Español" | gettext }}</a>
+        <a href="?lang=en" class="btn btn-primary">{{ "English" | gettext }}</a>
+      </div>
+
+      <div class="mt-4">
+        <h1 class="display-4">
+          {{ "Hola mi nombre es," | gettext }} {{ name }}
+        </h1>
+        <p class="lead">{{ "Mi edad es de:" | gettext }} {{ age }}</p>
+      </div>
+      <div>
+        <h1>Lista de Pájaros</h1>
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Nombre Científico</th>
+            <th>Grupo</th>
+            <th>Imagen</th>
+            <th>Cómo Identificar</th>
+            <th>Canto</th>
+          </tr>
+          {% for pajaro in pajaros %}
+          <tr>
+            <td>{{ pajaro.id_pajaro }}</td>
+            <td>{{ pajaro.nombre }}</td>
+            <td>
+              <i>{{ pajaro.nombre_cientifico }}</i>
+            </td>
+            <td>{{ pajaro.grupo ?: 'N/A' }}</td>
+            <td>
+              {% if pajaro.imagen %}
+              <img
+                src="{{ pajaro.imagen }}"
+                alt="Imagen de {{ pajaro.nombre }}"
+              />
+              {% else %} Sin imagen {% endif %}
+            </td>
+            <td>{{ pajaro.como_identificar | nl2br }}</td>
+            <td>
+              {% if pajaro.canto_audio %}
+              <audio controls>
+                <source src="{{ pajaro.canto_audio }}" type="audio/mpeg" />
+                Tu navegador no soporta el elemento de audio.
+              </audio>
+              {% else %} Sin audio {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="7">No se encontraron registros</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+    <!-- Vincular JS de Bootstrap desde la carpeta bootstrap -->
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
