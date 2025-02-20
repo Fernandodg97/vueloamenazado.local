@@ -26,9 +26,9 @@ try {
 $twig = require_once __DIR__ . '/../../config/twig.php';
 
 if (empty($pajaros)) {
-    error_log("⚠️ No hay datos en la variable \$pajaros.");
+    error_log("No hay datos en la variable \$pajaros.");
 } else {
-    error_log("✅ Se encontraron " . count($pajaros) . " registros.");
+    error_log("Se encontraron " . count($pajaros) . " registros.");
 }
 
 // ---- Variables Twig ----

@@ -1,5 +1,10 @@
-# Denegar el acceso a la carpeta images
-<FilesMatch ".*">
-    Order Allow,Deny
-    Deny from all
-</FilesMatch>
+# Evita la indexación de la carpeta pero permite acceder a los archivos
+Options -Indexes
+
+# Indica a los motores de búsqueda que no indexen el contenido de esta carpeta
+Header set X-Robots-Tag "noindex, nofollow"
+
+# Redirige el acceso directo a la carpeta a otra URL
+RewriteEngine On
+RewriteCond %{REQUEST_URI} /audio/$
+RewriteRule ^.*$ http://www.vueloamenazado.local/404 [R=301,L]
