@@ -14,8 +14,8 @@ namespace Twig\Node;
 use Twig\Attribute\YieldReady;
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;
-use Twig\Node\Expression\NameExpression;
 use Twig\Node\Expression\Variable\AssignTemplateVariable;
+use Twig\Node\Expression\Variable\ContextVariable;
 
 /**
  * Represents an import node.
@@ -25,12 +25,9 @@ use Twig\Node\Expression\Variable\AssignTemplateVariable;
 #[YieldReady]
 class ImportNode extends Node
 {
-    /**
-     * @param bool $global
-     */
     public function __construct(AbstractExpression $expr, AbstractExpression|AssignTemplateVariable $var, int $lineno)
     {
-        if (!\is_bool(\func_num_args() > 3)) {
+        if (\func_num_args() > 3) {
             trigger_deprecation('twig/twig', '3.15', \sprintf('Passing more than 3 arguments to "%s()" is deprecated.', __METHOD__));
         }
 
@@ -47,7 +44,7 @@ class ImportNode extends Node
     {
         $compiler->subcompile($this->getNode('var'));
 
-        if ($this->getNode('expr') instanceof NameExpression && '_self' === $this->getNode('expr')->getAttribute('name')) {
+        if ($this->getNode('expr') instanceof ContextVariable && '_self' === $this->getNode('expr')->getAttribute('name')) {
             $compiler->raw('$this');
         } else {
             $compiler

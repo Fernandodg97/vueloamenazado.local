@@ -1,0 +1,25 @@
+RewriteEngine On
+RewriteBase /api/
+RewriteRule ^index\\.php$ - [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /api/index.php [QSA,L]
+
+# Activa el motor de reescritura de URL
+#RewriteEngine On
+
+# Establece la base para las reglas de reescritura a "/api/"
+#RewriteBase /api/
+
+# Si la solicitud es exactamente para "index.php", no se hace ninguna reescritura (el guion "-" significa no cambiar nada)
+#RewriteRule ^index\\.php$ - [QSA,L]
+
+# Si la solicitud no corresponde a un archivo físico existente, pasa a la siguiente condición
+#RewriteCond %{REQUEST_FILENAME} !-f
+
+# Si la solicitud no corresponde a un directorio físico existente, pasa a la siguiente regla
+#RewriteCond %{REQUEST_FILENAME} !-d
+
+# Reescribe cualquier solicitud que no coincida con un archivo o directorio físico a "/api/index.php"
+# [QSA] asegura que los parámetros de la consulta sean añadidos a la URL reescrita, y [L] indica que esta es la última regla que debe aplicarse
+#RewriteRule . /api/index.php [QSA,L]

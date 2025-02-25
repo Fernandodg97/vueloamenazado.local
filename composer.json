@@ -1,4 +1,7 @@
 {
+    "autoload": {
+        "classmap": ["src/"]
+      },
     "require": {
         "twig/twig": "^3.15",
         "twbs/bootstrap": "^5.3"
