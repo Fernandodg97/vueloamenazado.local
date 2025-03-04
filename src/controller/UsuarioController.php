@@ -1,6 +1,6 @@
 <?php
 
-class ApiController
+class UsuarioController
 {
 
     const OBJECT = 1;
@@ -282,125 +282,6 @@ class ApiController
             echo json_encode(['status' => 'error', 'message' => 'Error al eliminar en la base de datos: ' . $error->getMessage()]);
         }
     }
-
-    // ### Pajaros ### /
-
-    // Devuelve por GET todos los pajaros /
-
-    public static function getPajaro($mode = self::OBJECT)
-    {
-        try {
-
-            $sql = "SELECT * FROM Pajaro WHERE 1";
-
-            $statement = (new self)->connection->prepare($sql);
-            $statement->setFetchMode(PDO::FETCH_ASSOC);
-            $statement->execute();
-
-            $result = $statement->fetchAll();
-
-            if ($mode == self::OBJECT) {
-                return $result;
-            } else if ($mode == self::JSON) {
-                return json_encode($result, JSON_PRETTY_PRINT);
-            }
-
-        } catch (PDOException $error) {
-            echo $sql . "<br>" . $error->getMessage();
-        }
-    }
-
-    // Añade por POST los pajaros nuevos /
-
-    // Devuelve por GET el pajaro seleccionado por id /
-
-    public static function getPajaroId($id, $mode = self::OBJECT)
-    {
-        try {
-            $sql = "SELECT * FROM Pajaro WHERE id_pajaro = :id";
-
-            $statement = (new self)->connection->prepare($sql);
-            $statement->bindValue(":id", $id);
-            $statement->setFetchMode(PDO::FETCH_ASSOC);
-            $statement->execute();
-
-            $result = $statement->fetch();
-
-            // Verificar si se encontró un usuario /
-            if ($result) {
-                if ($mode == self::OBJECT) {
-                    return $result;
-                } else if ($mode == self::JSON) {
-                    return json_encode($result, JSON_PRETTY_PRINT);
-                }
-            } else {
-                return json_encode(['status' => 'error', 'message' => 'Usuario no encontrado'], JSON_PRETTY_PRINT);
-            }
-
-        } catch (PDOException $error) {
-            echo $sql . "<br>" . $error->getMessage();
-        }
-    }
-
-    // Actualiza por PATCH el pajaro seleccionado por id /
-
-    // Elimina por DELETE el pajaro seleccionado por id /
-
-    public static function deletePajaroById($id)
-    {
-        try {
-            // Define la consulta SQL para eliminar un usuario por ID /
-            $sql = "DELETE FROM Pajaro WHERE id_pajaro = :id";
-
-            // Prepara la consulta PDO /
-            $statement = (new self)->connection->prepare($sql);
-
-            // Asignar el valor del ID con bindValue /
-            $statement->bindValue(':id', $id);
-
-            // Ejecutar la consulta y verificar el resultado /
-            if ($statement->execute()) {
-                echo json_encode(['status' => 'success', 'message' => 'Usuario eliminado correctamente.']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el usuario.']);
-            }
-
-        } catch (PDOException $error) {
-            // Captura cualquier error que ocurra durante la ejecución /
-            echo json_encode(['status' => 'error', 'message' => 'Error al eliminar en la base de datos: ' . $error->getMessage()]);
-        }
-    }
-
-    // ### Datos ### /
-
-    // Devuelve por GET todos los detalles del pajaro seleccionado por id /
-
-    // Añade por POST detalles del pajaro /
-
-    // Actualiza por PATCH los detalles del pajaro seleccionado por id /
-
-    // Elimina por DELETE los detalles del pajaro seleccionado por id /
-
-
-    // ### Lugares ### /
-
-    // Devuelve por GET todos los Lugares del pajaro seleccionado por id /
-
-    // Añade por POST Lugares /
-
-    // Actualiza por PATCH los Lugares del pajaro seleccionado por id /
-
-    // Elimina por DELETE los detalles del pajaro seleccionado por id /
-
-
-    // ### Avistamientos ### /
-
-    // Devuelve por GET todos los Avistamientos seleccionado por id pajaro /
-
-    // Añade por POST los Avistamientos /
-
-    // Actualiza por PATCH los Avistamientos seleccionado por id pajaro y id lugar/
-
-    // Elimina por DELETE los Avistamientos seleccionado por id pajaro y id lugar/
+  
 }
 

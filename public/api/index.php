@@ -57,52 +57,81 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
         echo json_encode(["error" => "Unauthorized"]);
         exit();
 
+    // ### Usuario ### /    
+
     case 'usuario': // Si la solicitud está relacionada con "usuario"
         if (!empty($chunks[3])) { // Si hay un cuarto segmento en la URI, se asume que es un ID de usuario
             $userId = $chunks[3];
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 // Llama al método para obtener los datos de un usuario específico
-                echo ApiController::getLinkId($userId, ApiController::JSON);
+                echo UsuarioController::getLinkId($userId, UsuarioController::JSON);
             } elseif ($_SERVER["REQUEST_METHOD"] == "PATCH") {
                 // Llama al método para actualizar los datos de un usuario
-                echo ApiController::patchLinkIdUpdate($userId, ApiController::JSON);
+                echo UsuarioController::patchLinkIdUpdate($userId, UsuarioController::JSON);
             } elseif ($_SERVER["REQUEST_METHOD"] == "DELETE") {
                 // Llama al método para eliminar un usuario
-                echo ApiController::deleteUserById($userId);
+                echo UsuarioController::deleteUserById($userId);
             }
         } else { // Si no hay un ID de usuario en la URI
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
-                print_r("GET usuarios");
                 // Llama al método para obtener todos los usuarios
-                echo ApiController::getLinks(ApiController::JSON);
+                echo UsuarioController::getLinks(UsuarioController::JSON);
             } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Llama al método para crear un nuevo usuario
-                echo ApiController::postNewUser(ApiController::JSON);
+                echo UsuarioController::postNewUser(UsuarioController::JSON);
             }
         }
         exit();
 
+    // ### Pajaro ### /
+
     case 'pajaro':
         if (!empty($chunks[3])) {
-            $userId = $chunks[3];
+            $pajaroId = $chunks[3];
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 // Llama al método para obtener los datos de un pajaro específico
-                echo ApiController::getPajaroId($userId, ApiController::JSON);
+                echo PajaroController::getPajaroId($pajaroId, PajaroController::JSON);
             } elseif ($_SERVER["REQUEST_METHOD"] == "PATCH") {
                 // Llama al método para actualizar los datos de un pajaro
-                echo ApiController::patchPajaroIdUpdate($userId, ApiController::JSON);
+                echo PajaroController::patchPajaroIdUpdate($pajaroId, PajaroController::JSON);
             } elseif ($_SERVER["REQUEST_METHOD"] == "DELETE") {
                 // Llama al método para eliminar un pajaro
-                echo ApiController::deletePajaroById($userId);
+                echo PajaroController::deletePajaroById($pajaroId);
             }
         }
         else{
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 // Llama al método para obtener todos los pajaros
-                echo ApiController::getPajaro(ApiController::JSON);
+                echo PajaroController::getPajaro(PajaroController::JSON);
             } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Llama al método para crear un nuevo pajaro
-                //echo ApiController::postNewPajaro(ApiController::JSON);
+                echo PajaroController::postNewPajaro(PajaroController::JSON);
+            }
+        }
+        exit();
+
+    // ### Datos ### /
+    case 'datos':
+        if (!empty($chunks[3])) {
+            $pajaroId = $chunks[3];
+            if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                // Llama al método para obtener los datos de un pajaro específico
+                echo DatosController::getDatosId($pajaroId, DatosController::JSON);
+            } elseif ($_SERVER["REQUEST_METHOD"] == "PATCH") {
+                // Llama al método para actualizar los datos de un pajaro
+                echo DatosController::patchDatosIdUpdate($pajaroId, DatosController::JSON);
+            } elseif ($_SERVER["REQUEST_METHOD"] == "DELETE") {
+                // Llama al método para eliminar un pajaro
+                echo DatosController::deleteDatosById($pajaroId);
+            }
+        }
+        else{
+            if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                // Llama al método para obtener todos los pajaros
+                echo DatosController::getDatos(DatosController::JSON);
+            } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // Llama al método para crear un nuevo pajaro
+                echo DatosController::postNewDatos(DatosController::JSON);
             }
         }
         exit();
