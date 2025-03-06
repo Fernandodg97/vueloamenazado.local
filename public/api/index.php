@@ -86,7 +86,20 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
     // ### Pajaro ### /
 
     case 'pajaro':
-        if (!empty($chunks[3])) {
+        // ### Avistamientos de pajaro ### /
+        if(!empty($chunks[4])){
+            $pajaroId = $chunks[3];
+            if ($_SERVER["REQUEST_METHOD"] == "GET" && $chunks[4] == "avistamientos") {
+                // Llama al método para obtener los datos de un pajaro específico
+                echo AvistamientosController::getAvistamientosId($pajaroId, AvistamientosController::JSON);
+            } 
+            //else if($_SERVER["REQUEST_METHOD"] == "GET" && $chunks[4] == "lugares") {
+            //      //Llama al método para obtener los datos de un pajaro específico
+            //     echo LugaresController::getLugaresId($pajaroId, LugaresController::JSON);
+            // }
+
+        }
+        else if (!empty($chunks[3])) {
             $pajaroId = $chunks[3];
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 // Llama al método para obtener los datos de un pajaro específico
@@ -113,16 +126,16 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
     // ### Datos ### /
     case 'datos':
         if (!empty($chunks[3])) {
-            $pajaroId = $chunks[3];
+            $datosId = $chunks[3];
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 // Llama al método para obtener los datos de un pajaro específico
-                echo DatosController::getDatosId($pajaroId, DatosController::JSON);
+                echo DatosController::getDatosId($datosId, DatosController::JSON);
             } elseif ($_SERVER["REQUEST_METHOD"] == "PATCH") {
                 // Llama al método para actualizar los datos de un pajaro
-                echo DatosController::patchDatosIdUpdate($pajaroId, DatosController::JSON);
+                echo DatosController::patchDatosIdUpdate($datosId, DatosController::JSON);
             } elseif ($_SERVER["REQUEST_METHOD"] == "DELETE") {
                 // Llama al método para eliminar un pajaro
-                echo DatosController::deleteDatosById($pajaroId);
+                echo DatosController::deleteDatosById($datosId);
             }
         }
         else{
@@ -132,6 +145,66 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
             } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Llama al método para crear un nuevo pajaro
                 echo DatosController::postNewDatos(DatosController::JSON);
+            }
+        }
+        exit();
+
+    // ### Lugares ### /
+    case 'lugares':
+        // ### Avistamientos de pajaro ### /
+        if(!empty($chunks[4])){
+            $lugarId = $chunks[3];
+            if ($_SERVER["REQUEST_METHOD"] == "GET" && $chunks[4] == "pajaros") {
+                // Llama al método para obtener los pajaros de ese lugar
+                echo AvistamientosController::getAvistamientosIdLugar($lugarId, AvistamientosController::JSON);
+            }
+        }
+        else if (!empty($chunks[3])) {
+            $lugarId = $chunks[3];
+            if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                // Llama al método para obtener los datos de un pajaro específico
+                echo LugaresController::getLugaresId($lugarId, LugaresController::JSON);
+            } elseif ($_SERVER["REQUEST_METHOD"] == "PATCH") {
+                // Llama al método para actualizar los datos de un pajaro
+                echo LugaresController::patchLugaresIdUpdate($lugarId, LugaresController::JSON);
+            } elseif ($_SERVER["REQUEST_METHOD"] == "DELETE") {
+                // Llama al método para eliminar un pajaro
+                echo LugaresController::deleteLugaresById($lugarId);
+            }
+        }
+        else{
+            if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                // Llama al método para obtener todos los pajaros
+                echo LugaresController::getLugares(LugaresController::JSON);
+            } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // Llama al método para crear un nuevo pajaro
+                echo LugaresController::postNewLugares(LugaresController::JSON);
+            }
+        }
+        exit();
+
+    // ### Avistamientos ### /
+    case 'avistamientos':
+        if (!empty($chunks[3])) {
+            $avistamientoId = $chunks[3];
+            if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                // Llama al método para obtener los datos de un pajaro específico
+                echo AvistamientosController::getAvistamientosId($avistamientoId, AvistamientosController::JSON);
+            } elseif ($_SERVER["REQUEST_METHOD"] == "PATCH") {
+                // Llama al método para actualizar los datos de un pajaro
+                echo AvistamientosController::patchAvistamientosIdUpdate($avistamientoId, AvistamientosController::JSON);
+            } elseif ($_SERVER["REQUEST_METHOD"] == "DELETE") {
+                // Llama al método para eliminar un pajaro
+                echo AvistamientosController::deleteAvistamientosById($avistamientoId);
+            }
+        }
+        else{
+            if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                // Llama al método para obtener todos los pajaros
+                echo AvistamientosController::getAvistamientos(AvistamientosController::JSON);
+            } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // Llama al método para crear un nuevo pajaro
+                echo AvistamientosController::postNewAvistamientos(AvistamientosController::JSON);
             }
         }
         exit();

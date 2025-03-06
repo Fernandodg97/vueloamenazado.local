@@ -1,6 +1,6 @@
 <?php
 
-class PajaroController
+class LugaresController
 {
 
     // ### Configuracion ### /
@@ -14,15 +14,15 @@ class PajaroController
         $this->connection = DatabaseController::connect();
     }
 
-    // ### Pajaros ### /
+    // ### Lugares ### /
 
-    // Devuelve por GET todos los pajaros /
+    // Devuelve por GET todos los Lugares
 
-    public static function getPajaro($mode = self::OBJECT)
+    public static function getLugares($mode = self::OBJECT)
     {
         try {
 
-            $sql = "SELECT * FROM Pajaro WHERE 1";
+            $sql = "SELECT * FROM Lugares WHERE 1";
 
             $statement = (new self)->connection->prepare($sql);
             $statement->setFetchMode(PDO::FETCH_ASSOC);
@@ -33,7 +33,7 @@ class PajaroController
             if ($mode == self::OBJECT) {
                 return $result;
             } else if ($mode == self::JSON) {
-                return json_encode($result, JSON_PRETTY_PRINT);
+                return json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             }
 
         } catch (PDOException $error) {
@@ -41,75 +41,11 @@ class PajaroController
         }
     }
 
-    // Añade por POST los pajaros nuevos /
-    public static function postNewPajaro($mode)
-    {
-        // Recibe el JSON enviado en la solicitud HTTP
-        $input = file_get_contents('php://input');
-        
-        // Decodifica el JSON en un array asociativo
-        $data = json_decode($input, true);
-
-        // Verificar si la decodificación fue exitosa
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            // Si hay un error en el JSON, devolver un mensaje de error
-            echo json_encode(['status' => 'error', 'message' => 'Formato JSON inválido']);
-            return;
-        }
-
-        // Definir los campos requeridos para la creación del usuario
-        $requiredFields = ['nombre', 'nombre_cientifico', 'grupo', 'imagen', 'como_identificar', 'canto_audio'];
-        $missingFields = [];
-
-        // Verificar que todos los campos necesarios están presentes en el JSON recibido
-        foreach ($requiredFields as $field) {
-            if (!isset($data[$field])) {
-                // Si falta algún campo, agregarlo a la lista de campos faltantes
-                $missingFields[] = $field;
-            }
-        }
-
-        // Si hay campos faltantes, devolver un mensaje específico con los nombres de los campos ausentes
-        if (!empty($missingFields)) {
-            echo json_encode(['status' => 'error', 'message' => 'Faltan campos requeridos: ' . implode(', ', $missingFields)]);
-            return;
-        }
-
-        try {
-            // Definir la consulta SQL para insertar un nuevo usuario en la base de datos
-            $sql = "INSERT INTO Pajaro (nombre, nombre_cientifico, grupo, imagen, como_identificar, canto_audio) VALUES (:nombre, :nombre_cientifico, :grupo, :imagen, :como_identificar, :canto_audio)";
-
-            // Preparar la consulta SQL utilizando PDO
-            $statement = (new self)->connection->prepare($sql);
-
-            // Asignar los valores de los parámetros en la consulta SQL
-            $statement->bindValue(':nombre', $data['nombre']);
-            $statement->bindValue(':nombre_cientifico', $data['nombre_cientifico']);
-            $statement->bindValue(':grupo', $data['grupo']); 
-            $statement->bindValue(':imagen', $data['imagen']);
-            $statement->bindValue(':como_identificar', $data['como_identificar']);
-            $statement->bindValue(':canto_audio', ['canto_audio']);
-
-            // Ejecutar la consulta SQL y verificar si la inserción fue exitosa
-            if ($statement->execute()) {
-                // Si la inserción fue exitosa, devolver un mensaje de éxito
-                echo json_encode(['status' => 'success', 'message' => 'Pajaro creado correctamente.']);
-            } else {
-                // Si hubo un problema al insertar, devolver un mensaje de error
-                echo json_encode(['status' => 'error', 'message' => 'Error al insertar el pajaro.']);
-            }
-
-        } catch (PDOException $error) {
-            // Capturar cualquier error que ocurra durante la ejecución de la consulta SQL
-            echo json_encode(['status' => 'error', 'message' => 'Error al insertar en la base de datos: ' . $error->getMessage()]);
-        }
-    }
-    // Devuelve por GET el pajaro seleccionado por id /
-
-    public static function getPajaroId($id, $mode = self::OBJECT)
+    // Devuelve por GET todos los Lugares seleccionado por id /
+    public static function getLugaresId($id, $mode = self::OBJECT)
     {
         try {
-            $sql = "SELECT * FROM Pajaro WHERE id_pajaro = :id";
+            $sql = "SELECT * FROM Lugares WHERE id_lugar = :id";
 
             $statement = (new self)->connection->prepare($sql);
             $statement->bindValue(":id", $id);
@@ -123,10 +59,10 @@ class PajaroController
                 if ($mode == self::OBJECT) {
                     return $result;
                 } else if ($mode == self::JSON) {
-                    return json_encode($result, JSON_PRETTY_PRINT);
+                    return json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
                 }
             } else {
-                return json_encode(['status' => 'error', 'message' => 'Pajaro no encontrado'], JSON_PRETTY_PRINT);
+                return json_encode(['status' => 'error', 'message' => 'Lugar no encontrado'], JSON_PRETTY_PRINT);
             }
 
         } catch (PDOException $error) {
@@ -134,8 +70,89 @@ class PajaroController
         }
     }
 
-    // Actualiza por PATCH el pajaro seleccionado por id /
-    public static function patchPajaroIdUpdate($id, $mode = self::OBJECT)
+    // Devuelve por GET todos los Lugares del pajaro seleccionado por id /
+    public static function getLugaresIdPajaro($id, $mode = self::OBJECT)
+    {
+        try {
+            $sql = "SELECT * FROM Lugares WHERE id_lugar = :id";
+
+            $statement = (new self)->connection->prepare($sql);
+            $statement->bindValue(":id", $id);
+            $statement->setFetchMode(PDO::FETCH_ASSOC);
+            $statement->execute();
+
+            $result = $statement->fetch();
+
+            // Verificar si se encontró un usuario /
+            if ($result) {
+                if ($mode == self::OBJECT) {
+                    return $result;
+                } else if ($mode == self::JSON) {
+                    return json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                }
+            } else {
+                return json_encode(['status' => 'error', 'message' => 'Lugar no encontrado'], JSON_PRETTY_PRINT);
+            }
+
+        } catch (PDOException $error) {
+            echo $sql . "<br>" . $error->getMessage();
+        }
+    }
+
+    // Añade por POST Lugares /
+    public static function postNewLugares($mode)
+    {
+        // Recibe el JSON enviado en la solicitud HTTP
+        $input = file_get_contents('php://input');
+
+        // Decodifica el JSON en un array asociativo
+        $data = json_decode($input, true);
+
+        // Verificar si la decodificación fue exitosa
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            echo json_encode(['status' => 'error', 'message' => 'Formato JSON inválido']);
+            return;
+        }
+
+        // Lista de campos requeridos (CORREGIDO)
+        $requiredFields = ['nombre','ubicacion'];
+        $missingFields = [];
+
+        // Verificar que todos los campos estén presentes
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field])) {
+                $missingFields[] = $field;
+            }
+        }
+
+        if (!empty($missingFields)) {
+            echo json_encode(['status' => 'error', 'message' => 'Faltan campos requeridos: ' . implode(', ', $missingFields)]);
+            return;
+        }
+
+        try {
+            $sql = "INSERT INTO `Lugares` (`nombre`, `ubicacion`) 
+                VALUES (:nombre, :ubicacion)";
+
+            $statement = (new self)->connection->prepare($sql);
+
+            // CORREGIDO: Asignar los valores correctamente
+            $statement->bindValue(':nombre', $data['nombre']);
+            $statement->bindValue(':ubicacion', $data['ubicacion']);
+
+            if ($statement->execute()) {
+                echo json_encode(['status' => 'success', 'message' => 'Lugar creado correctamente.']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Error al insertar el Lugar.']);
+            }
+
+        } catch (PDOException $error) {
+            echo json_encode(['status' => 'error', 'message' => 'Error al insertar en la base de datos: ' . $error->getMessage()]);
+        }
+    }
+
+    // Actualiza por PATCH los Lugares del pajaro seleccionado por id /
+    public static function patchLugaresIdUpdate($id, $mode = self::OBJECT)
     {
         // Recibe el JSON
         $input = file_get_contents('php://input');
@@ -149,9 +166,9 @@ class PajaroController
         }
 
         // Definir los campos que pueden ser actualizados
-        $allowedFields = ['nombre', 'nombre_cientifico', 'grupo', 'imagen', 'como_identificar', 'canto_audio'];
+        $allowedFields = ['nombre','ubicacion'];
         $fieldsToUpdate = [];
-        
+
         // Filtramos los campos que se desean actualizar
         foreach ($allowedFields as $field) {
             if (isset($data[$field])) {
@@ -173,7 +190,7 @@ class PajaroController
             }
 
             // Combinar las partes para la consulta SQL
-            $sql = "UPDATE Pajaro SET " . implode(', ', $setClause) . " WHERE id_pajaro = :id";
+            $sql = "UPDATE Lugares SET " . implode(', ', $setClause) . " WHERE id_lugar = :id";
 
             // Prepara la consulta PDO
             $statement = (new self)->connection->prepare($sql);
@@ -186,9 +203,9 @@ class PajaroController
 
             // Ejecutar la consulta y verificar el resultado
             if ($statement->execute()) {
-                echo json_encode(['status' => 'success', 'message' => 'Pajaro actualizado correctamente.']);
+                echo json_encode(['status' => 'success', 'message' => 'Lugar actualizado correctamente.']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al actualizar el Pajaro.']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al actualizar el lugar.']);
             }
 
         } catch (PDOException $error) {
@@ -197,13 +214,12 @@ class PajaroController
         }
     }
 
-    // Elimina por DELETE el pajaro seleccionado por id /
-
-    public static function deletePajaroById($id)
+    // Elimina por DELETE los detalles del pajaro seleccionado por id /
+    public static function deleteLugaresById($id)
     {
         try {
             // Define la consulta SQL para eliminar un usuario por ID /
-            $sql = "DELETE FROM Pajaro WHERE id_pajaro = :id";
+            $sql = "DELETE FROM Lugares WHERE id_lugar = :id";
 
             // Prepara la consulta PDO /
             $statement = (new self)->connection->prepare($sql);
@@ -213,9 +229,9 @@ class PajaroController
 
             // Ejecutar la consulta y verificar el resultado /
             if ($statement->execute()) {
-                echo json_encode(['status' => 'success', 'message' => 'Pajaro eliminado correctamente.']);
+                echo json_encode(['status' => 'success', 'message' => 'Lugar eliminado correctamente.']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Pajaro.']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Lugar.']);
             }
 
         } catch (PDOException $error) {

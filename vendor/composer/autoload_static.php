@@ -44,13 +44,13 @@ class ComposerStaticInit6a6772df2521c6860a448e9115f2793a
     );
 
     public static $classMap = array (
-        'AvistamientosController' => __DIR__ . '/../..' . '/src/controller/AvistamientosController.php',
+        'AvistamientosController' => __DIR__ . '/../..' . '/src/controller/apiController/AvistamientosController.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DatabaseController' => __DIR__ . '/../..' . '/src/controller/DataBaseController.php',
-        'DatosController' => __DIR__ . '/../..' . '/src/controller/DatosController.php',
-        'LugaresController' => __DIR__ . '/../..' . '/src/controller/LugaresController.php',
-        'PajaroController' => __DIR__ . '/../..' . '/src/controller/PajaroController.php',
-        'UsuarioController' => __DIR__ . '/../..' . '/src/controller/UsuarioController.php',
+        'DatosController' => __DIR__ . '/../..' . '/src/controller/apiController/DatosController.php',
+        'LugaresController' => __DIR__ . '/../..' . '/src/controller/apiController/LugaresController.php',
+        'PajaroController' => __DIR__ . '/../..' . '/src/controller/apiController/PajaroController.php',
+        'UsuarioController' => __DIR__ . '/../..' . '/src/controller/apiController/UsuarioController.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
