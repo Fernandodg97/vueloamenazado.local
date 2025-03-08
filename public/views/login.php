@@ -3,4 +3,4 @@
 require_once __DIR__ . '/../../config/twig.php';
 
 // ---- Renderizar plantilla ----
-echo $twig->render('login.html');
+echo $twig->render('login.html.twig');

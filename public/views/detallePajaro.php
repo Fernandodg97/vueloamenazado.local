@@ -62,7 +62,7 @@ try {
 require_once __DIR__ . '/../../config/twig.php';
 
 // Renderizar la plantilla Twig
-echo $twig->render('detalle_pajaro.html.twig', [
+echo $twig->render('detallePajaro.html.twig', [
     'pajaro' => $pajaro,
     'datos' => $datos,
     'avistamientos' => $avistamientos

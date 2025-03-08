@@ -1,62 +1,121 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Pájaro</title>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="container mt-5">
-    <h1>Panel de Administración</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ 'Editar Pájaro' | gettext }}</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      /* Estilo para que el contenedor ocupe todo el ancho en PC */
+      .container-full {
+        width: 100%;
+        max-width: 100%;
+      }
 
-    {% if mensaje %}
-        <div class="alert alert-info">{{ mensaje }}</div>
-    {% endif %}
+      /* Estilo para que en dispositivos más pequeños (móvil/tablet) tenga un max-width */
+      @media (max-width: 1024px) {
+        .container-full {
+          max-width: 90%;
+        }
+      }
+    </style>
+  </head>
 
-    <!-- Formulario para editar los detalles del pájaro -->
-    <h2 class="mt-4">Editar Detalles del Pájaro</h2>
-    <form method="POST" class="mb-4">
-        <div class="mb-3">
-            <label class="form-label">Estado de Conservación</label>
-            <input type="text" class="form-control" name="estado_conservacion" value="{{ pajaro.estado_conservacion }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Dieta</label>
-            <input type="text" class="form-control" name="dieta" value="{{ pajaro.dieta }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Población Europea</label>
-            <input type="text" class="form-control" name="poblacion_europea" value="{{ pajaro.poblacion_europea }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Pluma</label>
-            <input type="text" class="form-control" name="pluma" value="{{ pajaro.pluma }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Longitud</label>
-            <input type="text" class="form-control" name="longitud" value="{{ pajaro.longitud }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Peso</label>
-            <input type="text" class="form-control" name="peso" value="{{ pajaro.peso }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Envergadura</label>
-            <input type="text" class="form-control" name="envergadura" value="{{ pajaro.envergadura }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Hábitats</label>
-            <input type="text" class="form-control" name="habitats" value="{{ pajaro.habitats }}" required>
+  <body class="container mt-5">
+
+    <!-- Botones de traducción de idioma -->
+    <div class="d-flex justify-content-between">
+            <a href="?lang=es" class="btn btn-primary">{{ "Español"|gettext }}</a>
+            <a href="?lang=en" class="btn btn-primary">{{ "English"|gettext }}</a>
         </div>
 
-        <button type="submit" class="btn btn-success">Guardar Cambios</button>
-    </form>
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
 
-    <!-- Botón para eliminar -->
-    <a href="?eliminar=true" class="btn btn-danger" onclick="return confirm('¿Seguro que deseas eliminar este pájaro?')">Eliminar</a>
+        <h1 class="text-center mb-4">{{ 'Panel de Administración' | gettext }}</h1>
 
-    <br><br>
-    <!-- Enlace para volver a la administración -->
-    <a href="/admin" class="btn btn-secondary">Volver a la Administración</a>
-</body>
+        {% if mensaje %}
+        <div class="alert alert-info text-center">{{ mensaje }}</div>
+        {% endif %}
+
+        <!-- Formulario para editar los detalles del pájaro -->
+        <div class="card shadow p-4 mb-4">
+          <h2 class="text-center mb-3">{{ 'Editar Detalles del Pájaro' | gettext }}</h2>
+          <form method="POST">
+            <input type="hidden" name="actualizar_pajaro" value="true" />
+            <div class="mb-3">
+              <label class="form-label">{{ 'Estado de Conservación' | gettext }}</label>
+              <input type="text" class="form-control" name="estado_conservacion" value="{{ pajaro.estado_conservacion }}" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">{{ 'Dieta' | gettext }}</label>
+              <input type="text" class="form-control" name="dieta" value="{{ pajaro.dieta }}" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">{{ 'Población Europea' | gettext }}</label>
+              <input type="text" class="form-control" name="poblacion_europea" value="{{ pajaro.poblacion_europea }}" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">{{ 'Pluma' | gettext }}</label>
+              <input type="text" class="form-control" name="pluma" value="{{ pajaro.pluma }}" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">{{ 'Longitud' | gettext }}</label>
+              <input type="text" class="form-control" name="longitud" value="{{ pajaro.longitud }}" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">{{ 'Peso' | gettext }}</label>
+              <input type="text" class="form-control" name="peso" value="{{ pajaro.peso }}" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">{{ 'Envergadura' | gettext }}</label>
+              <input type="text" class="form-control" name="envergadura" value="{{ pajaro.envergadura }}" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">{{ 'Hábitats' | gettext }}</label>
+              <input type="text" class="form-control" name="habitats" value="{{ pajaro.habitats }}" required />
+            </div>
+            <button type="submit" class="btn btn-success w-100">{{ 'Guardar Cambios' | gettext }}</button>
+          </form>
+        </div>
+
+        <!-- Formulario para editar los avistamientos -->
+        <div class="card shadow p-4 mt-4">
+          <h2 class="text-center mb-3">{{ 'Editar Avistamientos' | gettext }}</h2>
+
+          <!-- Lista de avistamientos actuales -->
+          <h5 class="mb-3">{{ 'Avistamientos Actuales' | gettext }}</h5>
+          {% if avistamientos %}
+          <ul class="list-group mb-3">
+            {% for avistamiento in avistamientos %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{ 'Lugar ID' | gettext }}: {{ avistamiento.id_lugar }}
+              <a href="?eliminar_avistamiento={{ avistamiento.id_lugar }}" class="btn btn-danger btn-sm" onclick="return confirm('{{ '¿Seguro que deseas eliminar este avistamiento?' | gettext }}')">{{ 'Eliminar' | gettext }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-center text-muted">{{ 'No hay avistamientos registrados.' | gettext }}</p>
+          {% endif %}
+
+          <!-- Formulario para agregar un nuevo avistamiento -->
+          <form method="POST">
+            <div class="mb-3">
+              <label class="form-label">{{ 'Agregar Nuevo Avistamiento (ID del Lugar)' | gettext }}</label>
+              <input type="number" class="form-control" name="nuevo_avistamiento" required />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">{{ 'Agregar Avistamiento' | gettext }}</button>
+          </form>
+        </div>
+
+        <div class="d-flex justify-content-between mt-3">
+          <a href="?eliminar=true" class="btn btn-danger w-50 me-2" onclick="return confirm('{{ '¿Seguro que deseas eliminar este pájaro?' | gettext }}')">{{ 'Eliminar' | gettext }}</a>
+          <a href="/admin" class="btn btn-secondary w-50">{{ 'Volver a la Administración' | gettext }}</a>
+        </div>
+
+      </div>
+    </div>
+
+  </body>
 </html>

@@ -7,11 +7,11 @@ $request = strtok($_SERVER['REQUEST_URI'], '?');
 $viewDir = '/views/';
 
 //Switch para configurar las rutas
-if (preg_match('/^\/pajaro\/(\d+)$/', $request, $matches)) {
+if (preg_match('/^\/pajaros\/(\d+)$/', $request, $matches)) {
     $idPajaro = $matches[1]; // Obtienes el ID del pájaro
-    require __DIR__ . $viewDir . 'detalle_pajaro.php';
+    require __DIR__ . $viewDir . 'detallePajaro.php';
 } 
-elseif (preg_match('/^\/admin\/pajaro\/(\d+)$/', $request, $matches)) {
+elseif (preg_match('/^\/admin\/pajaros\/(\d+)$/', $request, $matches)) {
     $idPajaro = $matches[1];
     require __DIR__ . $viewDir . 'adminPajaroId.php';
 }else {
@@ -34,11 +34,11 @@ elseif (preg_match('/^\/admin\/pajaro\/(\d+)$/', $request, $matches)) {
             break;
 
         case '/forgot_password':
-            require __DIR__ . $viewDir . 'forgot_password.php';
+            require __DIR__ . $viewDir . 'forgotPassword.php';
             break;
 
         case '/admin':
-            require __DIR__ . $viewDir . 'admin_dashboard.php';
+            require __DIR__ . $viewDir . 'adminDashboard.php';
             break;
 
         case '/admin/lugares':
@@ -46,11 +46,11 @@ elseif (preg_match('/^\/admin\/pajaro\/(\d+)$/', $request, $matches)) {
             break;
 
         case '/register_process':
-            require '../process/register_process.php';
+            require '../process/registerProcess.php';
             break;
 
         case '/login_process':
-            require '../process/login_process.php';
+            require '../process/loginProcess.php';
             break;
 
         case '/logout':

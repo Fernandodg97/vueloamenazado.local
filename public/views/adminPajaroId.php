@@ -3,10 +3,11 @@
 // Inicializar variables
 $pajaro = null;
 $mensaje = "";
+$avistamientos = [];
 
 // Obtener el ID del pájaro desde la URL utilizando una expresión regular
 $request = strtok($_SERVER['REQUEST_URI'], '?'); // Obtener solo la parte de la ruta sin parámetros
-preg_match('/^\/admin\/pajaro\/(\d+)$/', $request, $matches);
+preg_match('/^\/admin\/pajaros\/(\d+)$/', $request, $matches);
 
 // Verificar si encontramos el ID del pájaro
 if (isset($matches[1])) {
@@ -17,97 +18,111 @@ if (isset($matches[1])) {
     exit;
 }
 
-// Obtener detalles del pájaro desde la API
+// Obtener detalles del pájaro y avistamientos desde la API
 try {
-    $url = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/detalles";
-    $response = file_get_contents($url);
-    
-    if ($response === FALSE) {
-        throw new Exception("Error al obtener detalles del pájaro desde la API.");
+    // Obtener datos del pájaro
+    $urlPajaro = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/detalles";
+    $responsePajaro = file_get_contents($urlPajaro);
+
+    if ($responsePajaro === FALSE) {
+        throw new Exception("Error al obtener detalles del pájaro.");
     }
 
-    // Decodificar la respuesta JSON
-    $pajaroArray = json_decode($response, true);
-
-    // Verificar si la decodificación fue exitosa
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        throw new Exception("Error al decodificar JSON: " . json_last_error_msg());
+    $pajaroArray = json_decode($responsePajaro, true);
+    if (json_last_error() !== JSON_ERROR_NONE || empty($pajaroArray)) {
+        throw new Exception("Error al procesar datos del pájaro.");
     }
-
-    // Verificar si se obtuvieron datos
-    if (empty($pajaroArray)) {
-        throw new Exception("No se encontraron detalles para el pájaro con ID $idPajaro.");
-    }
-
-    // Asignar los datos del pájaro
     $pajaro = $pajaroArray[0];
+
+    // Obtener avistamientos del pájaro
+    $urlAvistamientos = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/avistamientos";
+    $responseAvistamientos = file_get_contents($urlAvistamientos);
+
+    if ($responseAvistamientos !== FALSE) {
+        $avistamientos = json_decode($responseAvistamientos, true);
+    }
 } catch (Exception $e) {
     $mensaje = "Error: " . $e->getMessage();
 }
 
 // Manejo de formulario (Actualizar detalles del pájaro)
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $estado_conservacion = $_POST["estado_conservacion"] ?? '';
-    $dieta = $_POST["dieta"] ?? '';
-    $poblacion_europea = $_POST["poblacion_europea"] ?? '';
-    $pluma = $_POST["pluma"] ?? '';
-    $longitud = $_POST["longitud"] ?? '';
-    $peso = $_POST["peso"] ?? '';
-    $envergadura = $_POST["envergadura"] ?? '';
-    $habitats = $_POST["habitats"] ?? '';
-
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["actualizar_pajaro"])) {
     $data = json_encode([
-        "estado_conservacion" => $estado_conservacion,
-        "dieta" => $dieta,
-        "poblacion_europea" => $poblacion_europea,
-        "pluma" => $pluma,
-        "longitud" => $longitud,
-        "peso" => $peso,
-        "envergadura" => $envergadura,
-        "habitats" => $habitats
+        "estado_conservacion" => $_POST["estado_conservacion"] ?? '',
+        "dieta" => $_POST["dieta"] ?? '',
+        "poblacion_europea" => $_POST["poblacion_europea"] ?? '',
+        "pluma" => $_POST["pluma"] ?? '',
+        "longitud" => $_POST["longitud"] ?? '',
+        "peso" => $_POST["peso"] ?? '',
+        "envergadura" => $_POST["envergadura"] ?? '',
+        "habitats" => $_POST["habitats"] ?? ''
     ]);
 
     $context = stream_context_create([
         "http" => [
-            "method" => "PATCH",  // Utilizamos PATCH para la actualización
+            "method" => "PATCH",
             "header" => "Content-Type: application/json",
             "content" => $data
         ]
     ]);
 
-    $url = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/detalles";
+    $response = file_get_contents($urlPajaro, false, $context);
 
-    $response = file_get_contents($url, false, $context);
-
-    if ($response !== false) {
-        $mensaje = "Detalles del pájaro actualizados correctamente.";
-    } else {
-        $mensaje = "Error al actualizar los detalles del pájaro.";
-    }
-
-    header("Location: editar_pajaro.php?id=$idPajaro");
-    exit;
+    $mensaje = $response !== false ? "Detalles actualizados correctamente." : "Error al actualizar detalles.";
 }
 
-// Manejo de eliminación
+// Manejo de avistamientos (Agregar / Editar / Eliminar)
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["actualizar_avistamientos"])) {
+    $nuevoAvistamiento = $_POST["nuevo_avistamiento"] ?? null;
+    $eliminarAvistamiento = $_POST["eliminar_avistamiento"] ?? null;
+
+    // Agregar un nuevo avistamiento
+    if (!empty($nuevoAvistamiento)) {
+        $data = json_encode(["id_lugar" => $nuevoAvistamiento]);
+        $context = stream_context_create([
+            "http" => [
+                "method" => "POST",
+                "header" => "Content-Type: application/json",
+                "content" => $data
+            ]
+        ]);
+
+        $urlAgregarAvistamiento = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/avistamientos";
+        $response = file_get_contents($urlAgregarAvistamiento, false, $context);
+
+        $mensaje = $response !== false ? "Avistamiento agregado correctamente." : "Error al agregar avistamiento.";
+    }
+
+    // Eliminar un avistamiento existente
+    if (!empty($eliminarAvistamiento)) {
+        $urlEliminarAvistamiento = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/avistamientos/$eliminarAvistamiento";
+        $context = stream_context_create([
+            "http" => [
+                "method" => "DELETE"
+            ]
+        ]);
+
+        $response = file_get_contents($urlEliminarAvistamiento, false, $context);
+        $mensaje = $response !== false ? "Avistamiento eliminado correctamente." : "Error al eliminar avistamiento.";
+    }
+}
+
+// Manejo de eliminación del pájaro
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"])) {
-    $url = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/detalles";
     $context = stream_context_create([
         "http" => [
             "method" => "DELETE"
         ]
     ]);
 
-    $response = file_get_contents($url, false, $context);
+    $response = file_get_contents($urlPajaro, false, $context);
     
     if ($response !== false) {
-        $mensaje = "Pájaro eliminado correctamente.";
+        header("Location: lista_pajaros.php");
+        exit;
     } else {
         $mensaje = "Error al eliminar el pájaro.";
     }
-
-    header("Location: lista_pajaros.php");
-    exit;
 }
 
 // Cargar Twig
@@ -116,6 +131,7 @@ require_once __DIR__ . '/../../config/twig.php';
 // Renderizar la plantilla Twig
 echo $twig->render('adminPajaroId.html.twig', [
     'pajaro' => $pajaro,
-    'mensaje' => $mensaje
+    'mensaje' => $mensaje,
+    'avistamientos' => $avistamientos
 ]);
 ?>

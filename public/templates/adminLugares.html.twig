@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ 'Detalles del Lugar' | gettext }} - {{ lugar.nombre }}</title>
+    <!-- Vincular CSS de Bootstrap desde la carpeta bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      .card-img-top {
+        object-fit: cover;
+        height: 300px;
+      }
+
+      .card-body {
+        text-align: center;
+      }
+
+      .card {
+        cursor: pointer;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .section-title {
+        font-size: 1.75rem;
+        font-weight: bold;
+        margin-top: 30px;
+      }
+
+      ul {
+        list-style-type: none;
+        padding-left: 0;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+
+      .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+      }
+
+      .btn-secondary:hover {
+        background-color: #5a6268;
+      }
+
+      .container {
+        padding: 0 15px;
+        max-width: 100%;
+      }
+
+      .card-img {
+        width: 100%;
+      }
+
+      audio {
+        width: 200px;
+        margin-top: 10px;
+      }
+
+      /* Mejorar la experiencia en móviles */
+      @media (max-width: 768px) {
+        .section-title {
+          font-size: 1.25rem;
+        }
+
+        .btn {
+          width: 100%;
+          margin-bottom: 10px;
+        }
+
+        .table td, .table th {
+          padding: 8px;
+        }
+
+        .table-responsive {
+          margin-top: 20px;
+        }
+      }
+
+      /* Optimización para tablets */
+      @media (max-width: 1024px) {
+        .section-title {
+          font-size: 1.5rem;
+        }
+
+        .btn {
+          width: 48%;
+          margin-bottom: 10px;
+        }
+
+        .table td, .table th {
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body class="container mt-5">
+      <h1 class="mb-4 text-center">{{ 'Panel de Administración' | gettext }}</h1>
+      
+     <div class="d-flex justify-content-between">
+            <a href="?lang=es" class="btn btn-primary">{{ "Español"|gettext }}</a>
+            <a href="?lang=en" class="btn btn-primary">{{ "English"|gettext }}</a>
+        </div>
+
+      <!-- Formulario para agregar un nuevo lugar -->
+      <div class="section-title mt-4">{{ 'Agregar Nuevo Lugar' | gettext }}</div>
+      <form method="POST" action="/nuevo-lugar" class="mb-4">
+        <div class="mb-3">
+          <label for="nombre" class="form-label">{{ 'Nombre' | gettext }}</label>
+          <input type="text" class="form-control" id="nombre" name="nombre" required>
+        </div>
+        <div class="mb-3">
+          <label for="ubicacion" class="form-label">{{ 'Ubicación' | gettext }}</label>
+          <input type="text" class="form-control" id="ubicacion" name="ubicacion" required>
+        </div>
+        <button type="submit" class="btn btn-success w-100">{{ 'Agregar Lugar' | gettext }}</button>
+      </form>
+
+      <!-- Tabla de lugares -->
+      <div class="section-title mt-4">{{ 'Lista de Lugares' | gettext }}</div>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>{{ 'ID' | gettext }}</th>
+              <th>{{ 'Nombre' | gettext }}</th>
+              <th>{{ 'Ubicación' | gettext }}</th>
+              <th>{{ 'Acciones' | gettext }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if lugares is not empty %}
+              {% for lugarItem in lugares %}
+                <tr>
+                  <td>{{ lugarItem.id_lugar }}</td>
+                  <td>
+                    <form method="POST" action="/editar/{{ lugarItem.id_lugar }}">
+                      <input type="text" name="nombre" class="form-control" value="{{ lugarItem.nombre }}" required>
+                  </td>
+                  <td>
+                    <input type="text" name="ubicacion" class="form-control" value="{{ lugarItem.ubicacion }}" required>
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-success w-100">{{ 'Actualizar' | gettext }}</button>
+                    </form>
+                    <a href="/eliminar/{{ lugarItem.id_lugar }}" class="btn btn-danger w-100 mt-2">{{ 'Eliminar' | gettext }}</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="4" class="text-center">{{ 'No se han encontrado lugares.' | gettext }}</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="/admin" class="btn btn-secondary w-100">{{ 'Volver a la Administración' | gettext }}</a>
+      </div>
+    
+
+    <!-- Vincular JS de Bootstrap desde la carpeta bootstrap -->
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

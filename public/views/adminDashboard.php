@@ -1,6 +1,4 @@
 <?php
-// Incluir la conexión a la base de datos
-$pdo = require_once __DIR__ . '/../../config/conectorDatabase.php';
 
 // Inicializar variables
 $pajaros = [];
@@ -91,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"])) {
 require_once __DIR__ . '/../../config/twig.php';
 
 // Renderizar la plantilla Twig
-echo $twig->render('admin_dashboard.html.twig', [
+echo $twig->render('adminDashboard.html.twig', [
     'pajaros' => $pajaros,
     'mensaje' => $mensaje
 ]);

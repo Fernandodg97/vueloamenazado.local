@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ "Administración de Pájaros"|gettext }}</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        /* Responsividad general */
+        @media (max-width: 768px) {
+            .table td, .table th {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card {
+                padding: 15px;
+            }
+            .form-label {
+                font-size: 14px;
+            }
+            .btn {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+
+        /* Responsive table */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-control {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body class="container mt-5">
+    <div class="d-flex justify-content-between">
+            <a href="?lang=es" class="btn btn-primary">{{ "Español"|gettext }}</a>
+            <a href="?lang=en" class="btn btn-primary">{{ "English"|gettext }}</a>
+        </div>
+
+    <h1 class="mb-4 text-center">{{ "Panel de Administración"|gettext }}</h1>
+    
+    <nav class="mb-3">
+        <a href="http://www.vueloamenazado.local/admin/lugares" class="btn btn-primary">{{ "Editar Lugares"|gettext }}</a>
+    </nav>
+
+    {% if mensaje %}
+        <div class="alert alert-success">{{ mensaje }}</div>
+    {% endif %}
+
+    <!-- Formulario para agregar o editar pájaro -->
+    <h2 class="mb-3">
+        {% if id is defined %}{{ "Editar Pájaro"|gettext }}{% else %}{{ "Agregar Pájaro"|gettext }}{% endif %}
+    </h2>
+    
+    <form method="POST" class="card p-4 shadow">
+        {% if id is defined %}
+            <div class="mb-3">
+                <label class="form-label">{{ "ID del Pájaro"|gettext }}</label>
+                <input type="text" class="form-control" name="id" value="{{ id }}" readonly>
+            </div>
+        {% endif %}
+
+        <div class="mb-3">
+            <label class="form-label">{{ "Nombre"|gettext }}</label>
+            <input type="text" class="form-control" name="nombre" value="{{ nombre | default('') }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{{ "Nombre Científico"|gettext }}</label>
+            <input type="text" class="form-control" name="nombre_cientifico" value="{{ nombre_cientifico | default('') }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{{ "Imagen URL"|gettext }}</label>
+            <input type="text" class="form-control" name="imagen" value="{{ imagen | default('') }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{{ "Descripción de Identificación"|gettext }}</label>
+            <input type="text" class="form-control" name="como_identificar" value="{{ como_identificar | default('') }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{{ "Enlace del Canto"|gettext }}</label>
+            <input type="text" class="form-control" name="canto_audio" value="{{ canto_audio | default('') }}">
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">{{ "Guardar"|gettext }}</button>
+    </form>
+
+    <!-- Lista de pájaros -->
+    <h2 class="mt-5">{{ "Lista de Pájaros"|gettext }}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>{{ "ID"|gettext }}</th>
+                    <th>{{ "Nombre"|gettext }}</th>
+                    <th>{{ "Nombre Científico"|gettext }}</th>
+                    <th>{{ "Descripción de Identificación"|gettext }}</th>
+                    <th>{{ "Imagen"|gettext }}</th>
+                    <th>{{ "Imagen SRC"|gettext }}</th>
+                    <th>{{ "Canto"|gettext }}</th>
+                    <th>{{ "Canto SRC"|gettext }}</th>
+                    <th>{{ "Acciones"|gettext }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pajaro in pajaros %}
+                    <tr>
+                        <form method="POST" action="http://www.vueloamenazado.local/admin/pajaros/{{ pajaro.id_pajaro }}/editar">
+                            <td>{{ pajaro.id_pajaro }}</td>
+                            <td>
+                                <input type="text" class="form-control" name="nombre" value="{{ pajaro.nombre }}" required>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="nombre_cientifico" value="{{ pajaro.nombre_cientifico }}" required>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="como_identificar" value="{{ pajaro.como_identificar }}">
+                            </td>
+                            <td><img src="{{ pajaro.imagen }}" alt="{{ pajaro.nombre }}" width="50"></td>
+                            <td>
+                                <input type="text" class="form-control" name="imagen" value="{{ pajaro.imagen }}">
+                            </td>
+                            <td>
+                                {% if pajaro.canto_audio %}
+                                    <!-- Reproductor de audio con controles -->
+                                    <audio controls>
+                                        <source src="{{ pajaro.canto_audio }}" type="audio/mpeg">
+                                        {{ "Tu navegador no soporta el elemento de audio."|gettext }}
+                                    </audio>
+                                {% else %}
+                                    <p>{{ "No hay audio disponible"|gettext }}</p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="canto_audio" value="{{ pajaro.canto_audio }}">
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column gap-2">
+                                    <a href="http://www.vueloamenazado.local/admin/pajaros/{{ pajaro.id_pajaro }}" class="btn btn-info">{{ "Detalles"|gettext }}</a>
+                                    <button type="submit" class="btn btn-success">{{ "Guardar"|gettext }}</button>
+                                    <a href="?eliminar={{ pajaro.id_pajaro }}" class="btn btn-danger" onclick="return confirm('{{ '¿Seguro que quieres eliminar este pájaro?'|gettext }}')">{{ "Eliminar"|gettext }}</a>
+                                </div>
+                            </td>
+                        </form>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">{{ "No hay pájaros registrados."|gettext }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
