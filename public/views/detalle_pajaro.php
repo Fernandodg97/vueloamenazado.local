@@ -22,28 +22,40 @@ $avistamientos = [];
 
 // Consultar detalles del pájaro
 try {
-    $stmt = $pdo->prepare("SELECT * FROM Pajaro WHERE id_pajaro = ?");
-    $stmt->execute([$idPajaro]);
-    $pajaro = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Obtener datos del pájaro desde la API
+    $pajaroJson = file_get_contents("http://www.vueloamenazado.local/api/pajaros/$idPajaro");
+    $pajaro = json_decode($pajaroJson, true);
 
     if ($pajaro) {
-        // Consultar información adicional del pájaro
-        $stmtDatos = $pdo->prepare("SELECT * FROM Datos WHERE id_pajaro = ?");
-        $stmtDatos->execute([$idPajaro]);
-        $datos = $stmtDatos->fetch(PDO::FETCH_ASSOC);
+        // Obtener detalles adicionales del pájaro
+        $datosJson = file_get_contents("http://www.vueloamenazado.local/api/pajaros/$idPajaro/detalles");
+        $datosArray = json_decode($datosJson, true);
+        $datos = $datosArray[0] ?? null; // Extraer el primer elemento del array si existe
 
-        // Consultar avistamientos del pájaro
-        $stmtAvistamientos = $pdo->prepare("SELECT L.nombre, L.ubicacion FROM Avistamientos A JOIN Lugares L ON A.id_lugar = L.id_lugar WHERE A.id_pajaro = ?");
-        $stmtAvistamientos->execute([$idPajaro]);
-        $avistamientos = $stmtAvistamientos->fetchAll(PDO::FETCH_ASSOC);
+        // Obtener avistamientos del pájaro
+        $avistamientosJson = file_get_contents("http://www.vueloamenazado.local/api/pajaros/$idPajaro/avistamientos");
+        $avistamientosIds = json_decode($avistamientosJson, true);
+
+        // Obtener detalles de los lugares de avistamiento
+        $avistamientos = [];
+        foreach ($avistamientosIds as $avistamiento) {
+            if (isset($avistamiento['id_lugar'])) {
+                $idLugar = $avistamiento['id_lugar'];
+                $lugarJson = file_get_contents("http://www.vueloamenazado.local/api/lugares/$idLugar");
+                $lugar = json_decode($lugarJson, true);
+                if ($lugar) {
+                    $avistamientos[] = $lugar;
+                }
+            }
+        }        
     } else {
         // Si no se encuentra el pájaro
         http_response_code(404);
         echo "Pájaro no encontrado.";
         exit;
     }
-} catch (PDOException $e) {
-    error_log("Error en la consulta SQL: " . $e->getMessage());
+} catch (Exception $e) {
+    error_log("Error: " . $e->getMessage());
 }
 
 // Cargar Twig

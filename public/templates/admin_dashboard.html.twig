@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Pájaros</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <h1 class="mb-4 text-center">Panel de Administración</h1>
+    
+    <nav class="mb-3">
+        <a href="http://www.vueloamenazado.local/admin/lugares" class="btn btn-primary">Editar Lugares</a>
+    </nav>
+
+    {% if mensaje %}
+        <div class="alert alert-success">{{ mensaje }}</div>
+    {% endif %}
+
+    <!-- Formulario para agregar o editar pájaro -->
+    <h2 class="mb-3">
+        {% if id is defined %}Editar Pájaro{% else %}Agregar Pájaro{% endif %}
+    </h2>
+    
+    <form method="POST" class="card p-4 shadow">
+        {% if id is defined %}
+            <div class="mb-3">
+                <label class="form-label">ID del Pájaro</label>
+                <input type="text" class="form-control" name="id" value="{{ id }}" readonly>
+            </div>
+        {% endif %}
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" name="nombre" value="{{ nombre | default('') }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Nombre Científico</label>
+            <input type="text" class="form-control" name="nombre_cientifico" value="{{ nombre_cientifico | default('') }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Imagen URL</label>
+            <input type="text" class="form-control" name="imagen" value="{{ imagen | default('') }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Descripción de Identificación</label>
+            <input type="text" class="form-control" name="como_identificar" value="{{ como_identificar | default('') }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Enlace del Canto</label>
+            <input type="text" class="form-control" name="canto_audio" value="{{ canto_audio | default('') }}">
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Guardar</button>
+    </form>
+
+    <!-- Lista de pájaros -->
+    <h2 class="mt-5">Lista de Pájaros</h2>
+    <table class="table table-striped text-center align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Nombre Científico</th>
+                <th>Descripción de Identificación</th>
+                <th>Imagen</th>
+                <th>Imagen SRC</th>
+                <th>Canto</th>
+                <th>Canto SRC</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pajaro in pajaros %}
+                <tr>
+                    <form method="POST" action="http://www.vueloamenazado.local/admin/pajaro/{{ pajaro.id_pajaro }}/editar">
+                        <td>{{ pajaro.id_pajaro }}</td>
+                        <td>
+                            <input type="text" class="form-control" name="nombre" value="{{ pajaro.nombre }}" required>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="nombre_cientifico" value="{{ pajaro.nombre_cientifico }}" required>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="como_identificar" value="{{ pajaro.como_identificar }}">
+                        </td>
+                        <td><img src="{{ pajaro.imagen }}" alt="{{ pajaro.nombre }}" width="50"></td>
+                        <td>
+                            <input type="text" class="form-control" name="imagen" value="{{ pajaro.imagen }}">
+                        </td>
+                        <td>
+                            {% if pajaro.canto_audio %}
+                                <!-- Reproductor de audio con controles -->
+                                <audio controls>
+                                    <source src="{{ pajaro.canto_audio }}" type="audio/mpeg">
+                                    Tu navegador no soporta el elemento de audio.
+                                </audio>
+                            {% else %}
+                                <p>No hay audio disponible</p>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="canto_audio" value="{{ pajaro.canto_audio }}">
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column gap-2">
+                                <a href="http://www.vueloamenazado.local/admin/pajaro/{{ pajaro.id_pajaro }}" class="btn btn-info">Detalles</a>
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                                <a href="?eliminar={{ pajaro.id_pajaro }}" class="btn btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este pájaro?')">Eliminar</a>
+                            </div>
+                        </td>
+                    </form>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">No hay pájaros registrados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        
+    </body>
+</html>

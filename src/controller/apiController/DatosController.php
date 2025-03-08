@@ -70,6 +70,36 @@ class DatosController
         }
     }
 
+    // Devuelve por GET todos los datos seleccionado por id de los pajaros/
+
+    public static function getDatosIdPajaro($id, $mode = self::OBJECT)
+    {
+        try {
+            $sql = "SELECT * FROM Datos WHERE id_pajaro = :id";
+
+            $statement = (new self)->connection->prepare($sql);
+            $statement->bindValue(":id", $id);
+            $statement->setFetchMode(PDO::FETCH_ASSOC);
+            $statement->execute();
+
+            $result = $statement->fetchAll();
+
+            // Verificar si se encontró un usuario /
+            if ($result) {
+                if ($mode == self::OBJECT) {
+                    return $result;
+                } else if ($mode == self::JSON) {
+                    return json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                }
+            } else {
+                return json_encode(['status' => 'error', 'message' => 'Datos no encontrado'], JSON_PRETTY_PRINT);
+            }
+
+        } catch (PDOException $error) {
+            echo $sql . "<br>" . $error->getMessage();
+        }
+    }
+
     // Añade por POST datos /
 
     public static function postNewDatos($mode)

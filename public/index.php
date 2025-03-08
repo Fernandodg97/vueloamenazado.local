@@ -10,7 +10,11 @@ $viewDir = '/views/';
 if (preg_match('/^\/pajaro\/(\d+)$/', $request, $matches)) {
     $idPajaro = $matches[1]; // Obtienes el ID del pájaro
     require __DIR__ . $viewDir . 'detalle_pajaro.php';
-} else {
+} 
+elseif (preg_match('/^\/admin\/pajaro\/(\d+)$/', $request, $matches)) {
+    $idPajaro = $matches[1];
+    require __DIR__ . $viewDir . 'adminPajaroId.php';
+}else {
     switch ($request) {
         case '':
         case '/':
@@ -33,8 +37,12 @@ if (preg_match('/^\/pajaro\/(\d+)$/', $request, $matches)) {
             require __DIR__ . $viewDir . 'forgot_password.php';
             break;
 
-        case '/admin_dashboard':
+        case '/admin':
             require __DIR__ . $viewDir . 'admin_dashboard.php';
+            break;
+
+        case '/admin/lugares':
+            require __DIR__ . $viewDir . 'adminLugares.php';
             break;
 
         case '/register_process':

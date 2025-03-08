@@ -85,18 +85,18 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
 
     // ### Pajaro ### /
 
-    case 'pajaro':
+    case 'pajaros':
         // ### Avistamientos de pajaro ### /
         if(!empty($chunks[4])){
             $pajaroId = $chunks[3];
             if ($_SERVER["REQUEST_METHOD"] == "GET" && $chunks[4] == "avistamientos") {
                 // Llama al método para obtener los datos de un pajaro específico
                 echo AvistamientosController::getAvistamientosId($pajaroId, AvistamientosController::JSON);
-            } 
-            //else if($_SERVER["REQUEST_METHOD"] == "GET" && $chunks[4] == "lugares") {
-            //      //Llama al método para obtener los datos de un pajaro específico
-            //     echo LugaresController::getLugaresId($pajaroId, LugaresController::JSON);
-            // }
+            }
+            else if($_SERVER["REQUEST_METHOD"] == "GET" && $chunks[4] == "detalles") {
+                // Llama al método para obtener los datos de un pajaro específico
+                echo DatosController::getDatosIdPajaro($pajaroId, DatosController::JSON);
+            }
 
         }
         else if (!empty($chunks[3])) {

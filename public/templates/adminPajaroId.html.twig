@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Pájaro</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <h1>Panel de Administración</h1>
+
+    {% if mensaje %}
+        <div class="alert alert-info">{{ mensaje }}</div>
+    {% endif %}
+
+    <!-- Formulario para editar los detalles del pájaro -->
+    <h2 class="mt-4">Editar Detalles del Pájaro</h2>
+    <form method="POST" class="mb-4">
+        <div class="mb-3">
+            <label class="form-label">Estado de Conservación</label>
+            <input type="text" class="form-control" name="estado_conservacion" value="{{ pajaro.estado_conservacion }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Dieta</label>
+            <input type="text" class="form-control" name="dieta" value="{{ pajaro.dieta }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Población Europea</label>
+            <input type="text" class="form-control" name="poblacion_europea" value="{{ pajaro.poblacion_europea }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Pluma</label>
+            <input type="text" class="form-control" name="pluma" value="{{ pajaro.pluma }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Longitud</label>
+            <input type="text" class="form-control" name="longitud" value="{{ pajaro.longitud }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Peso</label>
+            <input type="text" class="form-control" name="peso" value="{{ pajaro.peso }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Envergadura</label>
+            <input type="text" class="form-control" name="envergadura" value="{{ pajaro.envergadura }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Hábitats</label>
+            <input type="text" class="form-control" name="habitats" value="{{ pajaro.habitats }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+    </form>
+
+    <!-- Botón para eliminar -->
+    <a href="?eliminar=true" class="btn btn-danger" onclick="return confirm('¿Seguro que deseas eliminar este pájaro?')">Eliminar</a>
+
+    <br><br>
+    <!-- Enlace para volver a la administración -->
+    <a href="/admin" class="btn btn-secondary">Volver a la Administración</a>
+</body>
+</html>

@@ -10,16 +10,30 @@ if (!$pdo instanceof PDO) {
 $pajaros = [];
 
 try {
-    // Consultar datos de la tabla Pajaro
-    $stmt = $pdo->query("SELECT * FROM Pajaro");
-    $pajaros = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Verificar si se obtuvieron datos
-    if (!$pajaros) {
-        error_log("No se encontraron registros en la tabla Pajaro.");
+    // Llamada a la API
+    $url = "http://www.vueloamenazado.local/api/pajaros";
+    $response = file_get_contents($url);
+    
+    if ($response === FALSE) {
+        throw new Exception("Error al obtener datos de la API");
     }
-} catch (PDOException $e) {
-    error_log("Error en la consulta SQL: " . $e->getMessage());
+    
+    // Decodificar JSON
+    $pajaros = json_decode($response, true);
+    
+    // Verificar si la decodificación fue exitosa
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception("Error al decodificar JSON: " . json_last_error_msg());
+    }
+    
+    // Verificar si se obtuvieron datos
+    if (empty($pajaros)) {
+        error_log("No se encontraron registros en la API.");
+    } else {
+        error_log("Se encontraron " . count($pajaros) . " registros.");
+    }
+} catch (Exception $e) {
+    error_log("Error: " . $e->getMessage());
 }
 
 //Cargamos el archivo twig
@@ -31,13 +45,10 @@ if (empty($pajaros)) {
     error_log("Se encontraron " . count($pajaros) . " registros.");
 }
 
-// ---- Variables Twig ----
-$data = [
-    'name' => 'Fernando Díaz',
-    'age' => '27',
-    'lang' => $lang,
-];
+$totalPajaros = count($pajaros); // Contar pájaros
+
 
 // ---- Renderizar plantilla ----
-echo $twig->render('home.html.twig', array_merge($data, ['pajaros' => $pajaros]));
+echo $twig->render('home.html.twig', array_merge(['total_pajaros' => $totalPajaros], ['pajaros' => $pajaros]));
+
 
