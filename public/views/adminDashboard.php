@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mensaje = "Error al procesar la solicitud.";
     }
 
-    header("Location: admin_pajaros.php");
+    header("Location: /admin");
     exit;
 }
 
@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"])) {
         $mensaje = "Error al eliminar el pájaro.";
     }
 
-    header("Location: admin_pajaros.php");
+    header("Location: /admin");
     exit;
 }
 

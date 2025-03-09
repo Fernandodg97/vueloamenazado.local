@@ -9,6 +9,9 @@ if (!$pdo instanceof PDO) {
 // Inicializar la variable
 $pajaros = [];
 
+// Obtener la letra seleccionada desde la URL
+$letra = isset($_GET['letra']) ? $_GET['letra'] : '';
+
 try {
     // Llamada a la API
     $url = "http://www.vueloamenazado.local/api/pajaros";
@@ -21,34 +24,28 @@ try {
     // Decodificar JSON
     $pajaros = json_decode($response, true);
     
-    // Verificar si la decodificación fue exitosa
     if (json_last_error() !== JSON_ERROR_NONE) {
         throw new Exception("Error al decodificar JSON: " . json_last_error_msg());
     }
-    
-    // Verificar si se obtuvieron datos
-    if (empty($pajaros)) {
-        error_log("No se encontraron registros en la API.");
-    } else {
-        error_log("Se encontraron " . count($pajaros) . " registros.");
+
+    // Filtrar por la letra seleccionada
+    if (!empty($letra) && ctype_alpha($letra)) {
+        $pajaros = array_filter($pajaros, function($pajaro) use ($letra) {
+            return stripos($pajaro['nombre'], $letra) === 0;
+        });
     }
+
 } catch (Exception $e) {
     error_log("Error: " . $e->getMessage());
 }
 
-//Cargamos el archivo twig
+// Contar los pájaros filtrados
+$totalPajaros = count($pajaros);
+
+// Cargar Twig y renderizar la plantilla
 $twig = require_once __DIR__ . '/../../config/twig.php';
-
-if (empty($pajaros)) {
-    error_log("No hay datos en la variable \$pajaros.");
-} else {
-    error_log("Se encontraron " . count($pajaros) . " registros.");
-}
-
-$totalPajaros = count($pajaros); // Contar pájaros
-
-
-// ---- Renderizar plantilla ----
-echo $twig->render('home.html.twig', array_merge(['total_pajaros' => $totalPajaros], ['pajaros' => $pajaros]));
-
-
+echo $twig->render('home.html.twig', [
+    'total_pajaros' => $totalPajaros,
+    'pajaros' => $pajaros,
+    'letra_seleccionada' => $letra
+]);

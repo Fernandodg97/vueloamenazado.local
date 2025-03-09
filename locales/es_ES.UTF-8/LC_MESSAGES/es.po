@@ -1,0 +1,254 @@
+msgid "Administración de Pájaros"
+msgstr "Administración de Pájaros"
+
+msgid "Español"
+msgstr "Español"
+
+msgid "English"
+msgstr "Inglés"
+
+msgid "Panel de Administración"
+msgstr "Panel de Administración"
+
+msgid "Editar Lugares"
+msgstr "Editar Lugares"
+
+msgid "Agregar Pájaro"
+msgstr "Agregar Pájaro"
+
+msgid "Editar Pájaro"
+msgstr "Editar Pájaro"
+
+msgid "ID del Pájaro"
+msgstr "ID del Pájaro"
+
+msgid "Nombre"
+msgstr "Nombre"
+
+msgid "Nombre Científico"
+msgstr "Nombre Científico"
+
+msgid "Imagen URL"
+msgstr "Imagen URL"
+
+msgid "Descripción de Identificación"
+msgstr "Descripción de Identificación"
+
+msgid "Enlace del Canto"
+msgstr "Enlace del Canto"
+
+msgid "Guardar"
+msgstr "Guardar"
+
+msgid "Lista de Pájaros"
+msgstr "Lista de Pájaros"
+
+msgid "Imagen"
+msgstr "Imagen"
+
+msgid "Imagen SRC"
+msgstr "Imagen SRC"
+
+msgid "Canto"
+msgstr "Canto"
+
+msgid "Canto SRC"
+msgstr "Canto SRC"
+
+msgid "Acciones"
+msgstr "Acciones"
+
+msgid "Detalles"
+msgstr "Detalles"
+
+msgid "Eliminar"
+msgstr "Eliminar"
+
+msgid "¿Seguro que quieres eliminar este pájaro?"
+msgstr "¿Seguro que quieres eliminar este pájaro?"
+
+msgid "No hay pájaros registrados."
+msgstr "No hay pájaros registrados."
+
+msgid "No hay audio disponible"
+msgstr "No hay audio disponible"
+
+msgid "Tu navegador no soporta el elemento de audio."
+msgstr "Tu navegador no soporta el elemento de audio."
+
+msgid "Detalles del Pájaro"
+msgstr "Detalles del Pájaro"
+
+msgid "Cargando..."
+msgstr "Cargando..."
+
+msgid "Eliminar este pájaro"
+msgstr "Eliminar este pájaro"
+
+msgid "Formulario para agregar o editar pájaro"
+msgstr "Formulario para agregar o editar pájaro"
+
+msgid "Regresar"
+msgstr "Regresar"
+
+msgid "Vuelo Amenazado"
+msgstr "Vuelo Amenazado"
+
+msgid "Has llegado al final de Internet."
+msgstr "Has llegado al final de Internet."
+
+msgid "Ir al inicio"
+msgstr "Ir al inicio"
+
+msgid "Detalles del Lugar"
+msgstr "Detalles del Lugar"
+
+msgid "Agregar Nuevo Lugar"
+msgstr "Agregar Nuevo Lugar"
+
+msgid "Ubicación"
+msgstr "Ubicación"
+
+msgid "Agregar Lugar"
+msgstr "Agregar Lugar"
+
+msgid "Lista de Lugares"
+msgstr "Lista de Lugares"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Actualizar"
+msgstr "Actualizar"
+
+msgid "No se han encontrado lugares."
+msgstr "No se han encontrado lugares."
+
+msgid "Volver a la Administración"
+msgstr "Volver a la Administración"
+
+msgid "Editar Detalles del Pájaro"
+msgstr "Editar Detalles del Pájaro"
+
+msgid "Estado de Conservación"
+msgstr "Estado de Conservación"
+
+msgid "Dieta"
+msgstr "Dieta"
+
+msgid "Población Europea"
+msgstr "Población Europea"
+
+msgid "Pluma"
+msgstr "Pluma"
+
+msgid "Longitud"
+msgstr "Longitud"
+
+msgid "Peso"
+msgstr "Peso"
+
+msgid "Envergadura"
+msgstr "Envergadura"
+
+msgid "Hábitats"
+msgstr "Hábitats"
+
+msgid "Guardar Cambios"
+msgstr "Guardar Cambios"
+
+msgid "Editar Avistamientos"
+msgstr "Editar Avistamientos"
+
+msgid "Avistamientos Actuales"
+msgstr "Avistamientos Actuales"
+
+msgid "Lugar ID"
+msgstr "Lugar ID"
+
+msgid "¿Seguro que deseas eliminar este avistamiento?"
+msgstr "¿Seguro que deseas eliminar este avistamiento?"
+
+msgid "No hay avistamientos registrados."
+msgstr "No hay avistamientos registrados."
+
+msgid "Agregar Nuevo Avistamiento (ID del Lugar)"
+msgstr "Agregar Nuevo Avistamiento (ID del Lugar)"
+
+msgid "Agregar Avistamiento"
+msgstr "Agregar Avistamiento"
+
+msgid "Imagen de"
+msgstr "Imagen de"
+
+msgid "Datos"
+msgstr "Datos"
+
+msgid "No hay datos disponibles."
+msgstr "No hay datos disponibles."
+
+msgid "Avistamientos"
+msgstr "Avistamientos"
+
+msgid "No se han encontrado avistamientos."
+msgstr "No se han encontrado avistamientos."
+
+msgid "Volver a la lista de pájaros"
+msgstr "Volver a la lista de pájaros"
+
+msgid "Recuperar contraseña"
+msgstr "Recuperar contraseña"
+
+msgid "Correo electrónico"
+msgstr "Correo electrónico"
+
+msgid "Enviar enlace de recuperación"
+msgstr "Enviar enlace de recuperación"
+
+msgid "Función en desarrollo, disculpen las molestias. Para recuperar la contraseña pónganse en contacto con"
+msgstr "Función en desarrollo, disculpen las molestias. Para recuperar la contraseña pónganse en contacto con"
+
+msgid "Volver al inicio de sesión"
+msgstr "Volver al inicio de sesión"
+
+msgid "vueloamenazado"
+msgstr "vueloamenazado"
+
+msgid "Total de pájaros en riesgo:"
+msgstr "Total de pájaros en riesgo:"
+
+msgid "Todos"
+msgstr "Todos"
+
+msgid "Sin imagen"
+msgstr "Sin imagen"
+
+msgid "No se encontraron registros"
+msgstr "No se encontraron registros"
+
+msgid "Login"
+msgstr "Iniciar sesión"
+
+msgid "Usuario"
+msgstr "Usuario"
+
+msgid "Contraseña"
+msgstr "Contraseña"
+
+msgid "Registrarse"
+msgstr "Registrarse"
+
+msgid "¿Has olvidado tu contraseña?"
+msgstr "¿Has olvidado tu contraseña?"
+
+msgid "Registro"
+msgstr "Registro"
+
+msgid "Crear cuenta"
+msgstr "Crear cuenta"
+
+msgid "Confirmar contraseña"
+msgstr "Confirmar contraseña"
+
+msgid "¿Ya tienes cuenta? Inicia sesión"
+msgstr "¿Ya tienes cuenta? Inicia sesión"

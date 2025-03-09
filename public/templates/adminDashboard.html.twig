@@ -1,9 +1,11 @@
+{# Esto funciona todo cambiar la direccion al enviar por post, put etc #}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ "Administración de Pájaros"|gettext }}</title>
+    <title>{{ "Administración de Pájaros"| gettext }}</title>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         /* Responsividad general */
@@ -114,7 +116,7 @@
             <tbody>
                 {% for pajaro in pajaros %}
                     <tr>
-                        <form method="POST" action="http://www.vueloamenazado.local/admin/pajaros/{{ pajaro.id_pajaro }}/editar">
+                        <form method="POST" action="http://www.vueloamenazado.local/admin/pajaros/{{ pajaro.id_pajaro }}">
                             <td>{{ pajaro.id_pajaro }}</td>
                             <td>
                                 <input type="text" class="form-control" name="nombre" value="{{ pajaro.nombre }}" required>

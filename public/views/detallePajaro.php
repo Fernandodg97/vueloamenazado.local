@@ -4,7 +4,7 @@ $pdo = require_once __DIR__ . '/../../config/conectorDatabase.php';
 
 // Obtener el ID del pájaro desde la URL utilizando una expresión regular
 $request = strtok($_SERVER['REQUEST_URI'], '?'); // Obtener solo la parte de la ruta sin parámetros
-preg_match('/^\/pajaro\/(\d+)$/', $request, $matches);
+preg_match('/^\/pajaros\/(\d+)$/', $request, $matches);
 
 // Verificar si encontramos el ID del pájaro
 if (isset($matches[1])) {

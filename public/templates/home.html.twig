@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ lang }}">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ "vueloamenzado" | gettext }}</title>
-    <!-- Vincular CSS de Bootstrap desde la carpeta bootstrap -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ "vueloamenazado" | gettext }}</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /* Estilos de la tabla */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -19,108 +19,106 @@
         th {
             background-color: #f2f2f2;
         }
-        /* img {
-            max-width: 200px;
-            height: auto;
-        } */
         audio {
-            width: 200px;
+            width: 100%;
         }
-        .card-img {
-        width: 100%;
-        }
-        .card-body {
-        text-align: center;
-        }
+
+        /* Estilos de la tarjeta */
         .card {
             cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card-img-top {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .card-body {
+            text-align: center;
+        }
+
+        /* Estilos del filtro alfabético */
+        .alphabet-filter {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .alphabet-filter a {
+            padding: 8px 12px;
+            border: 1px solid #007bff;
+            color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .alphabet-filter a:hover, 
+        .alphabet-filter a.active {
+            background-color: #007bff;
+            color: white;
         }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container mt-5">
-      <div class="d-flex justify-content-between">
-        <a href="?lang=es" class="btn btn-primary">{{ "Español" | gettext }}</a>
-        <a href="?lang=en" class="btn btn-primary">{{ "English" | gettext }}</a>
-      </div>
+        <!-- Selección de idioma -->
+        <div class="d-flex justify-content-between">
+            <a href="?lang=es" class="btn btn-primary">{{ "Español" | gettext }}</a>
+            <a href="?lang=en" class="btn btn-primary">{{ "English" | gettext }}</a>
+        </div>
 
-      <div class="mt-4">
-        <h1 class="display-4">
-          {{ "vueloamenzado" | gettext }}
-        </h1>
-        <p class="lead">{{ "Total de pajaros en riesgo:" | gettext }} {{ total_pajaros }}</p>
-      </div>
+        <!-- Título principal -->
+        <div class="mt-4 text-center">
+            <h1 class="display-4">{{ "Vuelo Amenazado" | gettext }}</h1>
+            <p class="lead">{{ "Total de pájaros en riesgo:" | gettext }} {{ total_pajaros }}</p>
+        </div>
 
-      <div class="row">
-        {% for pajaro in pajaros %}
-          <div class="col-md-4 mb-4">
-            <!-- Envolvemos la tarjeta en un enlace para redirigir -->
-            <a href="/pajaro/{{ pajaro.id_pajaro }}" class="card">
-              {% if pajaro.imagen %}
-                <img src="{{ pajaro.imagen }}" alt="Imagen de {{ pajaro.nombre }}" class="card-img-top">
-              {% else %}
-                <div class="card-img-top" style="height: 200px; background-color: #ccc;">Sin imagen</div>
-              {% endif %}
-              <div class="card-body">
-                <h5 class="card-title">{{ pajaro.nombre }}</h5>
-                <p class="card-text"><i>{{ pajaro.nombre_cientifico }}</i></p>
-              </div>
-            </a>
-          </div>
-        {% else %}
-          <div class="col-12">
-            <p>No se encontraron registros</p>
-          </div>
-        {% endfor %}
-      </div>
+        <!-- FILTRO ALFABÉTICO -->
+        <div class="alphabet-filter">
+            <a href="/" class="{{ letra_seleccionada == '' ? 'active' : '' }}">{{ "Todos" | gettext }}</a>
+            {% for letra in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'|split('') %}
+                <a href="?letra={{ letra }}" class="{{ letra_seleccionada == letra ? 'active' : '' }}">{{ letra }}</a>
+            {% endfor %}
+        </div>
 
-      <!-- <div>
-        <h1>Lista de Pájaros</h1>
-        <table>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Nombre Científico</th>
-            <th>Grupo</th>
-            <th>Imagen</th>
-            <th>Cómo Identificar</th>
-            <th>Canto</th>
-          </tr>
-          {% for pajaro in pajaros %}
-          <tr>
-            <td>{{ pajaro.id_pajaro }}</td>
-            <td>{{ pajaro.nombre }}</td>
-            <td>
-              <i>{{ pajaro.nombre_cientifico }}</i>
-            </td>
-            <td>{{ pajaro.grupo ?: 'N/A' }}</td>
-            <td>
-              {% if pajaro.imagen %}
-              <img
-                src="{{ pajaro.imagen }}"
-                alt="Imagen de {{ pajaro.nombre }}"
-              />
-              {% else %} Sin imagen {% endif %}
-            </td>
-            <td>{{ pajaro.como_identificar | nl2br }}</td>
-            <td>
-              {% if pajaro.canto_audio %}
-              <audio controls>
-                <source src="{{ pajaro.canto_audio }}" type="audio/mpeg" />
-                Tu navegador no soporta el elemento de audio.
-              </audio>
-              {% else %} Sin audio {% endif %}
-            </td>
-          </tr>
-          {% else %}
-          <tr>
-            <td colspan="7">No se encontraron registros</td>
-          </tr>
-          {% endfor %}
-        </table>
-      </div> -->
+        <!-- Tarjetas de pájaros -->
+        <div class="row g-3">
+            {% for pajaro in pajaros %}
+                <div class="col-6 col-md-4 col-lg-3">
+                    <a href="/pajaros/{{ pajaro.id_pajaro }}" class="card">
+                        {% if pajaro.imagen %}
+                            <img src="{{ pajaro.imagen }}" alt="{{ 'Imagen de' | gettext }} {{ pajaro.nombre }}" class="card-img-top">
+                        {% else %}
+                            <div class="card-img-top">{{ "Sin imagen" | gettext }}</div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ pajaro.nombre }}</h5>
+                            <p class="card-text"><i>{{ pajaro.nombre_cientifico }}</i></p>
+                        </div>
+                    </a>
+                </div>
+            {% else %}
+                <div class="col-12 text-center">
+                    <p>{{ "No se encontraron registros" | gettext }}</p>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-    <!-- Vincular JS de Bootstrap desde la carpeta bootstrap -->
+
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-  </body>
+</body>
 </html>

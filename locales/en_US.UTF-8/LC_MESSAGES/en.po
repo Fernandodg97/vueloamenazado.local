@@ -1,0 +1,260 @@
+msgid "Administración de Pájaros"
+msgstr "Bird Management"
+
+msgid "Español"
+msgstr "Spanish"
+
+msgid "English"
+msgstr "English"
+
+msgid "Panel de Administración"
+msgstr "Admin Panel"
+
+msgid "Editar Lugares"
+msgstr "Edit Places"
+
+msgid "Agregar Pájaro"
+msgstr "Add Bird"
+
+msgid "Editar Pájaro"
+msgstr "Edit Bird"
+
+msgid "ID del Pájaro"
+msgstr "Bird ID"
+
+msgid "Nombre"
+msgstr "Name"
+
+msgid "Nombre Científico"
+msgstr "Scientific Name"
+
+msgid "Imagen URL"
+msgstr "Image URL"
+
+msgid "Descripción de Identificación"
+msgstr "Identification Description"
+
+msgid "Enlace del Canto"
+msgstr "Song Link"
+
+msgid "Guardar"
+msgstr "Save"
+
+msgid "Lista de Pájaros"
+msgstr "Bird List"
+
+msgid "Imagen"
+msgstr "Image"
+
+msgid "Imagen SRC"
+msgstr "Image SRC"
+
+msgid "Canto"
+msgstr "Song"
+
+msgid "Canto SRC"
+msgstr "Song SRC"
+
+msgid "Acciones"
+msgstr "Actions"
+
+msgid "Detalles"
+msgstr "Details"
+
+msgid "Eliminar"
+msgstr "Delete"
+
+msgid "¿Seguro que quieres eliminar este pájaro?"
+msgstr "Are you sure you want to delete this bird?"
+
+msgid "No hay pájaros registrados."
+msgstr "No birds registered."
+
+msgid "No hay audio disponible"
+msgstr "No audio available"
+
+msgid "Tu navegador no soporta el elemento de audio."
+msgstr "Your browser does not support the audio element."
+
+msgid "Detalles del Pájaro"
+msgstr "Bird Details"
+
+msgid "Cargando..."
+msgstr "Loading..."
+
+msgid "Eliminar este pájaro"
+msgstr "Delete this bird"
+
+msgid "Formulario para agregar o editar pájaro"
+msgstr "Form to add or edit bird"
+
+msgid "Regresar"
+msgstr "Go back"
+
+msgid "Vuelo Amenazado"
+msgstr "Threatened Flight"
+
+msgid "Inglés"
+msgstr "English"
+
+msgid "Has llegado al final de Internet."
+msgstr "You've reached the end of the Internet."
+
+msgid "Ir al inicio"
+msgstr "Go to Home"
+
+msgid "Detalles del Lugar"
+msgstr "Place Details"
+
+msgid "Agregar Nuevo Lugar"
+msgstr "Add New Place"
+
+msgid "Ubicación"
+msgstr "Location"
+
+msgid "Agregar Lugar"
+msgstr "Add Place"
+
+msgid "Lista de Lugares"
+msgstr "List of Places"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Actualizar"
+msgstr "Update"
+
+msgid "No se han encontrado lugares."
+msgstr "No places found."
+
+msgid "Volver a la Administración"
+msgstr "Back to Admin"
+
+msgid "Editar Detalles del Pájaro"
+msgstr "Edit Bird Details"
+
+msgid "Estado de Conservación"
+msgstr "Conservation Status"
+
+msgid "Dieta"
+msgstr "Diet"
+
+msgid "Población Europea"
+msgstr "European Population"
+
+msgid "Pluma"
+msgstr "Feather"
+
+msgid "Longitud"
+msgstr "Length"
+
+msgid "Peso"
+msgstr "Weight"
+
+msgid "Envergadura"
+msgstr "Wingspan"
+
+msgid "Hábitats"
+msgstr "Habitats"
+
+msgid "Guardar Cambios"
+msgstr "Save Changes"
+
+msgid "Editar Avistamientos"
+msgstr "Edit Sightings"
+
+msgid "Avistamientos Actuales"
+msgstr "Current Sightings"
+
+msgid "Lugar ID"
+msgstr "Place ID"
+
+msgid "¿Seguro que deseas eliminar este avistamiento?"
+msgstr "Are you sure you want to delete this sighting?"
+
+msgid "No hay avistamientos registrados."
+msgstr "No sightings recorded."
+
+msgid "Agregar Nuevo Avistamiento (ID del Lugar)"
+msgstr "Add New Sighting (Place ID)"
+
+msgid "Agregar Avistamiento"
+msgstr "Add Sighting"
+
+msgid "Imagen de"
+msgstr "Image of"
+
+msgid "Datos"
+msgstr "Data"
+
+msgid "No hay datos disponibles."
+msgstr "No data available."
+
+msgid "Avistamientos"
+msgstr "Sightings"
+
+msgid "No se han encontrado avistamientos."
+msgstr "No sightings found."
+
+msgid "Volver a la lista de pájaros"
+msgstr "Back to the list of birds"
+
+msgid "Recuperar contraseña"
+msgstr "Recover Password"
+
+msgid "Correo electrónico"
+msgstr "Email"
+
+msgid "Enviar enlace de recuperación"
+msgstr "Send recovery link"
+
+msgid "Función en desarrollo, disculpen las molestias. Para recuperar la contraseña pónganse en contacto con"
+msgstr "Feature under development, sorry for the inconvenience. To recover your password, please contact"
+
+msgid "Volver al inicio de sesión"
+msgstr "Back to login"
+
+msgid "vueloamenazado"
+msgstr "Endangered Flight"
+
+msgid "Total de pájaros en riesgo:"
+msgstr "Total number of endangered birds:"
+
+msgid "Todos"
+msgstr "All"
+
+msgid "Sin imagen"
+msgstr "No image"
+
+msgid "No se encontraron registros"
+msgstr "No records found"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Iniciar sesión"
+msgstr "Log in"
+
+msgid "Usuario"
+msgstr "Username"
+
+msgid "Contraseña"
+msgstr "Password"
+
+msgid "Registrarse"
+msgstr "Register"
+
+msgid "¿Has olvidado tu contraseña?"
+msgstr "Forgot your password?"
+
+msgid "Registro"
+msgstr "Register"
+
+msgid "Crear cuenta"
+msgstr "Create account"
+
+msgid "Confirmar contraseña"
+msgstr "Confirm password"
+
+msgid "¿Ya tienes cuenta? Inicia sesión"
+msgstr "Already have an account? Log in"
