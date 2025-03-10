@@ -258,3 +258,18 @@ msgstr "Confirm password"
 
 msgid "¿Ya tienes cuenta? Inicia sesión"
 msgstr "Already have an account? Log in"
+
+msgid "grupo"
+msgstr "group"
+
+msgid "Grupo"
+msgstr "Group"
+
+msgid "No se encontraron detalles para el pájaro con ID: %s"
+msgstr "No details found for the bird with ID: %s"
+
+msgid "Seleccionar Lugar para Avistamiento"
+msgstr "Select Location for Sighting"
+
+msgid "Seleccione un lugar"
+msgstr "Select a place"

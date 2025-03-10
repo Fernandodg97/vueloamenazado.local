@@ -1,14 +1,16 @@
-{# Esto funciona todo cambiar la direccion al enviar por post, put etc #}
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Meta etiquetas para la codificación de caracteres y la configuración del viewport -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ "Administración de Pájaros"| gettext }}</title>
+    <title>{{ "Administración de Pájaros"| gettext }}</title> <!-- Título de la página traducido -->
+    
+    <!-- Enlace a los estilos de Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    
     <style>
-        /* Responsividad general */
+        /* Estilos responsivos para diferentes tamaños de pantalla */
         @media (max-width: 768px) {
             .table td, .table th {
                 padding: 10px;
@@ -28,7 +30,7 @@
             }
         }
 
-        /* Responsive table */
+        /* Estilo para la tabla cuando es muy grande */
         .table-responsive {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -44,17 +46,22 @@
     </style>
 </head>
 <body class="container mt-5">
-    <div class="d-flex justify-content-between">
-            <a href="?lang=es" class="btn btn-primary">{{ "Español"|gettext }}</a>
-            <a href="?lang=en" class="btn btn-primary">{{ "English"|gettext }}</a>
-        </div>
 
+    <!-- Contenedor para los botones de cambio de idioma -->
+    <div class="d-flex justify-content-between">
+        <a href="?lang=es" class="btn btn-primary">{{ "Español"|gettext }}</a>
+        <a href="?lang=en" class="btn btn-primary">{{ "English"|gettext }}</a>
+    </div>
+
+    <!-- Título de la página de administración -->
     <h1 class="mb-4 text-center">{{ "Panel de Administración"|gettext }}</h1>
     
+    <!-- Enlace a la sección para editar lugares -->
     <nav class="mb-3">
         <a href="http://www.vueloamenazado.local/admin/lugares" class="btn btn-primary">{{ "Editar Lugares"|gettext }}</a>
     </nav>
 
+    <!-- Mostrar mensaje si existe -->
     {% if mensaje %}
         <div class="alert alert-success">{{ mensaje }}</div>
     {% endif %}
@@ -66,12 +73,14 @@
     
     <form method="POST" class="card p-4 shadow">
         {% if id is defined %}
+            <!-- Campo oculto para mostrar el ID del pájaro si estamos editando -->
             <div class="mb-3">
                 <label class="form-label">{{ "ID del Pájaro"|gettext }}</label>
                 <input type="text" class="form-control" name="id" value="{{ id }}" readonly>
             </div>
         {% endif %}
 
+        <!-- Campos del formulario para editar o agregar información del pájaro -->
         <div class="mb-3">
             <label class="form-label">{{ "Nombre"|gettext }}</label>
             <input type="text" class="form-control" name="nombre" value="{{ nombre | default('') }}" required>
@@ -79,6 +88,10 @@
         <div class="mb-3">
             <label class="form-label">{{ "Nombre Científico"|gettext }}</label>
             <input type="text" class="form-control" name="nombre_cientifico" value="{{ nombre_cientifico | default('') }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{{ "Grupo"|gettext }}</label>
+            <input type="text" class="form-control" name="grupo" value="{{ grupo | default('') }}" required>
         </div>
         <div class="mb-3">
             <label class="form-label">{{ "Imagen URL"|gettext }}</label>
@@ -93,10 +106,11 @@
             <input type="text" class="form-control" name="canto_audio" value="{{ canto_audio | default('') }}">
         </div>
 
+        <!-- Botón para enviar el formulario -->
         <button type="submit" class="btn btn-success w-100">{{ "Guardar"|gettext }}</button>
     </form>
 
-    <!-- Lista de pájaros -->
+    <!-- Sección que muestra la lista de pájaros -->
     <h2 class="mt-5">{{ "Lista de Pájaros"|gettext }}</h2>
     <div class="table-responsive">
         <table class="table table-striped text-center align-middle">
@@ -105,6 +119,7 @@
                     <th>{{ "ID"|gettext }}</th>
                     <th>{{ "Nombre"|gettext }}</th>
                     <th>{{ "Nombre Científico"|gettext }}</th>
+                    <th>{{ "Grupo"|gettext }}</th>
                     <th>{{ "Descripción de Identificación"|gettext }}</th>
                     <th>{{ "Imagen"|gettext }}</th>
                     <th>{{ "Imagen SRC"|gettext }}</th>
@@ -116,13 +131,21 @@
             <tbody>
                 {% for pajaro in pajaros %}
                     <tr>
-                        <form method="POST" action="http://www.vueloamenazado.local/admin/pajaros/{{ pajaro.id_pajaro }}">
+                       <form method="POST" action="">
+                            <!-- Campo oculto para el método PATCH si el pájaro tiene un id -->
+                            <input type="hidden" name="_method" value="{{ pajaro.id_pajaro ? 'PATCH' : 'POST' }}" />
+                            <!-- Campo oculto para enviar el id del pájaro -->
+                            <input type="hidden" name="id_pajaro" value="{{ pajaro.id_pajaro }}">
+                            <!-- Información del pájaro que se puede editar -->
                             <td>{{ pajaro.id_pajaro }}</td>
                             <td>
                                 <input type="text" class="form-control" name="nombre" value="{{ pajaro.nombre }}" required>
                             </td>
                             <td>
                                 <input type="text" class="form-control" name="nombre_cientifico" value="{{ pajaro.nombre_cientifico }}" required>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="grupo" value="{{ pajaro.grupo }}" required>
                             </td>
                             <td>
                                 <input type="text" class="form-control" name="como_identificar" value="{{ pajaro.como_identificar }}">
@@ -146,6 +169,7 @@
                                 <input type="text" class="form-control" name="canto_audio" value="{{ pajaro.canto_audio }}">
                             </td>
                             <td>
+                                <!-- Botones para realizar acciones (Detalles, Guardar, Eliminar) -->
                                 <div class="d-flex flex-column gap-2">
                                     <a href="http://www.vueloamenazado.local/admin/pajaros/{{ pajaro.id_pajaro }}" class="btn btn-info">{{ "Detalles"|gettext }}</a>
                                     <button type="submit" class="btn btn-success">{{ "Guardar"|gettext }}</button>
@@ -155,6 +179,7 @@
                         </form>
                     </tr>
                 {% else %}
+                    <!-- Si no hay pájaros registrados, mostrar mensaje -->
                     <tr>
                         <td colspan="9" class="text-center text-muted">{{ "No hay pájaros registrados."|gettext }}</td>
                     </tr>
@@ -163,6 +188,7 @@
         </table>
     </div>
 
+    <!-- Script de Bootstrap para la funcionalidad de la página -->
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

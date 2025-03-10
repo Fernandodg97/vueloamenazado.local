@@ -35,49 +35,78 @@
 
         <h1 class="text-center mb-4">{{ 'Panel de Administración' | gettext }}</h1>
 
-        {% if mensaje %}
-        <div class="alert alert-info text-center">{{ mensaje }}</div>
+        {% if mensaje is not empty %}
+            <div class="alert alert-info">{{ mensaje }}</div>
         {% endif %}
 
-        <!-- Formulario para editar los detalles del pájaro -->
+        {% if mensaje_error %}
+            <p class="alert alert-warning text-center mb-4">
+                {{ 'No se encontraron detalles para el pájaro con ID: %s' | gettext | format(idPajaro) }}
+            </p>
+        {% endif %}
+
+        <!-- Formulario para editar o crear un pájaro -->
         <div class="card shadow p-4 mb-4">
-          <h2 class="text-center mb-3">{{ 'Editar Detalles del Pájaro' | gettext }}</h2>
-          <form method="POST">
-            <input type="hidden" name="actualizar_pajaro" value="true" />
-            <div class="mb-3">
-              <label class="form-label">{{ 'Estado de Conservación' | gettext }}</label>
-              <input type="text" class="form-control" name="estado_conservacion" value="{{ pajaro.estado_conservacion }}" required />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">{{ 'Dieta' | gettext }}</label>
-              <input type="text" class="form-control" name="dieta" value="{{ pajaro.dieta }}" required />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">{{ 'Población Europea' | gettext }}</label>
-              <input type="text" class="form-control" name="poblacion_europea" value="{{ pajaro.poblacion_europea }}" required />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">{{ 'Pluma' | gettext }}</label>
-              <input type="text" class="form-control" name="pluma" value="{{ pajaro.pluma }}" required />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">{{ 'Longitud' | gettext }}</label>
-              <input type="text" class="form-control" name="longitud" value="{{ pajaro.longitud }}" required />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">{{ 'Peso' | gettext }}</label>
-              <input type="text" class="form-control" name="peso" value="{{ pajaro.peso }}" required />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">{{ 'Envergadura' | gettext }}</label>
-              <input type="text" class="form-control" name="envergadura" value="{{ pajaro.envergadura }}" required />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">{{ 'Hábitats' | gettext }}</label>
-              <input type="text" class="form-control" name="habitats" value="{{ pajaro.habitats }}" required />
-            </div>
-            <button type="submit" class="btn btn-success w-100">{{ 'Guardar Cambios' | gettext }}</button>
-          </form>
+            <h2 class="text-center mb-3">{{ 'Editar Detalles del Pájaro' | gettext }}</h2>
+
+            <form method="POST" >
+                <input type="hidden" name="actualizar_pajaro" value="true" />
+                
+                {# Enviar el ID clave si existe #}
+                <input type="hidden" name="id_clave" value="{{ pajaro.id_clave is defined ? pajaro.id_clave : '' }}" />
+
+                <div class="mb-3">
+                    <label class="form-label">{{ 'Estado de Conservación' | gettext }}</label>
+                    <input type="text" class="form-control" name="estado_conservacion"
+                          value="{{ pajaro.estado_conservacion is defined ? pajaro.estado_conservacion : '' }}" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ 'Dieta' | gettext }}</label>
+                    <input type="text" class="form-control" name="dieta"
+                          value="{{ pajaro.dieta is defined ? pajaro.dieta : '' }}" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ 'Población Europea' | gettext }}</label>
+                    <input type="text" class="form-control" name="poblacion_europea"
+                          value="{{ pajaro.poblacion_europea is defined ? pajaro.poblacion_europea : '' }}" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ 'Pluma' | gettext }}</label>
+                    <input type="text" class="form-control" name="pluma"
+                          value="{{ pajaro.pluma is defined ? pajaro.pluma : '' }}" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ 'Longitud' | gettext }}</label>
+                    <input type="text" class="form-control" name="longitud"
+                          value="{{ pajaro.longitud is defined ? pajaro.longitud : '' }}" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ 'Peso' | gettext }}</label>
+                    <input type="text" class="form-control" name="peso"
+                          value="{{ pajaro.peso is defined ? pajaro.peso : '' }}" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ 'Envergadura' | gettext }}</label>
+                    <input type="text" class="form-control" name="envergadura"
+                          value="{{ pajaro.envergadura is defined ? pajaro.envergadura : '' }}" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ 'Hábitats' | gettext }}</label>
+                    <input type="text" class="form-control" name="habitats"
+                          value="{{ pajaro.habitats is defined ? pajaro.habitats : '' }}" required />
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">
+                    {{ 'Guardar Cambios' | gettext }}
+                </button>
+            </form>
         </div>
 
         <!-- Formulario para editar los avistamientos -->
@@ -86,31 +115,66 @@
 
           <!-- Lista de avistamientos actuales -->
           <h5 class="mb-3">{{ 'Avistamientos Actuales' | gettext }}</h5>
-          {% if avistamientos %}
-          <ul class="list-group mb-3">
-            {% for avistamiento in avistamientos %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              {{ 'Lugar ID' | gettext }}: {{ avistamiento.id_lugar }}
-              <a href="?eliminar_avistamiento={{ avistamiento.id_lugar }}" class="btn btn-danger btn-sm" onclick="return confirm('{{ '¿Seguro que deseas eliminar este avistamiento?' | gettext }}')">{{ 'Eliminar' | gettext }}</a>
-            </li>
-            {% endfor %}
-          </ul>
+          {% if avistamientos is not null and avistamientos|length > 0 %}
+            <ul class="list-group mb-3">
+              {% for avistamiento in avistamientos %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ avistamiento.id_lugar }}
+                    
+                    {# Buscar el lugar por su id_lugar #}
+                    {% set lugar = lugares|filter(l => l.id_lugar == avistamiento.id_lugar)|first %}
+                    
+                    {# Mostrar el nombre y la ubicación del lugar #}
+                    {% if lugar %}
+                      - {{ lugar.nombre }} - {{ lugar.ubicacion }}
+                    {% endif %}
+                  <a href="?eliminar=true&id_pajaro={{ idPajaro }}&id_lugar={{ avistamiento.id_lugar }}" 
+                    class="btn btn-danger btn-sm"  
+                    onclick="return confirm('{{ '¿Seguro que deseas eliminar este avistamiento?' | gettext }}')"> 
+                    {{ 'Eliminar' | gettext }} 
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
           {% else %}
-          <p class="text-center text-muted">{{ 'No hay avistamientos registrados.' | gettext }}</p>
+            <p class="text-center text-muted">{{ 'No hay avistamientos registrados.' | gettext }}</p>
           {% endif %}
+
 
           <!-- Formulario para agregar un nuevo avistamiento -->
           <form method="POST">
+            <!-- Campo oculto para indicar que la acción es actualizar avistamientos -->
+            <input type="hidden" name="accion" value="actualizar_avistamientos">
+            
+            <!-- Div que contiene el campo de selección para elegir un lugar -->
             <div class="mb-3">
-              <label class="form-label">{{ 'Agregar Nuevo Avistamiento (ID del Lugar)' | gettext }}</label>
-              <input type="number" class="form-control" name="nuevo_avistamiento" required />
+              <!-- Etiqueta que indica qué hacer, mostrando el texto traducido -->
+              <label class="form-label">{{ 'Seleccionar Lugar para Avistamiento' | gettext }}</label>
+              
+              <!-- Campo de selección (dropdown) donde el usuario podrá elegir un lugar -->
+              <select class="form-control" name="nuevo_avistamiento" required>
+                <!-- Opción predeterminada que no se puede seleccionar, sirve como texto instructivo -->
+                <option value="" disabled selected>{{ 'Seleccione un lugar' | gettext }}</option>
+                
+                <!-- Itera sobre la lista de lugares y crea una opción por cada lugar -->
+                {% for lugar in lugares %}
+                  <!-- Cada opción tendrá como valor el ID del lugar y mostrará su ID, nombre y ubicación -->
+                  <option value="{{ lugar.id_lugar }}">{{ lugar.id_lugar }} - {{ lugar.nombre }} - {{ lugar.ubicacion }}</option>
+                {% endfor %}
+              </select>
             </div>
+            
+            <!-- Botón para enviar el formulario, mostrando el texto traducido -->
             <button type="submit" class="btn btn-primary w-100">{{ 'Agregar Avistamiento' | gettext }}</button>
           </form>
+
         </div>
 
+        <!-- Botones para eliminar los datos del pajaro y vovler a admin -->
         <div class="d-flex justify-content-between mt-3">
-          <a href="?eliminar=true" class="btn btn-danger w-50 me-2" onclick="return confirm('{{ '¿Seguro que deseas eliminar este pájaro?' | gettext }}')">{{ 'Eliminar' | gettext }}</a>
+          <a href="?eliminar=true&id_pajaro={{ pajaro.id_clave }}" class="btn btn-danger w-50 me-2" onclick="return confirm('{{ '¿Seguro que deseas eliminar este pájaro?' | gettext }}')">
+            {{ 'Eliminar' | gettext }}
+        </a>
           <a href="/admin" class="btn btn-secondary w-50">{{ 'Volver a la Administración' | gettext }}</a>
         </div>
 

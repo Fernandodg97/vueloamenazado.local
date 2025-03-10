@@ -187,27 +187,36 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
     case 'avistamientos':
         if (!empty($chunks[3])) {
             $avistamientoId = $chunks[3];
+
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
-                // Llama al método para obtener los datos de un pajaro específico
+                // Llama al método para obtener los datos de un avistamiento específico
                 echo AvistamientosController::getAvistamientosId($avistamientoId, AvistamientosController::JSON);
             } elseif ($_SERVER["REQUEST_METHOD"] == "PATCH") {
-                // Llama al método para actualizar los datos de un pajaro
+                // Llama al método para actualizar los datos del avistamiento
                 echo AvistamientosController::patchAvistamientosIdUpdate($avistamientoId, AvistamientosController::JSON);
             } elseif ($_SERVER["REQUEST_METHOD"] == "DELETE") {
-                // Llama al método para eliminar un pajaro
-                echo AvistamientosController::deleteAvistamientosById($avistamientoId);
+                // Llama al método para eliminar un avistamiento por id_pajaro e id_lugar
+                // Se asume que el id_pajaro y el id_lugar se pasan en la URL de la siguiente forma:
+                // /avistamientos/{id_pajaro}/{id_lugar}
+                if (!empty($chunks[4])) {
+                    $idPajaro = $chunks[3]; // id_pajaro
+                    $idLugar = $chunks[4];  // id_lugar
+                    echo AvistamientosController::deleteAvistamientosByIdPajaroIdLugar($idPajaro, $idLugar);
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Faltan parámetros de id_pajaro o id_lugar.']);
+                }
             }
-        }
-        else{
+        } else {
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
-                // Llama al método para obtener todos los pajaros
+                // Llama al método para obtener todos los avistamientos
                 echo AvistamientosController::getAvistamientos(AvistamientosController::JSON);
             } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
-                // Llama al método para crear un nuevo pajaro
+                // Llama al método para crear un nuevo avistamiento
                 echo AvistamientosController::postNewAvistamientos(AvistamientosController::JSON);
             }
         }
         exit();
+
 
     default:
         // Si la ruta no coincide con ninguna de las anteriores, devuelve un error 404 (No encontrado)

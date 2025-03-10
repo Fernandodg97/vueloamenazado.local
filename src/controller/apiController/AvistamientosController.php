@@ -155,7 +155,6 @@ class AvistamientosController
     }
 
     // Actualiza por PATCH los Avistamientos seleccionado por id pajaro y id lugar/
-
     public static function patchAvistamientosIdUpdate($id, $mode = self::OBJECT)
     {
         // Recibe el JSON
@@ -169,11 +168,11 @@ class AvistamientosController
             return;
         }
 
-        // Definir los campos que pueden ser actualizados
-        $allowedFields = ['id_pajaro', 'id_lugar'];
+        // Definir el campo permitido que puede ser actualizado
+        $allowedFields = ['id_lugar'];  // Solo permitir la actualización de id_lugar
         $fieldsToUpdate = [];
 
-        // Filtramos los campos que se desean actualizar
+        // Filtramos los campos que se desean actualizar (solo id_lugar)
         foreach ($allowedFields as $field) {
             if (isset($data[$field])) {
                 $fieldsToUpdate[$field] = $data[$field];
@@ -187,14 +186,14 @@ class AvistamientosController
         }
 
         try {
-            // Construir la parte SET de la consulta dinámicamente
+            // Construir la parte SET de la consulta dinámicamente (solo con id_lugar)
             $setClause = [];
             foreach ($fieldsToUpdate as $key => $value) {
                 $setClause[] = "$key = :$key";
             }
 
             // Combinar las partes para la consulta SQL
-            $sql = "UPDATE Avistamientos SET " . implode(', ', $setClause) . " WHERE id_pajaro = :id";
+            $sql = "UPDATE Avistamientos SET " . implode(', ', $setClause) . " WHERE id_pajaro = :id_pajaro";
 
             // Prepara la consulta PDO
             $statement = (new self)->connection->prepare($sql);
@@ -203,11 +202,13 @@ class AvistamientosController
             foreach ($fieldsToUpdate as $key => $value) {
                 $statement->bindValue(":$key", $value);
             }
-            $statement->bindValue(':id', $id);
+
+            // Aquí, se usa el id_pajaro (el que ya se recibe) para filtrar el avistamiento específico
+            $statement->bindValue(':id_pajaro', $id);
 
             // Ejecutar la consulta y verificar el resultado
             if ($statement->execute()) {
-                echo json_encode(['status' => 'success', 'message' => 'Avistamientos actualizado correctamente.']);
+                echo json_encode(['status' => 'success', 'message' => 'Avistamiento actualizado correctamente.']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al actualizar los Avistamientos.']);
             }
@@ -218,11 +219,12 @@ class AvistamientosController
         }
     }
 
-    // Elimina por DELETE los Avistamientos seleccionado por id pajaro y id lugar/
+
+    // Elimina por DELETE los Avistamientos seleccionado por id pajaro/
     public static function deleteAvistamientosById($id)
     {
         try {
-            // Define la consulta SQL para eliminar un usuario por ID /
+            // Define la consulta SQL para eliminar un avistamiento por ID pajaro y id lugar /
             $sql = "DELETE FROM Avistamientos WHERE id_pajaro = :id";
 
             // Prepara la consulta PDO /
@@ -240,6 +242,33 @@ class AvistamientosController
 
         } catch (PDOException $error) {
             // Captura cualquier error que ocurra durante la ejecución /
+            echo json_encode(['status' => 'error', 'message' => 'Error al eliminar en la base de datos: ' . $error->getMessage()]);
+        }
+    }
+
+    // Elimina por DELETE los Avistamientos seleccionado por id_pajaro y id_lugar
+    public static function deleteAvistamientosByIdPajaroIdLugar($idPajaro, $idLugar)
+    {
+        try {
+            // Define la consulta SQL para eliminar un avistamiento por id_pajaro y id_lugar
+            $sql = "DELETE FROM Avistamientos WHERE id_pajaro = :id_pajaro AND id_lugar = :id_lugar";
+
+            // Prepara la consulta PDO
+            $statement = (new self)->connection->prepare($sql);
+
+            // Asignar los valores del ID con bindValue
+            $statement->bindValue(':id_pajaro', $idPajaro);
+            $statement->bindValue(':id_lugar', $idLugar);
+
+            // Ejecutar la consulta y verificar el resultado
+            if ($statement->execute()) {
+                echo json_encode(['status' => 'success', 'message' => 'Avistamiento eliminado correctamente.']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el avistamiento.']);
+            }
+
+        } catch (PDOException $error) {
+            // Captura cualquier error que ocurra durante la ejecución
             echo json_encode(['status' => 'error', 'message' => 'Error al eliminar en la base de datos: ' . $error->getMessage()]);
         }
     }

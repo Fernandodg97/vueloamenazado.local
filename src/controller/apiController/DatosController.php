@@ -102,7 +102,7 @@ class DatosController
 
     // Añade por POST datos /
 
-    public static function postNewDatos($mode)
+    public static function postNewDatos($mode):void
     {
         // Recibe el JSON enviado en la solicitud HTTP
         $input = file_get_contents('php://input');
@@ -163,7 +163,7 @@ class DatosController
 
     // Actualiza por PATCH los datos seleccionado por id /
 
-    public static function patchDatosIdUpdate($id, $mode = self::OBJECT)
+    public static function patchDatosIdUpdate($id, $mode = self::OBJECT):void
     {
         // Recibe el JSON
         $input = file_get_contents('php://input');
@@ -227,7 +227,7 @@ class DatosController
 
     // Elimina por DELETE los datos seleccionado por id /
 
-    public static function deleteDatosById($id)
+    public static function deleteDatosById($id):void
     {
         try {
             // Define la consulta SQL para eliminar un usuario por ID /

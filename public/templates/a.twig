@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ "Administración de Pájaros"|gettext }}</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="container mt-5">
+
+    <h1 class="mb-4 text-center">{{ "Panel de Administración"|gettext }}</h1>
+
+    {% if mensaje %}
+        <div class="alert alert-success">{{ mensaje }}</div>
+    {% endif %}
+
+    <!-- Formulario para agregar o editar pájaro -->
+    <h2 class="mb-3">{{ "Agregar / Editar Pájaro"|gettext }}</h2>
+    <form method="POST" class="card p-4 shadow">
+        <input type="hidden" name="id" value="{{ id | default('') }}">
+
+        <div class="mb-3">
+            <label class="form-label">{{ "Nombre"|gettext }}</label>
+            <input type="text" class="form-control" name="nombre" value="{{ nombre | default('') }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">{{ "Nombre Científico"|gettext }}</label>
+            <input type="text" class="form-control" name="nombre_cientifico" value="{{ nombre_cientifico | default('') }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">{{ "Imagen URL"|gettext }}</label>
+            <input type="text" class="form-control" name="imagen" value="{{ imagen | default('') }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">{{ "Enlace del Canto"|gettext }}</label>
+            <input type="text" class="form-control" name="canto_audio" value="{{ canto_audio | default('') }}">
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">{{ "Guardar"|gettext }}</button>
+    </form>
+
+    <!-- Lista de pájaros -->
+    <h2 class="mt-5">{{ "Lista de Pájaros"|gettext }}</h2>
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>{{ "ID"|gettext }}</th>
+                <th>{{ "Nombre"|gettext }}</th>
+                <th>{{ "Acciones"|gettext }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pajaro in pajaros %}
+                <tr>
+                    <td>{{ pajaro.id_pajaro }}</td>
+                    <td>{{ pajaro.nombre }}</td>
+                    <td>
+                        <form method="POST" action="/admin">
+                            <input type="hidden" name="id" value="{{ pajaro.id_pajaro }}">
+                            <input type="text" name="nombre" value="{{ pajaro.nombre }}">
+                            <button type="submit" class="btn btn-success">{{ "Guardar"|gettext }}</button>
+                        </form>
+
+                        <!-- Formulario seguro para eliminar -->
+                        <form method="POST" action="/admin" onsubmit="return confirm('{{ '¿Seguro que quieres eliminar este pájaro?'|gettext }}');">
+                            <input type="hidden" name="eliminar_id" value="{{ pajaro.id_pajaro }}">
+                            <button type="submit" class="btn btn-danger">{{ "Eliminar"|gettext }}</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center">{{ "No hay pájaros registrados."|gettext }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

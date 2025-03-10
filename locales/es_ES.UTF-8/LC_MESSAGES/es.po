@@ -252,3 +252,12 @@ msgstr "Confirmar contraseña"
 
 msgid "¿Ya tienes cuenta? Inicia sesión"
 msgstr "¿Ya tienes cuenta? Inicia sesión"
+
+msgid "grupo"
+msgstr "group"
+
+msgid "Grupo"
+msgid "group"
+
+msgid "No se encontraron detalles para el pájaro con ID: %s"
+msgstr "No details found for the bird with ID: %s"
