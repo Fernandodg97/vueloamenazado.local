@@ -4,3 +4,19 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Activar el motor de reescritura de URL (mod_rewrite)
+#RewriteEngine On
+
+# Establecer la base de la reescritura para las URLs
+#RewriteBase /
+
+# Si el archivo solicitado no es un directorio
+#RewriteCond %{REQUEST_FILENAME} !-d
+
+# Si el archivo solicitado no es un archivo físico
+#RewriteCond %{REQUEST_FILENAME} !-f
+
+# Reescribir la URL a index.php
+#RewriteRule ^(.*)$ index.php [QSA,L]
+

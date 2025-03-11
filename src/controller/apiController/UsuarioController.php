@@ -10,7 +10,8 @@ class UsuarioController
 
     public function __construct()
     {
-        $this->connection = DatabaseController::connect();
+        $dbController = DatabaseController::getInstance();
+        $this->connection = $dbController->getConnection();
     }
 
     // ### Hash ### /

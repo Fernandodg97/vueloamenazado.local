@@ -1,154 +1,319 @@
 <?php
 
-class SesionController {
-    // Iniciar sesión
-    public static function iniciarSesion($usuarioId, $usuarioNombre, $pdo) {
-        // Iniciar la sesión
-        session_start();
+// Incluir el archivo de conexión
+//$pdo = require_once __DIR__ . '/../../config/conectorDatabase.php';
 
-        // Guardar información de la sesión
-        $_SESSION['usuario_id'] = $usuarioId;
-        $_SESSION['nombre_usuario'] = $usuarioNombre;
+class SessionController {
 
-        // Generar un token único para mantener la sesión persistente
-        $token = bin2hex(random_bytes(16));
+    private $connection;
+    
 
-        // Guardar el token en la base de datos asociado con el usuario
-        $query = "UPDATE usuarios SET token = ? WHERE id = ?";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([$token, $usuarioId]);
-
-        // Establecer la cookie con el token de sesión persistente
-        setcookie('usuario_token', $token, time() + (30 * 24 * 60 * 60), '/', null, false, true); // 30 días
-
-        // Redirigir al panel de administración o página principal
-        header("Location: /admin");
-        exit;
+    public function __construct() {
+        //$this->connection = DataBaseController::connect();
+        $dbController = DatabaseController::getInstance();
+        $this->connection = $dbController->getConnection();
     }
 
-    // Verificar si el usuario está autenticado (iniciar sesión automáticamente si la cookie está presente)
-    public static function verificarSesion($pdo) {
+    public static function userSignUp($username, $email, $password) {
+
+        if ((new self)->exist($username, $email)) {
+            echo "Username or email already exist";
+            return;
+        } else {
+            try  {
+       
+                $sql = "INSERT INTO User
+                        (username, email, password, token) VALUES (:username, :email, :password, :token)";
+            
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                $statement = (new self)->connection->prepare($sql);
+                $statement->bindValue(':username', $username);
+                $statement->bindValue(':email', $email);
+                $statement->bindValue(':password', $hashed_password);
+                $statement->bindValue(':token', "");
+                $statement->setFetchMode(PDO::FETCH_OBJ);
+                $statement->execute();
+    
+                echo "Usuario registrado exitosamente";
+                return;
+    
+              } catch(PDOException $error) {
+                  echo $sql . "<br>" . $error->getMessage();
+                  return null;
+              }
+        }
+    }
+
+    public static function userLogin($username, $password){
+
+        if (!(new self)->exist($username)) {
+            //echo "Username does not exists";
+            return false;
+        } else {
+            try {
+       
+                $sql = "SELECT id, password FROM User WHERE username = :username";
+
+                $statement = (new self)->connection->prepare($sql);
+                $statement->bindValue(':username', $username);
+                $statement->setFetchMode(PDO::FETCH_OBJ);
+                $statement->execute();
+    
+                $user = $statement->fetch();
+    
+                if ($user && password_verify($password, $user->password)) {
+                    // La autenticación es correcta
+                    //session_start();
+                    
+                    $_SESSION['user_id'] = $user->id;
+                    $_SESSION['username'] = $username;
+                    // Redirigir al usuario a su perfil o a la página de inicio
+                    // header("Location: perfil.php");
+
+                    // Creamos un token de session
+                    self::generateSessionToken($user);
+                    
+                    // Creamos y guardamos el token jwt en una cookie segura
+                    SessionController::createSecureCookie("jwt", self::createJWT(), time() + (86400 * 30), "/"); // 30 días
+                    return true;
+
+                } else {
+                    // Usuario o contraseña incorrectos
+                    //echo "Nombre de usuario o contraseña incorrectos.";
+                    return false;
+                }
+    
+              } catch(PDOException $error) {
+                  echo $sql . "<br>" . $error->getMessage();
+                  return false;
+              }
+        }
+    }
+
+    public static function userLogout() {
         session_start();
+        session_destroy();
+        setcookie("token", "", time() - 3600, "/"); // Eliminar cookie
+        setcookie("jwt", "", time() - 3600, "/"); // Eliminar cookie
+    }
 
-        // Verificar si la cookie 'usuario_token' está presente
-        if (isset($_COOKIE['usuario_token'])) {
-            $token = $_COOKIE['usuario_token'];
+    private static function generateSessionToken($user) {
+           
+            if (isset($_SESSION['user_id'])) {
+                // Genera un token de sesión para recordar al usuario
+                $token = bin2hex(random_bytes(16));
+                setcookie("token", $token, time() + (86400 * 30), "/"); // 30 días
 
-            // Verificar si el token es válido
-            $query = "SELECT id, nombre FROM usuarios WHERE token = ?";
-            $stmt = $pdo->prepare($query);
-            $stmt->execute([$token]);
-            $usuario = $stmt->fetch();
-
-            if ($usuario) {
-                // Si el token es válido, inicializar sesión para el usuario
-                $_SESSION['usuario_id'] = $usuario['id'];
-                $_SESSION['nombre_usuario'] = $usuario['nombre'];
-
-                return true; // Usuario autenticado
+                // Guarda el token en la base de datos
+                $statement = (new self)->connection->prepare("UPDATE User SET token = :token WHERE id = :id");
+                $statement->bindValue(':token', $token);
+                $statement->bindValue(':id', $user->id);
+                
+                $statement->execute();
+                return true;
+            } else {
+                return false;
             }
+    }
+
+    public static function exist($username, $email = null) {
+
+        if ($email === null) {
+
+            try  {
+       
+                $sql = "SELECT * 
+                        FROM User
+                        WHERE username = :username";
+            
+                $statement = (new self)->connection->prepare($sql);
+                $statement->bindValue(':username', $username);
+                $statement->setFetchMode(PDO::FETCH_OBJ);
+                $statement->execute();
+    
+                $result = $statement->fetch();
+                return !$result ? false : true;
+    
+              } catch(PDOException $error) {
+                  echo $sql . "<br>" . $error->getMessage();
+              }
+
+        } else {
+
+            try  {
+       
+                $sql = "SELECT * 
+                        FROM User
+                        WHERE username = :username AND email = :email";
+            
+                $statement = (new self)->connection->prepare($sql);
+                $statement->bindValue(':username', $username);
+                $statement->bindValue(':email', $email);
+                $statement->setFetchMode(PDO::FETCH_OBJ);
+                $statement->execute();
+    
+                $result = $statement->fetch();
+                return !$result ? false : true;
+    
+              } catch(PDOException $error) {
+                  echo $sql . "<br>" . $error->getMessage();
+              }
+        }
+    }
+
+    //TODO cookie jwt
+    public static function verifyTokenCookie() {
+
+        if (isset($_COOKIE['token'])) {
+            $token = $_COOKIE['token'];
+            
+            $statement = (new self)->connection->prepare("SELECT id, username FROM User WHERE token = :token");
+            $statement->bindValue(":token", $token);
+            $statement->setFetchMode(PDO::FETCH_OBJ);
+            $statement->execute();
+            $user = $statement->fetch();
+
+            if ($user) {
+                $_SESSION['user_id'] = $user->id;
+                $_SESSION['username'] = $user->username;
+                return true;
+            } else {
+                // Token inválido
+                setcookie("token", "", time() - 3600, "/"); // Eliminar cookie
+                // header("Location: login.php");
+                // exit();
+                echo "Token inválido!";
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public static function verifyJWTCookie() {
+
+        if (isset($_COOKIE['jwt'])) {
+            $jwt = $_COOKIE['jwt'];
+            
+            $statement = (new self)->connection->prepare("SELECT id, username FROM User WHERE jwt = :jwt");
+            $statement->bindValue(":jwt", $jwt);
+            $statement->setFetchMode(PDO::FETCH_OBJ);
+            $statement->execute();
+            $user = $statement->fetch();
+
+            if ($user) {
+                $_SESSION['user_id'] = $user->id;
+                $_SESSION['username'] = $user->username;
+                return true;
+            } else {
+                // Token inválido
+                setcookie("jwt", "", time() - 3600, "/"); // Eliminar cookie
+                echo "JWT inválido!";
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public static function isLoggedIn() {
+        return self::verifyTokenCookie() && self::verifyJWTCookie();
+    }
+
+    private static function createJWT() {
+        if (isset($_SESSION['user_id'])) {
+            // Datos para el JWT
+            $header = [
+                'alg' => 'HS256',
+                'typ' => 'JWT'
+            ];
+
+            $payload = [
+                'user_id' => $_SESSION['user_id'],
+                'username' => $_SESSION['username'],
+                'exp' => time() + (86400 * 30) // Expira en 30 días
+            ];
+
+            // Generar el JWT
+            $jwt = self::generateJWT($header, $payload, self::getSecretKey());
+            // echo "JWT generado: " . $jwt . "\n";
+
+            // Guarda el token en la base de datos
+            $statement = (new self)->connection->prepare("UPDATE User SET jwt = :jwt WHERE id = :id");
+            $statement->bindValue(':jwt', $jwt);
+            $statement->bindValue(':id', $_SESSION['user_id']);
+            $statement->execute();
+
+            return $jwt;
+        } else {
+            return null;
+        }
+    }
+
+    public static function getSecretKey() {
+        // .env file placed in the root directory
+        $dotenv = Dotenv\Dotenv::createImmutable("../");
+        $dotenv->load();
+        
+        return $_ENV['JWT_SECRET_KEY'];
+    }
+
+    // Función para generar el JWT
+    public static function generateJWT($header, $payload, $secret_key) {
+        // Codificar en Base64 URL el header y el payload
+        $header_encoded = self::base64URLEncode(json_encode($header));
+        $payload_encoded = self::base64URLEncode(json_encode($payload));
+        
+        // Crear la firma
+        $signature = hash_hmac('sha256', "$header_encoded.$payload_encoded", $secret_key, true);
+        $signature_encoded = self::base64URLEncode($signature);
+        
+        // Combinar todos los elementos en el JWT
+        return "$header_encoded.$payload_encoded.$signature_encoded";
+    }
+
+    // Función para verificar el JWT
+    public static function verifyJWT($jwt, $secret_key) {
+        list($header_encoded, $payload_encoded, $signature_encoded) = explode('.', $jwt);
+        $signature = self::base64URLEncode(hash_hmac('sha256', "$header_encoded.$payload_encoded", $secret_key, true));
+
+        if ($signature !== $signature_encoded) {
+            return false;
         }
 
-        return false; // No autenticado
+        // Decodificar el payload para verificar el tiempo de expiración
+        $payload = json_decode(base64_decode($payload_encoded), true);
+        if (isset($payload['exp']) && $payload['exp'] < time()) {
+            return false; // Token expirado
+        }
+        return true; // Token válido
     }
 
-    // Cerrar sesión y eliminar la cookie
-    public static function cerrarSesion() {
-        session_start(); // Asegúrate de iniciar la sesión
-
-        // Destruir todas las variables de sesión
-        session_unset();
-        session_destroy();
-
-        // Eliminar la cookie de sesión persistente
-        setcookie('usuario_token', '', time() - 3600, '/', null, false, true); // Expirar la cookie
-
-        // Redirigir al login o página principal
-        header("Location: /login");
-        exit;
+    // Función auxiliar para codificar en Base64 URL seguro
+    public static function base64URLEncode($data) {
+        return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($data));
     }
+
+    public static function createSecureCookie($cookieName, $cookieValue, $expirationTime, $path) {
+        // Dominio (puede ser tu dominio o dejarlo vacío)
+        $domain = '';
+
+        // Secure: true para enviar solo sobre HTTPS
+        $secure = false;
+
+        // HttpOnly: true para evitar acceso desde JavaScript
+        $httponly = true;
+
+        // Configurar la cookie
+        setcookie(
+            $cookieName,       // Nombre de la cookie
+            $cookieValue,      // Valor de la cookie
+            $expirationTime,   // Tiempo de expiración
+            $path,             // Ruta
+            $domain,           // Dominio
+            $secure,           // Secure
+            $httponly          // HttpOnly
+        );
+    }
+
 }
-
-
-// 3. Explicación del Código
-// Iniciar sesión (iniciarSesion)
-// Cuando un usuario inicia sesión correctamente (por ejemplo, después de verificar el nombre de usuario y la contraseña), se inicia una sesión con session_start().
-// Guardamos el ID de usuario y el nombre de usuario en la sesión.
-// Generamos un token único y lo guardamos en la base de datos asociado con el usuario.
-// Establecemos una cookie usuario_token que contiene el token y tiene una duración de 30 días.
-// Finalmente, redirigimos al usuario al panel de administración o la página principal.
-// Verificar sesión (verificarSesion)
-// En cada solicitud, verificamos si existe la cookie usuario_token.
-// Si la cookie está presente, verificamos el token en la base de datos.
-// Si el token es válido, restauramos la sesión con la información del usuario y lo autenticamos automáticamente.
-// Cerrar sesión (cerrarSesion)
-// Destruimos las variables de sesión con session_unset() y session_destroy().
-// Eliminamos la cookie usuario_token para asegurarnos de que la sesión persistente también se elimine.
-// Redirigimos al usuario al formulario de login o a la página principal.
-// 4. Uso del Controlador en tu Aplicación
-// Ejemplo de Login:
-// Cuando un usuario inicia sesión, puedes usar el SesionController de la siguiente manera:
-
-// php
-// Copiar
-// Editar
-// Asumiendo que tienes un formulario de login con el usuario y contraseña
-
-// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//     Obtener datos del formulario
-//     $usuario = $_POST['usuario'];
-//     $contrasena = $_POST['contrasena'];
-
-//     Verificar las credenciales en la base de datos
-//     $query = "SELECT id, nombre, contrasena FROM usuarios WHERE usuario = ?";
-//     $stmt = $pdo->prepare($query);
-//     $stmt->execute([$usuario]);
-//     $usuarioDatos = $stmt->fetch();
-
-//     if ($usuarioDatos && password_verify($contrasena, $usuarioDatos['contrasena'])) {
-//         Si las credenciales son correctas, iniciar sesión
-//         SesionController::iniciarSesion($usuarioDatos['id'], $usuarioDatos['nombre'], $pdo);
-//     } else {
-//         echo "Credenciales incorrectas.";
-//     }
-// }
-// Ejemplo de Verificación en Páginas Protegidas:
-// Antes de mostrar cualquier página protegida, verifica si el usuario está autenticado:
-
-// php
-// Copiar
-// Editar
-// Iniciar la sesión y verificar si el usuario está autenticado
-// if (!SesionController::verificarSesion($pdo)) {
-//     Si no está autenticado, redirigir al login
-//     header("Location: /login");
-//     exit;
-// }
-// Ejemplo de Cierre de Sesión:
-// Cuando el usuario decide cerrar sesión, puedes llamar a SesionController::cerrarSesion():
-
-// php
-// Copiar
-// Editar
-// Cuando el usuario decide cerrar sesión
-// SesionController::cerrarSesion();
-// 5. Configuración de PDO
-// Asegúrate de que tu archivo config.php tenga la configuración correcta para la conexión a la base de datos con PDO:
-
-// php
-// Copiar
-// Editar
-// <?php
-// $dsn = 'mysql:host=localhost;dbname=nombre_base_datos';
-// $username = 'usuario_bd';
-// $password = 'contraseña_bd';
-
-// try {
-//     $pdo = new PDO($dsn, $username, $password);
-//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-// } catch (PDOException $e) {
-//     echo 'Error de conexión: ' . $e->getMessage();
-//     exit;
-// }
-// Resumen
-// Este controlador maneja las funciones básicas de autenticación y gestión de sesión, permitiendo que el usuario permanezca conectado incluso si cierra el navegador. Utiliza cookies persistentes y sesiones para mantener la autenticación.

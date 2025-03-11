@@ -1,10 +1,4 @@
 <?php
-// Incluir el archivo de conexión
-$pdo = require_once __DIR__ . '/../../config/conectorDatabase.php';
-
-if (!$pdo instanceof PDO) {
-    die("Error: No se pudo conectar a la base de datos.");
-}
 
 // Inicializar la variable
 $pajaros = [];
@@ -40,7 +34,11 @@ try {
 }
 
 // Contar los pájaros filtrados
+try {
 $totalPajaros = count($pajaros);
+} catch (Exception $e) {
+    error_log("Error: " . $e->getMessage());
+}
 
 // Cargar Twig y renderizar la plantilla
 $twig = require_once __DIR__ . '/../../config/twig.php';

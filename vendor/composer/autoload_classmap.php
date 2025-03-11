@@ -6,11 +6,17 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'AvistamientosController' => $baseDir . '/src/controller/apiController/AvistamientosController.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'DatabaseController' => $baseDir . '/src/controller/DataBaseController.php',
     'DatosController' => $baseDir . '/src/controller/apiController/DatosController.php',
     'LugaresController' => $baseDir . '/src/controller/apiController/LugaresController.php',
     'PajaroController' => $baseDir . '/src/controller/apiController/PajaroController.php',
+    'PhpToken' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
+    'SessionController' => $baseDir . '/src/controller/SesionController.php',
+    'Stringable' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+    'UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
     'UsuarioController' => $baseDir . '/src/controller/apiController/UsuarioController.php',
+    'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
 );

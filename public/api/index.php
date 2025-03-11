@@ -21,32 +21,15 @@ $request = $_SERVER['REQUEST_URI'];
 // Divide la URI en segmentos utilizando "/" como delimitador
 $chunks = explode("/", $request);
 
-// // Función para verificar autenticación del usuario
-// function isUserAuthenticated() {
-//     // Verifica si existe un token de autorización en los encabezados HTTP
-//     if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
-//         return false; // Si no hay token, el usuario no está autenticado
-//     }
+// Función para verificar autenticación del usuario
+session_start();
 
-//     // Obtiene el encabezado de autorización
-//     $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
-    
-//     // Extrae el token eliminando la parte "Bearer "
-//     $token = str_replace("Bearer ", "", $authHeader);
-    
-//     // Aquí puedes validar el token, por ejemplo, con JWT u otro sistema de autenticación
-//     return !empty($token); // Retorna verdadero si el token no está vacío
-// }
-
-// // Verifica la autenticación antes de permitir ciertos métodos HTTP sensibles (PUT, DELETE, POST)
-// if (in_array($_SERVER["REQUEST_METHOD"], ["PATCH", "DELETE", "POST"])) {
-//     // Si el usuario no está autenticado, devuelve un error 401 (No autorizado)
-//     if (!isUserAuthenticated()) {
-//         http_response_code(401); // Retorna un código de estado HTTP 401
-//         echo json_encode(["error" => "Unauthorized"]); // Devuelve un mensaje JSON indicando que la autenticación es requerida
-//         exit(); // Termina la ejecución del script
-//     }
-// }
+// Si no es una peticion GET y el usuario no esta validado manda un erro en formato JSON
+if ($_SERVER["REQUEST_METHOD"] !== "GET" && !SessionController::isLoggedIn()) {
+    http_response_code(401);
+    echo json_encode(["error" => "Unauthorized"]);
+    exit();
+}
 
 // Estructura de enrutamiento basada en la URI de la solicitud
 switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 del array)
@@ -59,29 +42,29 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
 
     // ### Usuario ### /    
 
-    case 'usuario': // Si la solicitud está relacionada con "usuario"
-        if (!empty($chunks[3])) { // Si hay un cuarto segmento en la URI, se asume que es un ID de usuario
-            $userId = $chunks[3];
-            if ($_SERVER["REQUEST_METHOD"] == "GET") {
-                // Llama al método para obtener los datos de un usuario específico
-                echo UsuarioController::getLinkId($userId, UsuarioController::JSON);
-            } elseif ($_SERVER["REQUEST_METHOD"] == "PATCH") {
-                // Llama al método para actualizar los datos de un usuario
-                echo UsuarioController::patchLinkIdUpdate($userId, UsuarioController::JSON);
-            } elseif ($_SERVER["REQUEST_METHOD"] == "DELETE") {
-                // Llama al método para eliminar un usuario
-                echo UsuarioController::deleteUserById($userId);
-            }
-        } else { // Si no hay un ID de usuario en la URI
-            if ($_SERVER["REQUEST_METHOD"] == "GET") {
-                // Llama al método para obtener todos los usuarios
-                echo UsuarioController::getLinks(UsuarioController::JSON);
-            } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
-                // Llama al método para crear un nuevo usuario
-                echo UsuarioController::postNewUser(UsuarioController::JSON);
-            }
-        }
-        exit();
+    // case 'usuario': // Si la solicitud está relacionada con "usuario"
+    //     if (!empty($chunks[3])) { // Si hay un cuarto segmento en la URI, se asume que es un ID de usuario
+    //         $userId = $chunks[3];
+    //         if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    //             // Llama al método para obtener los datos de un usuario específico
+    //             echo UsuarioController::getLinkId($userId, UsuarioController::JSON);
+    //         } elseif ($_SERVER["REQUEST_METHOD"] == "PATCH") {
+    //             // Llama al método para actualizar los datos de un usuario
+    //             echo UsuarioController::patchLinkIdUpdate($userId, UsuarioController::JSON);
+    //         } elseif ($_SERVER["REQUEST_METHOD"] == "DELETE") {
+    //             // Llama al método para eliminar un usuario
+    //             echo UsuarioController::deleteUserById($userId);
+    //         }
+    //     } else { // Si no hay un ID de usuario en la URI
+    //         if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    //             // Llama al método para obtener todos los usuarios
+    //             echo UsuarioController::getLinks(UsuarioController::JSON);
+    //         } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //             // Llama al método para crear un nuevo usuario
+    //             echo UsuarioController::postNewUser(UsuarioController::JSON);
+    //         }
+    //     }
+    //     exit();
 
     // ### Pajaro ### /
 

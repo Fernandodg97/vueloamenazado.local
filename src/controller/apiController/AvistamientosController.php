@@ -9,9 +9,9 @@ class AvistamientosController
 
     private $connection;
 
-    public function __construct()
-    {
-        $this->connection = DatabaseController::connect();
+    public function __construct(){
+        $dbController = DatabaseController::getInstance();
+        $this->connection = $dbController->getConnection();
     }
 
     // ### Avistamientos ### /

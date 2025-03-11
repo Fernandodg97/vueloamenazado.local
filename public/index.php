@@ -6,6 +6,12 @@ require_once __DIR__ . '/../config/gettext.php';
 $request = strtok($_SERVER['REQUEST_URI'], '?');
 $viewDir = '/views/';
 
+//Funcion para redirigir
+function redirect($url) {
+    header("Location: $url");
+    exit();
+}
+
 //Switch para configurar las rutas
 if (preg_match('/^\/pajaros\/(\d+)$/', $request, $matches)) {
     $idPajaro = $matches[1]; // Obtienes el ID del pájaro
@@ -13,7 +19,12 @@ if (preg_match('/^\/pajaros\/(\d+)$/', $request, $matches)) {
 } 
 elseif (preg_match('/^\/admin\/pajaros\/(\d+)$/', $request, $matches)) {
     $idPajaro = $matches[1];
-    require __DIR__ . $viewDir . 'adminPajaroId.php';
+    if (SessionController::isLoggedIn()) {
+        require __DIR__ . $viewDir . 'adminPajaroId.php';
+    } else {
+        redirect("/");
+    }
+
 }else {
     switch ($request) {
         case '':
@@ -26,8 +37,13 @@ elseif (preg_match('/^\/admin\/pajaros\/(\d+)$/', $request, $matches)) {
             break;
 
         case '/login':
-            require __DIR__ . $viewDir . 'login.php';
-            break;
+            if (SessionController::isLoggedIn()) {
+                redirect("/admin");
+                break;
+            } else {
+                require __DIR__ . $viewDir . 'login.php';
+                break;
+            }
 
         case '/register':
             require __DIR__ . $viewDir . 'register.php';
@@ -38,24 +54,34 @@ elseif (preg_match('/^\/admin\/pajaros\/(\d+)$/', $request, $matches)) {
             break;
 
         case '/admin':
-            require __DIR__ . $viewDir . 'adminDashboard.php';
-            break;
+            if (SessionController::isLoggedIn()) {
+                require __DIR__ . $viewDir . 'adminDashboard.php';
+                break;
+            } else {
+                redirect("/");
+                break;
+            }
 
         case '/admin/lugares':
-            require __DIR__ . $viewDir . 'adminLugares.php';
-            break;
+            if (SessionController::isLoggedIn()) {
+                require __DIR__ . $viewDir . 'adminLugares.php';
+                break;
+            } else {
+                redirect("/");
+                break;
+            }
+        
 
         case '/register_process':
             require '../process/registerProcess.php';
             break;
 
-        case '/login_process':
-            require '../process/loginProcess.php';
+        case '/logout':
+            require __DIR__ . $views . 'logout.php';
+            redirect("/");
             break;
 
-        case '/logout':
-            require '../process/logout.php';
-            break;
+        case 'not-found':
 
         default:
             http_response_code(404);
