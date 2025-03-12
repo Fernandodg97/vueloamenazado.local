@@ -273,3 +273,6 @@ msgstr "Select Location for Sighting"
 
 msgid "Seleccione un lugar"
 msgstr "Select a place"
+
+msgid "Recordarme"
+

@@ -1,5 +1,4 @@
 <?php
-
 // Inicializar la variable
 $pajaros = [];
 

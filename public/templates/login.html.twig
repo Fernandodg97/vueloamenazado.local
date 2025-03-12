@@ -35,9 +35,12 @@
                                 <label for="password">{{ "Contraseña"|gettext }}</label>
                                 <input type="password" id="password" name="password" class="form-control" required>
                             </div>
+                            <div class="form-group mt-3 form-check">
+                                <input type="checkbox" id="remember_me" name="remember_me" class="form-check-input">
+                                <label class="form-check-label" for="remember_me">{{ "Recordarme"|gettext }}</label>
+                            </div>
                             <div class="form-group mt-4 d-flex justify-content-between">
                                 <button type="submit" class="btn btn-primary">{{ "Iniciar sesión"|gettext }}</button>
-                                <a href="register" class="btn btn-secondary">{{ "Registrarse"|gettext }}</a>
                             </div>
                         </form>
                         <div class="form-group mt-3 text-center">

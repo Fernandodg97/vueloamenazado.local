@@ -1,4 +1,5 @@
 <?php
+print_r($_SESSION);
 
 // Inicializar variables
 $pajaros = [];  // Variable para almacenar la lista de pájaros obtenidos desde la API

@@ -1,4 +1,5 @@
 <?php
+// print_r($_SESSION);
 
 // Inicializar variables
 $lugar = null;  // Variable para almacenar un lugar específico

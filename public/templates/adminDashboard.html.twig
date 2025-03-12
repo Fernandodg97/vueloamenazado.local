@@ -59,6 +59,9 @@
     <!-- Enlace a la sección para editar lugares -->
     <nav class="mb-3">
         <a href="http://www.vueloamenazado.local/admin/lugares" class="btn btn-primary">{{ "Editar Lugares"|gettext }}</a>
+        <a href="register" class="btn btn-secondary">{{ "Registrarse"|gettext }}</a>
+        <a href="http://www.vueloamenazado.local/logout" class="btn btn-danger">{{ "Cerrar sesión"|gettext }}</a>
+
     </nav>
 
     <!-- Mostrar mensaje si existe -->
@@ -99,7 +102,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">{{ "Descripción de Identificación"|gettext }}</label>
-            <input type="text" class="form-control" name="como_identificar" value="{{ como_identificar | default('') }}">
+            <textarea class="form-control" name="como_identificar">{{ como_identificar | default('') }}</textarea>
         </div>
         <div class="mb-3">
             <label class="form-label">{{ "Enlace del Canto"|gettext }}</label>
@@ -148,7 +151,7 @@
                                 <input type="text" class="form-control" name="grupo" value="{{ pajaro.grupo }}" required>
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="como_identificar" value="{{ pajaro.como_identificar }}">
+                                <textarea class="form-control" name="como_identificar" >{{ pajaro.como_identificar }}</textarea>
                             </td>
                             <td><img src="{{ pajaro.imagen }}" alt="{{ pajaro.nombre }}" width="50"></td>
                             <td>

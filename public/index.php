@@ -45,13 +45,22 @@ elseif (preg_match('/^\/admin\/pajaros\/(\d+)$/', $request, $matches)) {
                 break;
             }
 
+        case '/logout':
+                require __DIR__ . $viewDir . 'logout.php';
+                break;
+
         case '/register':
-            require __DIR__ . $viewDir . 'register.php';
-            break;
+            if (SessionController::isLoggedIn()){
+                require __DIR__ . $viewDir . 'register.php';
+                break;
+            } else {
+                redirect("/");
+                break;
+            }
 
         case '/forgot_password':
-            require __DIR__ . $viewDir . 'forgotPassword.php';
-            break;
+                require __DIR__ . $viewDir . 'forgotPassword.php';
+                break;   
 
         case '/admin':
             if (SessionController::isLoggedIn()) {
@@ -70,16 +79,6 @@ elseif (preg_match('/^\/admin\/pajaros\/(\d+)$/', $request, $matches)) {
                 redirect("/");
                 break;
             }
-        
-
-        case '/register_process':
-            require '../process/registerProcess.php';
-            break;
-
-        case '/logout':
-            require __DIR__ . $views . 'logout.php';
-            redirect("/");
-            break;
 
         case 'not-found':
 

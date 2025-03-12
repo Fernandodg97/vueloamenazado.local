@@ -1,4 +1,15 @@
 <?php
+echo "<br>";
+print_r('<b>Datos sesión TEST:</b>');
+echo "<br>";
+echo "<b>¿Está logueado? </b>" . (SessionController::isLoggedIn() ? "<br>Sí" : "<br>No");
+echo "<br>";
+print_r('<b>Sesión: </b>');
+echo "<br>";
+;print_r($_SESSION);
+echo "<br>";
+print_r('<b>Token en cookie jwt: </b>');echo $_COOKIE['jwt'];
+echo "<br>";
 
 // Inicializar variables
 $pajaro = null;
@@ -22,7 +33,7 @@ if (isset($matches[1])) {
 // Obtener detalles del pájaro y avistamientos desde la API
 try {
     // Obtener datos del pájaro
-    $urlPajaro = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/detalles";
+    $urlPajaro = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/datos";
     $responsePajaro = file_get_contents($urlPajaro);
 
     if ($responsePajaro === FALSE) {
@@ -41,7 +52,7 @@ try {
         $mensajeError = [
             'error' => true,  // Indicamos que hay un error
             'idPajaro' => $idPajaro  // Incluimos el idPajaro
-        ];
+        ];http://www.vueloamenazado.local/api/pajaros/$idPajaro/detalles
     }
 
     // Obtener avistamientos del pájaro
@@ -104,8 +115,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["actualizar_pajaro"])) 
     $mensaje = $response !== false ? "Detalles guardados correctamente." : "Error al guardar detalles.";
 
     // Redirigir después de crear el lugar
-    header("Location:/admin/pajaros/$idPajaro");
-    exit();
+    //header("Location:/admin/pajaros/$idPajaro");
+    //exit();
+
+if ($response === false) {
+    echo "Error al hacer la solicitud.";
+} else {
+    echo "Respuesta de la API: " . $response;
+}
 }
 
 // Manejo de avistamientos - Agregar

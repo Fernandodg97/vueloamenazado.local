@@ -1,6 +1,5 @@
 <?php
-// Incluir el archivo de conexión
-$pdo = require_once __DIR__ . '/../../config/conectorDatabase.php';
+//print_r($_SESSION);
 
 // Obtener el ID del pájaro desde la URL utilizando una expresión regular
 $request = strtok($_SERVER['REQUEST_URI'], '?'); // Obtener solo la parte de la ruta sin parámetros

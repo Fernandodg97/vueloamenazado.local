@@ -1,15 +1,8 @@
 <?php
-
 // Configuración de CORS para permitir solicitudes desde cualquier origen
 header("Access-Control-Allow-Origin: *"); // Permite solicitudes desde cualquier dominio
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS"); // Define los métodos HTTP permitidos
 header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Especifica qué encabezados se pueden enviar en la solicitud
-
-// Manejar preflight requests (solicitudes OPTIONS que hacen los navegadores antes de ciertas peticiones)
-if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
-    http_response_code(200); // Responde con un código 200 OK para permitir la solicitud
-    exit(); // Termina la ejecución del script
-}
 
 // Carga las dependencias necesarias (como librerías de terceros, frameworks, etc.)
 // Asegúrate de que la ruta es correcta en relación con la estructura de tu proyecto
@@ -18,18 +11,41 @@ require_once "../../vendor/autoload.php";
 // Obtiene la URI de la solicitud actual
 $request = $_SERVER['REQUEST_URI'];
 
-// Divide la URI en segmentos utilizando "/" como delimitador
-$chunks = explode("/", $request);
+// Manejar preflight requests (solicitudes OPTIONS que hacen los navegadores antes de ciertas peticiones)
+if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
+    http_response_code(200); // Responde con un código 200 OK para permitir la solicitud
+    exit(); // Termina la ejecución del script
+}
 
-// Función para verificar autenticación del usuario
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
 session_start();
 
-// Si no es una peticion GET y el usuario no esta validado manda un erro en formato JSON
-if ($_SERVER["REQUEST_METHOD"] !== "GET" && !SessionController::isLoggedIn()) {
-    http_response_code(401);
-    echo json_encode(["error" => "Unauthorized"]);
+$_SESSION['SessionM'] = SessionController::isLoggedIn() ? "Sí" : "No";
+$_SESSION['cookieM'] = !empty($_COOKIE['jwt']) ? "Sí" : "No";
+
+// ##### El probelema parece ser que no se recoje la sesion ni las cookies del usaurio #####
+
+// Si el usuario NO está logueado y NO es una solicitud GET manda un erro en formato JSON (Se tienen que cumplir las 2)
+if (!SessionController::isLoggedIn() && $_SERVER["REQUEST_METHOD"] !== "GET") {
+    //http_response_code(401);  // Responde con código de error 401 (No autorizado)
+    //echo json_encode(["error" => "API: Unauthorized"]);  // Envía el mensaje de error en formato JSON
+    echo json_encode([
+        "message" => "Esta logueado? " . (SessionController::isLoggedIn() ? "Si" : "No"),
+        "sessionM" => $_SESSION['SessionM'],
+        "cookieM" => $_SESSION['cookieM']
+    ]);
     exit();
 }
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+// Divide la URI en segmentos utilizando "/" como delimitador
+$chunks = explode("/", $request);
 
 // Estructura de enrutamiento basada en la URI de la solicitud
 switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 del array)
@@ -70,19 +86,17 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
 
     case 'pajaros':
         // ### Avistamientos de pajaro ### /
-        if(!empty($chunks[4])){
+        if (!empty($chunks[4])) {
             $pajaroId = $chunks[3];
             if ($_SERVER["REQUEST_METHOD"] == "GET" && $chunks[4] == "avistamientos") {
                 // Llama al método para obtener los datos de un pajaro específico
                 echo AvistamientosController::getAvistamientosId($pajaroId, AvistamientosController::JSON);
-            }
-            else if($_SERVER["REQUEST_METHOD"] == "GET" && $chunks[4] == "detalles") {
+            } else if ($_SERVER["REQUEST_METHOD"] == "GET" && $chunks[4] == "datos") {
                 // Llama al método para obtener los datos de un pajaro específico
                 echo DatosController::getDatosIdPajaro($pajaroId, DatosController::JSON);
             }
 
-        }
-        else if (!empty($chunks[3])) {
+        } else if (!empty($chunks[3])) {
             $pajaroId = $chunks[3];
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 // Llama al método para obtener los datos de un pajaro específico
@@ -94,8 +108,7 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
                 // Llama al método para eliminar un pajaro
                 echo PajaroController::deletePajaroById($pajaroId);
             }
-        }
-        else{
+        } else {
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 // Llama al método para obtener todos los pajaros
                 echo PajaroController::getPajaro(PajaroController::JSON);
@@ -120,8 +133,7 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
                 // Llama al método para eliminar un pajaro
                 echo DatosController::deleteDatosById($datosId);
             }
-        }
-        else{
+        } else {
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 // Llama al método para obtener todos los pajaros
                 echo DatosController::getDatos(DatosController::JSON);
@@ -135,14 +147,13 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
     // ### Lugares ### /
     case 'lugares':
         // ### Avistamientos de pajaro ### /
-        if(!empty($chunks[4])){
+        if (!empty($chunks[4])) {
             $lugarId = $chunks[3];
             if ($_SERVER["REQUEST_METHOD"] == "GET" && $chunks[4] == "pajaros") {
                 // Llama al método para obtener los pajaros de ese lugar
                 echo AvistamientosController::getAvistamientosIdLugar($lugarId, AvistamientosController::JSON);
             }
-        }
-        else if (!empty($chunks[3])) {
+        } else if (!empty($chunks[3])) {
             $lugarId = $chunks[3];
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 // Llama al método para obtener los datos de un pajaro específico
@@ -154,8 +165,7 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
                 // Llama al método para eliminar un pajaro
                 echo LugaresController::deleteLugaresById($lugarId);
             }
-        }
-        else{
+        } else {
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 // Llama al método para obtener todos los pajaros
                 echo LugaresController::getLugares(LugaresController::JSON);
@@ -199,6 +209,21 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
             }
         }
         exit();
+    case 'sesion':
+        echo "<br>";
+        print_r('<b>Datos sesión TEST:</b>');
+        echo "<br>";
+        echo "<b>¿Está logueado? </b>" . (SessionController::isLoggedIn() ? "<br>Sí" : "<br>No");
+        echo "<br>";
+        print_r('<b>Sesión: </b>');
+        echo "<br>";
+        ;
+        print_r($_SESSION);
+        echo "<br>";
+        print_r('<b>Token en cookie jwt: </b>');
+        echo $_COOKIE['jwt'];
+        echo "<br>";
+        exit;
 
 
     default:

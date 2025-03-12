@@ -34,12 +34,12 @@ class SessionController {
                 $statement->setFetchMode(PDO::FETCH_OBJ);
                 $statement->execute();
     
-                echo "Usuario registrado exitosamente";
-                return;
+                //echo "Usuario registrado exitosamente";
+                return true;
     
               } catch(PDOException $error) {
-                  echo $sql . "<br>" . $error->getMessage();
-                  return null;
+                  //echo $sql . "<br>" . $error->getMessage();
+                  return false;
               }
         }
     }
@@ -63,7 +63,7 @@ class SessionController {
     
                 if ($user && password_verify($password, $user->password)) {
                     // La autenticación es correcta
-                    //session_start();
+                    session_start();
                     
                     $_SESSION['user_id'] = $user->id;
                     $_SESSION['username'] = $username;
