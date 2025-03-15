@@ -21,24 +21,32 @@ if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
 ###################################################################################################################
 ###################################################################################################################
 
-session_start();
 
-$_SESSION['SessionM'] = SessionController::isLoggedIn() ? "Sí" : "No";
-$_SESSION['cookieM'] = !empty($_COOKIE['jwt']) ? "Sí" : "No";
+// $sesionLogin = SessionController::isLoggedIn();
+
+// $cookieJWT = SessionController::verifyJWTCookie();
+
+
+// $metodoHttp = $_SERVER["REQUEST_METHOD"];
 
 // ##### El probelema parece ser que no se recoje la sesion ni las cookies del usaurio #####
-
+// ##### Comprobar si estas condiciones son correctas, relizamos un if true. #####
+//error_log("logged? " + !SessionController::isLoggedIn() + "----- Method? " + $_SERVER["REQUEST_METHOD"] !== "GET");
 // Si el usuario NO está logueado y NO es una solicitud GET manda un erro en formato JSON (Se tienen que cumplir las 2)
-if (!SessionController::isLoggedIn() && $_SERVER["REQUEST_METHOD"] !== "GET") {
-    //http_response_code(401);  // Responde con código de error 401 (No autorizado)
-    //echo json_encode(["error" => "API: Unauthorized"]);  // Envía el mensaje de error en formato JSON
-    echo json_encode([
-        "message" => "Esta logueado? " . (SessionController::isLoggedIn() ? "Si" : "No"),
-        "sessionM" => $_SESSION['SessionM'],
-        "cookieM" => $_SESSION['cookieM']
-    ]);
-    exit();
-}
+// if (!$cookieJWT && $metodoHttp!== "GET") {
+//     http_response_code(401);  // Responde con código de error 401 (No autorizado)
+//     echo json_encode(["error" => "API: Unauthorized"]);  // Envía el mensaje de error en formato JSON
+//     exit();
+// }
+
+// if (!$cookieJWT) {
+//     http_response_code(401);  // Responde con código de error 401 (No autorizado)
+//     echo json_encode(["error" => "API: Unauthorized"]);  // Envía el mensaje de error en formato JSON
+//     exit();
+// }
+
+
+
 
 ###################################################################################################################
 ###################################################################################################################
@@ -191,6 +199,14 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
                 // Llama al método para eliminar un avistamiento por id_pajaro e id_lugar
                 // Se asume que el id_pajaro y el id_lugar se pasan en la URL de la siguiente forma:
                 // /avistamientos/{id_pajaro}/{id_lugar}
+                $idPajaro = $chunks[3]; // id_pajaro
+                echo AvistamientosController::deleteAvistamientosById($idPajaro);
+            }
+        } elseif(!empty($chunks[4])){
+            if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
+                // Llama al método para eliminar un avistamiento por id_pajaro e id_lugar
+                // Se asume que el id_pajaro y el id_lugar se pasan en la URL de la siguiente forma:
+                // /avistamientos/{id_pajaro}/{id_lugar}
                 if (!empty($chunks[4])) {
                     $idPajaro = $chunks[3]; // id_pajaro
                     $idLugar = $chunks[4];  // id_lugar
@@ -199,6 +215,7 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
                     echo json_encode(['status' => 'error', 'message' => 'Faltan parámetros de id_pajaro o id_lugar.']);
                 }
             }
+
         } else {
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 // Llama al método para obtener todos los avistamientos
@@ -223,7 +240,7 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
         print_r('<b>Token en cookie jwt: </b>');
         echo $_COOKIE['jwt'];
         echo "<br>";
-        exit;
+        exit();
 
 
     default:
@@ -232,3 +249,11 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
         echo json_encode(["error" => "Not Found"]);
         exit();
 }
+
+// if (SessionController::isLoggedIn()) {
+//     require __DIR__ . $viewDir . 'adminLugares.php';
+//     break;
+// } else {
+//     redirect("/");
+//     break;
+// }

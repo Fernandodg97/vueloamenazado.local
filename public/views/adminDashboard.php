@@ -1,5 +1,5 @@
 <?php
-print_r($_SESSION);
+//print_r($_SESSION);
 
 // Inicializar variables
 $pajaros = [];  // Variable para almacenar la lista de pájaros obtenidos desde la API
@@ -85,16 +85,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" || $_SERVER["REQUEST_METHOD"] == "PATCH
 
 // Manejo de eliminación
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"])) {
+
     // Obtener el id del pájaro a eliminar desde la URL
     $idEliminar = $_GET["eliminar"];
-    // Definir la URL de la API para eliminar el pájaro
-    $url = "http://www.vueloamenazado.local/api/pajaros/$idEliminar";
+
+    // ####################### ELIMANR AVISTAMIENTOS PÁJARO ########################
+
+    // Crear el contexto para la solicitud DELETE
+    $context = stream_context_create([
+        "http" => [
+            "method" => "DELETE"
+        ]
+    ]);
+
+    // Definir la URL con el idPajaro para realizar la eliminación de los avistamientos
+    $urlEliminarAvistamiento = "http://www.vueloamenazado.local/api/avistamientos/$idEliminar";
+    
+    // Enviar la solicitud DELETE
+    $response = file_get_contents($urlEliminarAvistamiento, false, $context);
+
+    if ($response == false) {
+        // Si hay error, mostrar el mensaje
+        $mensaje = "Error al eliminar avistamientos.";
+    }      
+
+    // ####################### ELIMANR DATOS PÁJARO ########################
+
+    // Crear el contexto para la solicitud DELETE
+    $context = stream_context_create([
+        "http" => [
+            "method" => "DELETE",
+            "header" => "Content-Type: application/json"
+        ]
+    ]);
+
+    // Definir la URL con el idPajaro para realizar la eliminación de los datos
+    $url = "http://www.vueloamenazado.local/api/datos/$idEliminar";
+
+    // Enviar la solicitud DELETE
+    $response = file_get_contents($url, false, $context);
+    
+    if ($response == false) {
+        // Si hay error, mostrar el mensaje
+        $mensaje = "Error al eliminar datos del pájaro.";
+    }
+
+    // ####################### ELIMANR PÁJARO ########################
+
     // Crear el contexto para la solicitud DELETE
     $context = stream_context_create([
         "http" => [
             "method" => "DELETE"  // Método HTTP para eliminar
         ]
     ]);
+
+    // Definir la URL de la API para eliminar el pájaro
+    $url = "http://www.vueloamenazado.local/api/pajaros/$idEliminar";
 
     // Realizar la solicitud DELETE
     $response = file_get_contents($url, false, $context);

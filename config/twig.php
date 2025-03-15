@@ -1,7 +1,4 @@
 <?php
-// Iniciamos la sesión
-session_start();
-
 // Cargamos Composer autoload
 require_once '../vendor/autoload.php';
 
@@ -28,8 +25,11 @@ class GettextExtension extends \Twig\Extension\AbstractExtension {
 // Añadir el filtro de gettext a Twig
 $twig->addExtension(new GettextExtension());
 
+// Iniciamos la sesión
+session_start();
+
 // Pasar las variables de sesión al entorno de Twig
-$twig->addGlobal('session', $_SESSION);
+//$twig->addGlobal('session', $_SESSION);
 
 // Limpiar las variables de sesión después de cargarlas
 function clearSessionMessages() {

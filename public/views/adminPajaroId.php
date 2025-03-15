@@ -1,18 +1,20 @@
 <?php
-echo "<br>";
-print_r('<b>Datos sesión TEST:</b>');
-echo "<br>";
-echo "<b>¿Está logueado? </b>" . (SessionController::isLoggedIn() ? "<br>Sí" : "<br>No");
-echo "<br>";
-print_r('<b>Sesión: </b>');
-echo "<br>";
-;print_r($_SESSION);
-echo "<br>";
-print_r('<b>Token en cookie jwt: </b>');echo $_COOKIE['jwt'];
-echo "<br>";
+// session_start();
+// echo "<br>";
+// print_r('<b>Datos sesión TEST:</b>');
+// echo "<br>";
+// echo "<b>¿Está logueado? </b>" . (SessionController::isLoggedIn() ? "<br>Sí" : "<br>No");
+// echo "<br>";
+// print_r('<b>Sesión: </b>');
+// echo "<br>";
+// ;print_r($_SESSION);
+// echo "<br>";
+// print_r('<b>Token en cookie jwt: </b>');echo $_COOKIE['jwt'];
+// echo "<br>";
 
 // Inicializar variables
 $pajaro = null;
+$datos = null;
 $mensaje = "";
 $avistamientos = [];
 $lugares = [];  // Variable para almacenar todos los lugares
@@ -30,7 +32,16 @@ if (isset($matches[1])) {
     exit;
 }
 
-// Obtener detalles del pájaro y avistamientos desde la API
+// Consultar pájaro
+try {
+    // Obtener datos del pájaro desde la API
+    $pajaroJson = file_get_contents("http://www.vueloamenazado.local/api/pajaros/$idPajaro");
+    $pajaro = json_decode($pajaroJson, true);
+} catch (Exception $e) {
+    error_log("Error: " . $e->getMessage());
+}
+
+// Obtener datos del pájaro y avistamientos desde la API
 try {
     // Obtener datos del pájaro
     $urlPajaro = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/datos";
@@ -46,7 +57,7 @@ try {
     }
 
     if (isset($pajaroArray[0])) {
-        $pajaro = $pajaroArray[0];
+        $datos = $pajaroArray[0];
         $mensajeError = false;  // Si el pájaro se encuentra, asignamos false
     } else {
         $mensajeError = [
@@ -75,8 +86,57 @@ try {
     $mensaje = "Error: " . $e->getMessage();
 }
 
-// Manejo de formulario (Actualizar detalles del pájaro)
+// Manejo de formulario (Actualizar pájaro)
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["actualizar_pajaro"])) {
+    
+    $nombre = $_POST["nombre"] ?? '';  // Nombre del pájaro
+    $nombre_cientifico = $_POST["nombre_cientifico"] ?? '';  // Nombre científico
+    $grupo = $_POST["grupo"] ?? '';  // Grupo del pájaro
+    $imagen = $_POST["imagen"] ?? '';  // URL de la imagen
+    $como_identificar = $_POST["como_identificar"] ?? '';  // Descripción de cómo identificar al pájaro
+    $canto_audio = $_POST["canto_audio"] ?? '';  // URL del audio del canto
+
+    var_dump($_POST); // Verificar que todos los datos del formulario se están enviando correctamente
+
+    // Convertir los datos en un formato JSON para enviarlos a la API
+    $data = json_encode([
+        "nombre" => $nombre,
+        "nombre_cientifico" => $nombre_cientifico,
+        "grupo" => $grupo,
+        "imagen" => $imagen,
+        "como_identificar" => $como_identificar,
+        "canto_audio" => $canto_audio
+    ]);
+
+    // Crear el contexto para la solicitud HTTP
+    $context = stream_context_create([
+        "http" => [
+            "method" => "PATCH",  // Usar PATCH para actualización
+            "header" => "Content-Type: application/json",  // Especificar que el contenido es JSON
+            "content" => $data  // Los datos del formulario en formato JSON
+        ]
+    ]);
+
+    // Definir la URL de la API para actualizar el pájaro
+    $url = "http://www.vueloamenazado.local/api/pajaros/$idPajaro";
+
+    // Realizar la solicitud HTTP
+    $response = file_get_contents($url, false, $context);
+
+    // Verificar si la solicitud fue exitosa
+    if ($response !== false) {
+        $mensaje = "Pájaro actualizado correctamente.";
+    } else {
+        $mensaje = "Error al procesar la solicitud.";
+    }
+
+    // Redirigir a la página de administración después de procesar el formulario
+    header("Location:/admin/pajaros/$idPajaro");
+    exit;  // Finalizar la ejecución después de la redirección
+}
+
+// Manejo de formulario (Actualizar detalles del pájaro)
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["actualizar_datos_pajaro"])) {
     // Se obtiene el id_clave si existe
     $idClave = $_POST["id_clave"] ?? null;
     
@@ -115,8 +175,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["actualizar_pajaro"])) 
     $mensaje = $response !== false ? "Detalles guardados correctamente." : "Error al guardar detalles.";
 
     // Redirigir después de crear el lugar
-    //header("Location:/admin/pajaros/$idPajaro");
-    //exit();
+    header("Location:/admin/pajaros/$idPajaro");
+    exit();
 
 if ($response === false) {
     echo "Error al hacer la solicitud.";
@@ -201,7 +261,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"])) {
         ]);
 
         // Definir la URL con el idPajaro para realizar la eliminación
-        $url = "http://www.vueloamenazado.local/api/datos/$idPajaro/$idLugar";
+        $url = "http://www.vueloamenazado.local/api/datos/$idPajaro";
 
         // Enviar la solicitud DELETE
         $response = file_get_contents($url, false, $context);
@@ -239,6 +299,7 @@ require_once __DIR__ . '/../../config/twig.php';
 // Renderizar la plantilla Twig
 echo $twig->render('adminPajaroId.html.twig', [
     'pajaro' => $pajaro,
+    'datos' => $datos,
     'mensaje' => $mensaje,
     'avistamientos' => $avistamientos,
     'lugares' => $lugares,

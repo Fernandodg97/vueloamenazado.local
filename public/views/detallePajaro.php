@@ -27,7 +27,7 @@ try {
 
     if ($pajaro) {
         // Obtener detalles adicionales del pájaro
-        $datosJson = file_get_contents("http://www.vueloamenazado.local/api/pajaros/$idPajaro/detalles");
+        $datosJson = file_get_contents("http://www.vueloamenazado.local/api/pajaros/$idPajaro/datos");
         $datosArray = json_decode($datosJson, true);
         $datos = $datosArray[0] ?? null; // Extraer el primer elemento del array si existe
 

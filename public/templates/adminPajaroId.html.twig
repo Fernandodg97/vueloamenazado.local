@@ -45,62 +45,107 @@
             </p>
         {% endif %}
 
-        <!-- Formulario para editar o crear un pájaro -->
+        <!-- Formulario para editar pájaro -->
+        <h2 class="mb-3">
+            {% if id is defined %}{{ "Editar Pájaro"|gettext }}{% else %}{{ "Editar Pájaro"|gettext }}{% endif %}
+        </h2>
+        <div class="card shadow p-4 mb-4">
+          <form method="POST">
+          <input type="hidden" name="actualizar_pajaro" value="true" />
+            <!-- Campos del formulario para editar o agregar información del pájaro -->
+            <div class="mb-3">
+                <label class="form-label">{{ "Nombre"|gettext }}</label>
+                <input type="text" class="form-control" name="nombre" value="{{ pajaro.nombre  }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{{ "Nombre Científico"|gettext }}</label>
+                <input type="text" class="form-control" name="nombre_cientifico" value="{{ pajaro.nombre_cientifico }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{{ "Grupo"|gettext }}</label>
+                <input type="text" class="form-control" name="grupo" value="{{ pajaro.grupo }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{{ "Imagen URL"|gettext }}</label>
+                <input type="text" class="form-control" name="imagen" value="{{ pajaro.imagen }}">
+                <br>
+                <img src="{{ pajaro.imagen }}" alt="{{ pajaro.nombre }}" width="200" style="display: block; margin: auto;">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{{ "Descripción de Identificación"|gettext }}</label>
+                <textarea class="form-control" name="como_identificar" rows="6">{{ pajaro.como_identificar }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{{ "Enlace del Canto"|gettext }}</label>
+                <input type="text" class="form-control" name="canto_audio" value="{{ pajaro.canto_audio }}">
+                <br>
+                <audio controls>
+                  <source src="{{ pajaro.canto_audio }}" type="audio/mpeg">
+                  {{ "Tu navegador no soporta el elemento de audio."|gettext }}
+                </audio>
+            </div>
+
+            <!-- Botón para enviar el formulario -->
+            <button type="submit" class="btn btn-success w-100">{{ "Guardar"|gettext }}</button>
+        </form>
+            
+        </div> 
+        <!-- Formulario para editar o crear un detalles del pájaro -->
         <div class="card shadow p-4 mb-4">
             <h2 class="text-center mb-3">{{ 'Editar Detalles del Pájaro' | gettext }}</h2>
 
             <form method="POST" >
-                <input type="hidden" name="actualizar_pajaro" value="true" />
+                <input type="hidden" name="actualizar_datos_pajaro" value="true" />
                 
                 {# Enviar el ID clave si existe #}
-                <input type="hidden" name="id_clave" value="{{ pajaro.id_clave is defined ? pajaro.id_clave : '' }}" />
+                <input type="hidden" name="id_clave" value="{{ datos.id_clave is defined ? datos.id_clave : '' }}" />
 
                 <div class="mb-3">
                     <label class="form-label">{{ 'Estado de Conservación' | gettext }}</label>
                     <input type="text" class="form-control" name="estado_conservacion"
-                          value="{{ pajaro.estado_conservacion is defined ? pajaro.estado_conservacion : '' }}" required />
+                          value="{{ datos.estado_conservacion is defined ? datos.estado_conservacion : '' }}" required />
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">{{ 'Dieta' | gettext }}</label>
                     <input type="text" class="form-control" name="dieta"
-                          value="{{ pajaro.dieta is defined ? pajaro.dieta : '' }}" required />
+                          value="{{ datos.dieta is defined ? datos.dieta : '' }}" required />
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">{{ 'Población Europea' | gettext }}</label>
                     <input type="text" class="form-control" name="poblacion_europea"
-                          value="{{ pajaro.poblacion_europea is defined ? pajaro.poblacion_europea : '' }}" required />
+                          value="{{ datos.poblacion_europea is defined ? datos.poblacion_europea : '' }}" required />
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">{{ 'Pluma' | gettext }}</label>
                     <input type="text" class="form-control" name="pluma"
-                          value="{{ pajaro.pluma is defined ? pajaro.pluma : '' }}" required />
+                          value="{{ datos.pluma is defined ? datos.pluma : '' }}" required />
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">{{ 'Longitud' | gettext }}</label>
                     <input type="text" class="form-control" name="longitud"
-                          value="{{ pajaro.longitud is defined ? pajaro.longitud : '' }}" required />
+                          value="{{ datos.longitud is defined ? datos.longitud : '' }}" required />
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">{{ 'Peso' | gettext }}</label>
                     <input type="text" class="form-control" name="peso"
-                          value="{{ pajaro.peso is defined ? pajaro.peso : '' }}" required />
+                          value="{{ datos.peso is defined ? datos.peso : '' }}" required />
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">{{ 'Envergadura' | gettext }}</label>
                     <input type="text" class="form-control" name="envergadura"
-                          value="{{ pajaro.envergadura is defined ? pajaro.envergadura : '' }}" required />
+                          value="{{ datos.envergadura is defined ? datos.envergadura : '' }}" required />
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">{{ 'Hábitats' | gettext }}</label>
                     <input type="text" class="form-control" name="habitats"
-                          value="{{ pajaro.habitats is defined ? pajaro.habitats : '' }}" required />
+                          value="{{ datos.habitats is defined ? datos.habitats : '' }}" required />
                 </div>
 
                 <button type="submit" class="btn btn-success w-100">
@@ -172,7 +217,7 @@
 
         <!-- Botones para eliminar los datos del pajaro y vovler a admin -->
         <div class="d-flex justify-content-between mt-3">
-          <a href="?eliminar=true&id_pajaro={{ pajaro.id_clave }}" class="btn btn-danger w-50 me-2" onclick="return confirm('{{ '¿Seguro que deseas eliminar este pájaro?' | gettext }}')">
+          <a href="?eliminar=true&id_pajaro={{ datos.id_clave }}" class="btn btn-danger w-50 me-2" onclick="return confirm('{{ '¿Seguro que deseas eliminar este pájaro?' | gettext }}')">
             {{ 'Eliminar' | gettext }}
         </a>
           <a href="/admin" class="btn btn-secondary w-50">{{ 'Volver a la Administración' | gettext }}</a>

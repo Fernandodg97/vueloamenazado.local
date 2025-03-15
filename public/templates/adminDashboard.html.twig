@@ -123,11 +123,8 @@
                     <th>{{ "Nombre"|gettext }}</th>
                     <th>{{ "Nombre Científico"|gettext }}</th>
                     <th>{{ "Grupo"|gettext }}</th>
-                    <th>{{ "Descripción de Identificación"|gettext }}</th>
                     <th>{{ "Imagen"|gettext }}</th>
-                    <th>{{ "Imagen SRC"|gettext }}</th>
                     <th>{{ "Canto"|gettext }}</th>
-                    <th>{{ "Canto SRC"|gettext }}</th>
                     <th>{{ "Acciones"|gettext }}</th>
                 </tr>
             </thead>
@@ -141,22 +138,10 @@
                             <input type="hidden" name="id_pajaro" value="{{ pajaro.id_pajaro }}">
                             <!-- Información del pájaro que se puede editar -->
                             <td>{{ pajaro.id_pajaro }}</td>
-                            <td>
-                                <input type="text" class="form-control" name="nombre" value="{{ pajaro.nombre }}" required>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="nombre_cientifico" value="{{ pajaro.nombre_cientifico }}" required>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="grupo" value="{{ pajaro.grupo }}" required>
-                            </td>
-                            <td>
-                                <textarea class="form-control" name="como_identificar" >{{ pajaro.como_identificar }}</textarea>
-                            </td>
+                            <td>{{ pajaro.nombre }}</td>
+                            <td>{{ pajaro.nombre_cientifico }}</td>
+                            <td>{{pajaro.grupo }}</td>
                             <td><img src="{{ pajaro.imagen }}" alt="{{ pajaro.nombre }}" width="50"></td>
-                            <td>
-                                <input type="text" class="form-control" name="imagen" value="{{ pajaro.imagen }}">
-                            </td>
                             <td>
                                 {% if pajaro.canto_audio %}
                                     <!-- Reproductor de audio con controles -->
@@ -169,14 +154,10 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="canto_audio" value="{{ pajaro.canto_audio }}">
-                            </td>
-                            <td>
                                 <!-- Botones para realizar acciones (Detalles, Guardar, Eliminar) -->
                                 <div class="d-flex flex-column gap-2">
                                     <a href="http://www.vueloamenazado.local/admin/pajaros/{{ pajaro.id_pajaro }}" class="btn btn-info">{{ "Detalles"|gettext }}</a>
-                                    <button type="submit" class="btn btn-success">{{ "Guardar"|gettext }}</button>
-                                    <a href="?eliminar={{ pajaro.id_pajaro }}" class="btn btn-danger" onclick="return confirm('{{ '¿Seguro que quieres eliminar este pájaro?'|gettext }}')">{{ "Eliminar"|gettext }}</a>
+                                    <a href="?eliminar={{ pajaro.id_pajaro }}" class="btn btn-danger" onclick="return confirm('{{ '¿Seguro que quieres eliminar este pájaro? Se eliminaran Pajaro, Datos y Avistamientos.'|gettext }}')">{{ "Eliminar"|gettext }}</a>
                                 </div>
                             </td>
                         </form>
