@@ -1,4 +1,6 @@
-# README - Práctica M08 - Creación de una página web dinámica en PHP
+# README - Práctica M08 - Creación de una página web dinámica en PHP - vueloamenazado.local
+
+![Imagen de la página principal de la web.](imgReadme/vueloamenazado.png)
 
 Esta práctica consiste en una **página web dinámica en PHP** la cual extrae los datos de [www.rspb.org.uk](https://www.rspb.org.uk) utilizando scraping con Selenium. [Link al proyecto: wselenium](https://github.com/Fernandodg97/wselenium). 
 
@@ -122,7 +124,7 @@ Se han realizado pruebas manuales para verificar el correcto funcionamiento de l
 
 ### Traducciones
 
-![Imagen de dos navegadores, izquierda la web en español y derecha la web en inglés](imgReadme/T1.png)
+![Imagen de dos navegadores: a la izquierda, la web en español; a la derecha, la web en inglés.](imgReadme/T1.png)
 
 ### Añadir, editar y eliminar (Postman)
 
