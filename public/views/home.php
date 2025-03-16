@@ -32,6 +32,32 @@ try {
     error_log("Error: " . $e->getMessage());
 }
 
+// Obtener lista de estados de conservacion 
+$estadosConservacion = [];
+
+if (is_array($pajaros)) {
+    foreach ($pajaros as $pajaro) {
+        if (isset($pajaro['id_pajaro'])) {
+            $idPajaro = $pajaro['id_pajaro'];
+            $urlPajaro = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/datos";
+            $responsePajaro = file_get_contents($urlPajaro);
+            $datosPajaro = json_decode($responsePajaro, true);
+            
+            // Verificar si la respuesta es un array y tiene al menos un elemento
+            if (is_array($datosPajaro) && count($datosPajaro) > 0) {
+                $primerDato = $datosPajaro[0]; // Tomar el primer elemento del array
+                
+                if (isset($primerDato['estado_conservacion'])) {
+                    $estadosConservacion[] = $primerDato['estado_conservacion'];
+                }
+            }
+        }
+    }
+}
+
+// Contar la cantidad de pájaros por estado de conservación
+$conteoEstados = array_count_values($estadosConservacion);
+
 // Contar los pájaros filtrados
 try {
 $totalPajaros = count($pajaros);
@@ -44,5 +70,6 @@ $twig = require_once __DIR__ . '/../../config/twig.php';
 echo $twig->render('home.html.twig', [
     'total_pajaros' => $totalPajaros,
     'pajaros' => $pajaros,
-    'letra_seleccionada' => $letra
+    'letra_seleccionada' => $letra,
+    'conteo_estados' => $conteoEstados,
 ]);

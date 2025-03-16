@@ -1,124 +1,262 @@
 <!DOCTYPE html>
 <html lang="{{ lang }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ "vueloamenazado" | gettext }}</title>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+        const canvas = document.getElementById('chartEstados');
+        if (!canvas) {
+          console.error("No se encontró el elemento canvas con id 'chartEstados'");
+          return;
+        }
+        const ctx = canvas.getContext('2d');
+
+        const datosEstados = {{ conteo_estados|json_encode|raw }};
+        console.log("Datos de estados:", datosEstados);
+
+        if (!datosEstados || Object.keys(datosEstados).length === 0) {
+          console.warn("No hay datos disponibles para la gráfica.");
+          return;
+        }
+
+        const etiquetas = Object.keys(datosEstados);
+        const valores = Object.values(datosEstados);
+
+        // Crear el gráfico inicialmente con tipo "pie"
+        let chart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: etiquetas,
+            datasets: [{
+              label: 'Estados de Conservación',
+              data: valores,
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)'
+              ],
+              borderColor: '#fff',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: { position: 'top' }
+            }
+          }
+        });
+
+        // Función para actualizar el gráfico
+        function actualizarGrafico(tipoGrafico) {
+          // Destruir el gráfico anterior antes de crear uno nuevo
+          chart.destroy();
+
+          // Crear un nuevo gráfico con el tipo seleccionado
+          chart = new Chart(ctx, {
+            type: tipoGrafico,
+            data: {
+              labels: etiquetas,
+              datasets: [{
+                label: 'Estados de Conservación',
+                data: valores,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.6)',
+                  'rgba(54, 162, 235, 0.6)',
+                  'rgba(255, 206, 86, 0.6)',
+                  'rgba(75, 192, 192, 0.6)',
+                  'rgba(153, 102, 255, 0.6)'
+                ],
+                borderColor: '#fff',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: {
+                legend: { position: 'top' }
+              }
+            }
+          });
+        }
+
+        // Escuchar el cambio en el selector de tipo de gráfico
+        const chartTypeSelector = document.getElementById('chartType');
+        chartTypeSelector.addEventListener('change', function() {
+          const selectedType = chartTypeSelector.value;
+          actualizarGrafico(selectedType);
+        });
+      });
+    </script>
     <style>
-        /* Estilos de la tabla */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        audio {
-            width: 100%;
-        }
+      /* Estilos de la tabla */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      audio {
+        width: 100%;
+      }
 
-        /* Estilos de la tarjeta */
-        .card {
-            cursor: pointer;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease-in-out;
-        }
-        .card:hover {
-            transform: scale(1.05);
-        }
-        .card-img-top {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background-color: #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-        .card-body {
-            text-align: center;
-        }
+      /* Estilos de la tarjeta */
+      .card {
+        cursor: pointer;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease-in-out;
+      }
+      .card:hover {
+        transform: scale(1.05);
+      }
+      .card-img-top {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background-color: #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+      }
+      .card-body {
+        text-align: center;
+      }
 
-        /* Estilos del filtro alfabético */
-        .alphabet-filter {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-        .alphabet-filter a {
-            padding: 8px 12px;
-            border: 1px solid #007bff;
-            color: #007bff;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        .alphabet-filter a:hover, 
-        .alphabet-filter a.active {
-            background-color: #007bff;
-            color: white;
-        }
+      /* Estilos del filtro alfabético */
+      .alphabet-filter {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+      .alphabet-filter a {
+        padding: 8px 12px;
+        border: 1px solid #007bff;
+        color: #007bff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s;
+      }
+      .alphabet-filter a:hover,
+      .alphabet-filter a.active {
+        background-color: #007bff;
+        color: white;
+      }
+      .chartContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+        max-width: 800px;
+        height: 400px;
+        margin: 0 auto;
+      }
+      #chartEstados {
+        width: 100%;
+        height: 400px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container mt-5">
-        <!-- Selección de idioma -->
-        <div class="d-flex justify-content-between">
-            <a href="?lang=es" class="btn btn-primary">{{ "Español" | gettext }}</a>
-            <a href="?lang=en" class="btn btn-primary">{{ "English" | gettext }}</a>
-        </div>
+      <!-- Selección de idioma -->
+      <div class="d-flex justify-content-between">
+        <a href="?lang=es" class="btn btn-primary">{{ "Español" | gettext }}</a>
+        <a href="?lang=en" class="btn btn-primary">{{ "English" | gettext }}</a>
+      </div>
 
-        <!-- Título principal -->
-        <div class="mt-4 text-center">
-            <h1 class="display-4">{{ "Vuelo Amenazado" | gettext }}</h1>
-            <p class="lead">{{ "Total de pájaros en riesgo:" | gettext }} {{ total_pajaros }}</p>
-        </div>
+      <!-- Título principal -->
+      <div class="mt-4 text-center">
+        <h1 class="display-4">{{ "Vuelo Amenazado" | gettext }}</h1>
+        <p class="lead">
+          {{ "Total de pájaros en riesgo:" | gettext }} {{ total_pajaros }}
+        </p>
+      </div>
 
-        <!-- FILTRO ALFABÉTICO -->
-        <div class="alphabet-filter">
-            <a href="/" class="{{ letra_seleccionada == '' ? 'active' : '' }}">{{ "Todos" | gettext }}</a>
-            {% for letra in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'|split('') %}
-                <a href="?letra={{ letra }}" class="{{ letra_seleccionada == letra ? 'active' : '' }}">{{ letra }}</a>
-            {% endfor %}
+      <!-- Grafica Chart.js-->
+      <div class="mb-4 text-center">
+        <h2 >{{ "Estado de Conservación de las Especies en Riesgo" | gettext }}</h2>
+        <div class="mb-3">
+          <label for="chartType" class="form-label"
+            >{{ "Selecciona el tipo de gráfico" | gettext }}</label
+          >
+          <select
+            id="chartType"
+            class="form-select"
+            aria-label="Tipo de gráfico"
+          >
+            <option value="pie">{{ "Circular" | gettext }}</option>
+            <option value="bar">{{ "Barras" | gettext }}</option>
+          </select>
         </div>
+        <div class="chartContainer">
+          <canvas id="chartEstados"></canvas>
+        </div>
+      </div>
 
-        <!-- Tarjetas de pájaros -->
-        <div class="row g-3">
-            {% for pajaro in pajaros %}
-                <div class="col-6 col-md-4 col-lg-3">
-                    <a href="/pajaros/{{ pajaro.id_pajaro }}" class="card">
-                        {% if pajaro.imagen %}
-                            <img src="{{ pajaro.imagen }}" alt="{{ 'Imagen de' | gettext }} {{ pajaro.nombre }}" class="card-img-top">
-                        {% else %}
-                            <div class="card-img-top">{{ "Sin imagen" | gettext }}</div>
-                        {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ pajaro.nombre }}</h5>
-                            <p class="card-text"><i>{{ pajaro.nombre_cientifico }}</i></p>
-                        </div>
-                    </a>
-                </div>
+      <!-- FILTRO ALFABÉTICO -->
+      <div class="alphabet-filter">
+        <a href="/" class="{{ letra_seleccionada == '' ? 'active' : '' }}"
+          >{{ "Todos" | gettext }}</a
+        >
+        {% for letra in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'|split('') %}
+        <a
+          href="?letra={{ letra }}"
+          class="{{ letra_seleccionada == letra ? 'active' : '' }}"
+          >{{ letra }}</a
+        >
+        {% endfor %}
+      </div>
+
+      <!-- Tarjetas de pájaros -->
+      <div class="row g-3">
+        {% for pajaro in pajaros %}
+        <div class="col-6 col-md-4 col-lg-3">
+          <a href="/pajaros/{{ pajaro.id_pajaro }}" class="card">
+            {% if pajaro.imagen %}
+            <img
+              src="{{ pajaro.imagen }}"
+              alt="{{ 'Imagen de' | gettext }} {{ pajaro.nombre }}"
+              class="card-img-top"
+            />
             {% else %}
-                <div class="col-12 text-center">
-                    <p>{{ "No se encontraron registros" | gettext }}</p>
-                </div>
-            {% endfor %}
+            <div class="card-img-top">{{ "Sin imagen" | gettext }}</div>
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ pajaro.nombre }}</h5>
+              <p class="card-text"><i>{{ pajaro.nombre_cientifico }}</i></p>
+            </div>
+          </a>
         </div>
+        {% else %}
+        <div class="col-12 text-center">
+          <p>{{ "No se encontraron registros" | gettext }}</p>
+        </div>
+        {% endfor %}
+      </div>
     </div>
 
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
+  </body>
 </html>

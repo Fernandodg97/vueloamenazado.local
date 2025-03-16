@@ -275,4 +275,17 @@ msgid "Seleccione un lugar"
 msgstr "Select a place"
 
 msgid "Recordarme"
+msgstr "Remember me"
+
+msgid "Selecciona el tipo de gráfico"
+msgstr "Select chart type"
+
+msgid "Circular"
+msgstr "Pie chart"
+
+msgid "Barras"
+msgstr "Bar chart"
+
+msgid "Estado de Conservación de las Especies en Riesgo"
+msgstr "Conservation Status of Endangered Species"
 
