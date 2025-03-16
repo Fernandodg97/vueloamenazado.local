@@ -46,7 +46,6 @@ if (is_array($pajaros)) {
             // Verificar si la respuesta es un array y tiene al menos un elemento
             if (is_array($datosPajaro) && count($datosPajaro) > 0) {
                 $primerDato = $datosPajaro[0]; // Tomar el primer elemento del array
-                
                 if (isset($primerDato['estado_conservacion'])) {
                     $estadosConservacion[] = $primerDato['estado_conservacion'];
                 }
