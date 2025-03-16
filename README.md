@@ -124,7 +124,7 @@ Se han realizado pruebas manuales para verificar el correcto funcionamiento de l
 
 ### Traducciones
 
-![Imagen de dos navegadores: a la izquierda, la web en español; a la derecha, la web en inglés.](imgReadme/T1.png)
+![Imagen de dos navegadores: a la izquierda, la web en español; a la derecha, la web en inglés.](imgReadme/T1.1.png)
 
 ### Añadir, editar y eliminar (Postman)
 
