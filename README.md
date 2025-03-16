@@ -123,12 +123,21 @@ sudo systemctl restart apache2
 Se han realizado pruebas manuales para verificar el correcto funcionamiento de las llamadas a la API y de las traducciones implementadas. Sin embargo, no se han aplicado pruebas de código debido a limitaciones de tiempo y recursos. Aunque las funcionalidades clave fueron probadas de manera manual, el proceso de pruebas automatizadas no se implementó en este proyecto.
 
 ### Traducciones
+Se han comprobado todas las traducciones del código de forma manual.
 
 ![Imagen de dos navegadores: a la izquierda, la web en español; a la derecha, la web en inglés.](imgReadme/T1.1.png)
 
-### Añadir, editar y eliminar (Postman)
 
-### Añadir, editar y eliminar (web)
+
+### Recuperar, añadir, editar y eliminar (Postman)
+Se realizan las llamadas a la API utilizando Postman para comprobar su funcionamiento antes de la integración. No se incluyen imágenes de todas las pruebas, solo una muestra.
+
+![Imagen de envío de JSON por GET utilizando Postman](imgReadme/GETPostman.png)
+![Imagen de envío de JSON por POST utilizando Postman](imgReadme/POSTPostman.png)
+![Imagen de envío de JSON por PATCH utilizando Postman](imgReadme/PATCHPostman.png)
+![Imagen de envío de JSON por DELETE utilizando Postman](imgReadme/DELETEPostman.png)
+
+### Recuperar, añadir, editar y eliminar (web)
 
 ### Gestión de Sesiones y Cookies 
 
