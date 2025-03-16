@@ -5,15 +5,15 @@ Esta práctica consiste en una **página web dinámica en PHP** la cual extrae l
 Dispone de un frontal que nos permite visualizar todos los pájaros, una segunda página que nos permite visualizar la información de estos. También dispone de una página para iniciar sesión y un panel de administración. Entre sus funcionalidades destacan:
 
 - Traducción al inglés.
-- Gráfica para mostrar los estados de conservación de las especies en riesgo, circular o barras.
+- Gráfica circular o de barras para mostrar los estados de conservación de las especies en riesgo..
 - Visualización de todos los pájaros por orden alfabético pudiendo filtrar por letra.
 - Visualización de cada pájaro incluyendo foto y audio del canto.
-- Iniciar o cerrar sesion en panel de administracion.
+- Iniciar o cerrar sesión en panel de administración.
 - Autenticación JWT para las rutas.
-- Añadir, editar o elimar un pajaro.
-- Añadir, editar o elimanr lugares.
-- Añadir, editar o elimar datos del pajaro.
-- Añadir, editar o elimar avistamientos del pajaro.
+- Añadir, editar o eliminar un pájaro.
+- Añadir, editar o eliminar lugares.
+- Añadir, editar o eliminar datos del pájaro.
+- Añadir, editar o eliminar avistamientos del pájaro.
 - Registrar nuevos usuarios.
 
 ## Tecnologías
@@ -50,20 +50,20 @@ Se implementó un sistema de autenticación mediante JWT para gestionar el acces
 La información obtenida se almacena en una base de datos, y se ha creado un sistema que permite gestionar esos datos mediante una API REST. Esta API se encarga de manejar las solicitudes para acceder, agregar, actualizar o eliminar la información almacenada, asegurando que el flujo de datos sea organizado y eficiente.
 
 ### Internacionalización
-Se implementó la internacionalización en la aplicación utilizando la biblioteca gettext en PHP. Esto permite que la aplicación soporte al menos dos idiomas, español e inglés. Se aseguraron de que todas las interfaces de usuario y mensajes estén correctamente traducidos, garantizando que los usuarios puedan interactuar con la aplicación en el idioma de su preferencia.
+Se implementó la internacionalización en la aplicación utilizando la biblioteca gettext en PHP. Esto permite que la aplicación soporte al menos dos idiomas, español e inglés. Se ha asegurado que todas las interfaces de usuario y mensajes estén correctamente traducidos, garantizando que los usuarios puedan interactuar con la aplicación en el idioma de su preferencia.
 
 ### Scraping de Datos con Selenium y Python
 Se realizó un scraping de datos utilizando Selenium en Python para extraer información de una página web pública. Los datos obtenidos se estructuraron y almacenaron en una base de datos. 
 
 ### Modelo de Datos en Base de Datos
-Se creó un modelo de datos estructurado para almacenar la información obtenida mediante scraping en la base de datos. El modelo incluye las siguientes tablas: Pajaro, Datos, Lugares, Avistamientos y Usuarios. La relación entre las tablas es la siguiente: Pajaro y Datos tienen una relación uno a uno; Lugares y Pajaros están relacionados a través de una relación muchos a muchos (mediante la tabla de Avistamientos). Este modelo está diseñado para ser flexible y permitir futuras ampliaciones sin grandes modificaciones.
+Se creó un modelo de datos estructurado para almacenar la información obtenida mediante scraping en la base de datos. El modelo incluye las siguientes tablas: Pájaro, Datos, Lugares, Avistamientos y Usuarios. La relación entre las tablas es la siguiente: Pájaro y Datos tienen una relación uno a uno; Lugares y Pájaros están relacionados a través de una relación muchos a muchos (mediante la tabla de Avistamientos). Este modelo está diseñado para ser flexible y permitir futuras ampliaciones sin grandes modificaciones.
 
 ## Instalación y Uso
 
 Clonar el repositorio.
 
 ```bash
-git clon https://github.com/Fernandodg97/vueloamenazado.local
+git clone https://github.com/Fernandodg97/vueloamenazado.local
 ```
 Configurar VirtualHost.
 
@@ -80,7 +80,7 @@ sudo nano /etc/apache2/sites-available/vueloamenazado.local.conf
     CustomLog ${APACHE_LOG_DIR}/vueloamenazado.local_access.log combined
 </VirtualHost>
 ```
-Añadir el host en /etc/hosts
+Añadir la entrada en /etc/hosts
 
 ```bash
 sudo nano /etc/hosts
@@ -88,22 +88,51 @@ sudo nano /etc/hosts
 ```bash
 127.0.0.1	www.vueloamenazado.local
 ```
-Añadir dependencias con composer
+Añadir dependencias con Composer
 
 ```bash
 composer require "twig/twig:^3.0"
 composer require twbs/bootstrap
+composer require firebase/php-jwt
 ```
-Vincula el archivo de TWBS al directorio público.
+Vincular TWBS al directorio público.
 ```bash
 ln -sf /var/www/www.vueloamenazado.local/vendor/twbs/ 	/var/www/www.vueloamenazado.local/public/assets/twbs
 ```
 
-## Configuración
+Instalar Gettext
 
-- **Cambiar BBDD**: En `Conexion.java`, se modifican las variables: `dbURL`, `user` y `pass`.
-- **Cambiar o añadir usuarios**: En `Login.java`, en la línea 63 dentro del método `validarUsuario`, se añade el usuario o se modifica el existente.
-- **Modificar la base de datos que se usa en el informe**: Se deben modificar las líneas 11, 12 y 13 del archivo `persistence.xml`:
+```bash
+sudo apt-get install gettext
+```
+```bash
+sudo locale-gen es_ES.UTF-8
+```
+```bash
+sudo update-locale LANG=es_ES.UTF-8
+```
+Reiniciar Apache
+
+```bash
+sudo systemctl restart apache2
+```
+
+## Pruebas
+Se han realizado pruebas manuales para verificar el correcto funcionamiento de las llamadas a la API y de las traducciones implementadas. Sin embargo, no se han aplicado pruebas de código debido a limitaciones de tiempo y recursos. Aunque las funcionalidades clave fueron probadas de manera manual, el proceso de pruebas automatizadas no se implementó en este proyecto.
+
+### Traducciones
+
+![Imagen de dos navegadores, izquierda la web en español y derecha la web en inglés](imgReadme/T1.png)
+
+### Añadir, editar y eliminar (Postman)
+
+### Añadir, editar y eliminar (web)
+
+### Gestión de Sesiones y Cookies 
+
+## Documentación
+
+## Mejoras
 
 
 
@@ -112,6 +141,6 @@ ln -sf /var/www/www.vueloamenazado.local/vendor/twbs/ 	/var/www/www.vueloamenaza
 - [@Fernandodg97](https://github.com/Fernandodg97)
 
 
-## License
+## Licencia
 
 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es)
