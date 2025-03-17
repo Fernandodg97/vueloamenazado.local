@@ -147,30 +147,51 @@ No se realizan pruebas, ya que la web muestra el contenido de forma satisfactori
 
 ![Imagen de antes del envío de JSON POST utilizando Web](imgReadme/BeforePOSTWeb.png)
 
-### Estado despues de la prueba POST:
+### Estado después de la prueba POST:
 ![Imagen del envío de JSON POST utilizando Web](imgReadme/POSTWeb.png)
 
-![Imagen de despues del envío de JSON POST utilizando Web](imgReadme/AfterPOSTWeb1.png)
+![Imagen de después del envío de JSON POST utilizando Web](imgReadme/AfterPOSTWeb1.png)
 
 ### Estado antes de la prueba PATCH:
 
 ![Imagen de antes del envío de JSON PATCH utilizando Web](imgReadme/BeforePATCHWeb.png)
 
-### Estado despues de la prueba PATCH:
+### Estado después de la prueba PATCH:
 
-![Imagen de despues del envío de JSON PATCH utilizando Web](imgReadme/AfterPATCHWeb.png)
+![Imagen de después del envío de JSON PATCH utilizando Web](imgReadme/AfterPATCHWeb.png)
 
 ### Estado antes de la prueba DELETE:
 
 ![Imagen de antes del envío de JSON DELETE utilizando Web](imgReadme/BeforeDELETEWeb.png)
 
-### Estado despues de la prueba DELETE:
+### Estado después de la prueba DELETE:
 
 ![Imagen del envío de JSON DELETE utilizando Web](imgReadme/DELETEWeb.png)
 
-![Imagen de despues del envío de JSON DELETE utilizando Web](imgReadme/BeforePOSTWeb.png)
+![Imagen de después del envío de JSON DELETE utilizando Web](imgReadme/BeforePOSTWeb.png)
 
 ### Gestión de Sesiones y Cookies 
+
+Se comprueba si el navegador almacena la cookie de la sósión
+
+![Imagen del navegador con la sesión iniciada: a la izquierda, la web en español; a la derecha, se muestran las cookies.](imgReadme/CookieSessionSi.png)
+
+Se comprueba si el navegador elimina la cookie de la sesión
+
+![Imagen del navegador con la sesión cerrada: a la izquierda, la web en español; a la derecha, se muestran las cookies.](imgReadme/CookieSessionNo.png)
+
+Se comprueba si se mantiene la sesión al abrir una ventana nueva del navegador
+
+![Imagen de dos navegadores con la misma sesión: a la izquierda, la web en español; a la derecha, la web en inglés.](imgReadme/CookiesSession2Nav.png)
+
+Se comprueba si se mantiene la sesión al abrir una ventana nueva del mismo navegador con otro perfil de Chrome
+
+![Imagen de dos navegadores con diferente sesión: a la izquierda, la web en español; a la derecha, la web en inglés.](imgReadme/CookieSession2NavDife.png)
+
+Se comprueba si se mantiene la sesión al abrir una ventana en otro navegador
+
+![Imagen de dos navegadores diferentes: a la izquierda, la web en español; a la derecha, la web en inglés.](imgReadme/CookieSession2NavDife2.png)
+
 
 ## Documentación
 
