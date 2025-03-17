@@ -172,7 +172,7 @@ No se realizan pruebas, ya que la web muestra el contenido de forma satisfactori
 
 ### Gestión de Sesiones y Cookies 
 
-Se comprueba si el navegador almacena la cookie de la sósión
+Se comprueba si el navegador almacena la cookie de la sesión
 
 ![Imagen del navegador con la sesión iniciada: a la izquierda, la web en español; a la derecha, se muestran las cookies.](imgReadme/CookieSessionSi.png)
 
@@ -194,6 +194,7 @@ Se comprueba si se mantiene la sesión al abrir una ventana en otro navegador
 
 
 ## Documentación
+Se carece de documentación adicional, salvo por este README y los comentarios en el código. Debido a limitaciones de tiempo y recursos, no se pudo desarrollar una documentación más detallada. Sin embargo, se ha intentado que el código esté bien comentado para facilitar su comprensión y mantenimiento, asegurando que los desarrolladores puedan entender su funcionamiento de manera clara y directa.
 
 ## Mejoras
 
