@@ -80,8 +80,11 @@ elseif (preg_match('/^\/admin\/pajaros\/(\d+)$/', $request, $matches)) {
                 break;
             }
 
-        case 'not-found':
-
+        case '/templates':
+            http_response_code(404);
+            require __DIR__ . $viewDir . '404.php';
+            break;
+            
         default:
             http_response_code(404);
             require __DIR__ . $viewDir . '404.php';

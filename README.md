@@ -64,10 +64,6 @@ Se creó un modelo de datos estructurado para almacenar la información obtenida
 
 ## Rutas
 
-### Carpeta Images y audio
-
-- Rutas no accesible
-
 ### Inicio
 
 - vueloamenazado.local
@@ -98,7 +94,7 @@ Se creó un modelo de datos estructurado para almacenar la información obtenida
 
 ### 404
 
-- Respuesta por defecto.
+- Respuesta por defecto si la ruta no existe o no se tiene acceso.
 
 ## Rutas API
 
@@ -170,7 +166,7 @@ Se creó un modelo de datos estructurado para almacenar la información obtenida
 - vueloamenazado.local/api/avistamientos/IDpajaro/IDlugar (Elimina un avistamiento por la ID del pájaro y la ID del lugar).
 
 ### 404
-- Respuesta por defecto.
+- Respuesta por defecto si la ruta no existe o no se tiene acceso.
 
 ## Instalación y Uso
 
@@ -314,6 +310,10 @@ Se comprueba si se mantiene la sesión al abrir una ventana nueva del mismo nave
 Se comprueba si se mantiene la sesión al abrir una ventana en otro navegador
 
 ![Imagen de dos navegadores diferentes: a la izquierda, la web en español; a la derecha, la web en inglés.](imgReadme/CookieSession2NavDife2.png)
+
+### Registro de usuarios
+
+Se comprueba que se pueda registrar un usuario y se comprueba que no se pueda registrar un usuario que ya existe. No se realizan capturas.
 
 ### Interfaz adaptable
 Vista en escritorio 1277px: Pantalla mayor a 1200px de ancho.

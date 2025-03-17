@@ -50,7 +50,6 @@ try {
     } else {
         // Si no se encuentra el pájaro
         http_response_code(404);
-        echo "Pájaro no encontrado.";
         exit;
     }
 } catch (Exception $e) {
