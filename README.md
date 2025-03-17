@@ -132,15 +132,26 @@ Se han comprobado todas las traducciones del código de forma manual.
 ### Recuperar, añadir, editar y eliminar (Postman)
 Se realizan las llamadas a la API utilizando Postman para comprobar su funcionamiento antes de la integración. No se incluyen imágenes de todas las pruebas, solo una muestra.
 
+### GET
+
 ![Imagen de envío de JSON por GET utilizando Postman](imgReadme/GETPostman.png)
+
+### POST
+
 ![Imagen de envío de JSON por POST utilizando Postman](imgReadme/POSTPostman.png)
+
+### PATCH
+
 ![Imagen de envío de JSON por PATCH utilizando Postman](imgReadme/PATCHPostman.png)
+
+### DELETE
+
 ![Imagen de envío de JSON por DELETE utilizando Postman](imgReadme/DELETEPostman.png)
 
 ### Recuperar, añadir, editar y eliminar (web)
 Se realizan las llamadas a la API utilizando la web para comprobar su funcionamiento después de la integración. No se incluyen imágenes de todas las pruebas, solo una muestra.
 
-### GET
+### Prueba GET
 No se realizan pruebas, ya que la web muestra el contenido de forma satisfactoria.
 
 ### Estado antes de la prueba POST:
@@ -192,12 +203,32 @@ Se comprueba si se mantiene la sesión al abrir una ventana en otro navegador
 
 ![Imagen de dos navegadores diferentes: a la izquierda, la web en español; a la derecha, la web en inglés.](imgReadme/CookieSession2NavDife2.png)
 
+### Interfaz adaptable
+Vista en escritorio 1277px: Pantalla mayor a 1200px de ancho.
+
+![Vista en escritorio 1277px](imgReadme/VistaPC.png)
+
+Vista en tablet 900px: Pantalla entre 768px y 1199px de ancho.
+
+![Vista en tablet 900px](imgReadme/VistaTablet.png)
+
+Vista en móvil 412px: Pantalla menor a 768px de ancho
+
+![Vista en móvil 412px](imgReadme/VistaMovil.png)
+
+
+
 
 ## Documentación
 Se carece de documentación adicional, salvo por este README y los comentarios en el código. Debido a limitaciones de tiempo y recursos, no se pudo desarrollar una documentación más detallada. Sin embargo, se ha intentado que el código esté bien comentado para facilitar su comprensión y mantenimiento, asegurando que los desarrolladores puedan entender su funcionamiento de manera clara y directa.
 
 ## Mejoras
+Aunque el proyecto cumple con las funcionalidades básicas, existen varias áreas de mejora que podrían optimizar la experiencia de usuario y la eficiencia del sistema. Algunas posibles mejoras incluyen:
 
+- **Pruebas automatizadas**: Implementar pruebas unitarias y de integración para asegurar la calidad del código y la estabilidad a largo plazo.
+- **Optimización de rendimiento**: Mejorar el rendimiento de la carga de datos y las consultas a la base de datos para manejar un mayor volumen de información.
+- **Interfaz de usuario**: Mejorar la accesibilidad y la experiencia de usuario, implementando un diseño más intuitivo y amigable.
+Notificaciones y alertas: Agregar notificaciones en tiempo real para la gestión de datos y alertas cuando se realicen cambios importantes.
 
 
 ## Autores
