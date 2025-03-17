@@ -4,7 +4,9 @@
 
 Esta práctica consiste en una **página web dinámica en PHP** la cual extrae los datos de [www.rspb.org.uk](https://www.rspb.org.uk) utilizando scraping con Selenium. [Link al proyecto: wselenium](https://github.com/Fernandodg97/wselenium). 
 
-Dispone de un frontal que nos permite visualizar todos los pájaros, una segunda página que nos permite visualizar la información de estos. También dispone de una página para iniciar sesión y un panel de administración. Entre sus funcionalidades destacan:
+Dispone de un frontal que nos permite visualizar todos los pájaros, una segunda página que nos permite visualizar la información de estos. También dispone de una página para iniciar sesión y un panel de administración. 
+
+Entre sus funcionalidades destacan:
 
 - Traducción al inglés.
 - Gráfica circular o de barras para mostrar los estados de conservación de las especies en riesgo..
