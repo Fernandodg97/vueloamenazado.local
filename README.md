@@ -62,6 +62,116 @@ Se realizó un scraping de datos utilizando Selenium en Python para extraer info
 ### Modelo de Datos en Base de Datos
 Se creó un modelo de datos estructurado para almacenar la información obtenida mediante scraping en la base de datos. El modelo incluye las siguientes tablas: Pájaro, Datos, Lugares, Avistamientos y Usuarios. La relación entre las tablas es la siguiente: Pájaro y Datos tienen una relación uno a uno; Lugares y Pájaros están relacionados a través de una relación muchos a muchos (mediante la tabla de Avistamientos). Este modelo está diseñado para ser flexible y permitir futuras ampliaciones sin grandes modificaciones.
 
+## Rutas
+
+### Carpeta Images y audio
+
+- Rutas no accesible
+
+### Inicio
+
+- vueloamenazado.local
+
+### Visualizacion de un pájaro
+
+- vueloamenazado.local/pajaros/IDPajaro
+
+### Inicio de sésion 
+
+- vueloamenazado.local/login
+
+### Registro 
+
+- vueloamenazado.local/register
+
+### Panel de administración
+
+- vueloamenazado.local/admin
+
+### Editar pájaro
+
+- vueloamenazado.local/admin/pajaros/IDPajaro
+
+### Editar lugares
+
+- vueloamenazado.local/admin/lugares
+
+### 404
+
+- Respuesta por defecto.
+
+## Rutas API
+
+### API
+
+- Ruta no accesible
+
+### Pájaros
+
+#### GET
+- vueloamenazado.local/api/pajaros (Devuelve todos los pájaros).
+- vueloamenazado.local/api/pajaros/IDpajaro (Devuelve un pájaro por su ID).
+- vueloamenazado.local/api/pajaros/IDpajaro/avistamientos (Devuelve los id de los lugares donde ver un pájaro por su ID).
+- vueloamenazado.local/api/pajaros/IDpajaro/datos (Devuelve los datos de un pájaro por su ID).
+
+#### POST
+- vueloamenazado.local/api/pajaros (Añade un pájaro).
+
+#### PATCH
+- vueloamenazado.local/api/pajaros/IDpajaro (Edita un pájaro por su ID).
+
+#### DELETE
+- vueloamenazado.local/api/pajaros/IDpajaro (Elimina un pájaro por su ID).
+
+### Datos
+
+#### GET
+- vueloamenazado.local/api/datos (Devuelve todos los datos).
+- vueloamenazado.local/api/datos/IDdatos (Devuelve un dato por su ID).
+
+#### POST
+- vueloamenazado.local/api/datos/IDdatos (Añade un dato por su id).
+
+#### PATCH
+- vueloamenazado.local/api/datos/IDdatos (Edita un dato por su ID).
+
+#### DELETE
+- vueloamenazado.local/api/datos/IDdatos (Elimina un dato por su ID).
+
+### Lugares
+
+#### GET
+- vueloamenazado.local/api/lugares (Devuelve todos los lugares).
+- vueloamenazado.local/api/lugares/IDlugar (Devuelve un lugar por su ID).
+
+#### POST
+- vueloamenazado.local/api/lugares/IDlugar (Añade un lugar por su id).
+
+#### PATCH
+- vueloamenazado.local/api/lugares/IDlugar (Edita un lugar por su ID).
+
+#### DELETE
+- vueloamenazado.local/api/lugares/IDlugar (Elimina un lugar por su ID).
+
+### Avistamientos
+
+#### GET
+- vueloamenazado.local/api/avistamientos (Devuelve todos los avistamientos).
+- vueloamenazado.local/api/avistamientos/IDavistamiento (Devuelve un lugar por su ID).
+
+#### POST
+- vueloamenazado.local/api/avistamientos/IDavistamiento (Añade un avistamiento por su id).
+
+#### PATCH
+- vueloamenazado.local/api/avistamientos/IDavistamiento (Edita un avistamiento por su ID).
+
+#### DELETE
+- vueloamenazado.local/api/avistamientos/IDavistamiento (Elimina un avistamiento por su ID).
+- vueloamenazado.local/api/avistamientos/IDpajaro/IDlugar (Elimina un avistamiento por la ID del pájaro y la ID del lugar).
+
+### 404
+- Respuesta por defecto.
+
 ## Instalación y Uso
 
 Clonar el repositorio.

@@ -226,21 +226,21 @@ switch ($chunks[2] ?? '') { // Verifica el tercer segmento de la URI (índice 2 
             }
         }
         exit();
-    case 'sesion':
-        echo "<br>";
-        print_r('<b>Datos sesión TEST:</b>');
-        echo "<br>";
-        echo "<b>¿Está logueado? </b>" . (SessionController::isLoggedIn() ? "<br>Sí" : "<br>No");
-        echo "<br>";
-        print_r('<b>Sesión: </b>');
-        echo "<br>";
-        ;
-        print_r($_SESSION);
-        echo "<br>";
-        print_r('<b>Token en cookie jwt: </b>');
-        echo $_COOKIE['jwt'];
-        echo "<br>";
-        exit();
+    // case 'sesion':
+    //     echo "<br>";
+    //     print_r('<b>Datos sesión TEST:</b>');
+    //     echo "<br>";
+    //     echo "<b>¿Está logueado? </b>" . (SessionController::isLoggedIn() ? "<br>Sí" : "<br>No");
+    //     echo "<br>";
+    //     print_r('<b>Sesión: </b>');
+    //     echo "<br>";
+    //     ;
+    //     print_r($_SESSION);
+    //     echo "<br>";
+    //     print_r('<b>Token en cookie jwt: </b>');
+    //     echo $_COOKIE['jwt'];
+    //     echo "<br>";
+    //     exit();
 
 
     default:
