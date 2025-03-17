@@ -223,13 +223,38 @@ Vista en móvil 412px: Pantalla menor a 768px de ancho
 Se carece de documentación adicional, salvo por este README y los comentarios en el código. Debido a limitaciones de tiempo y recursos, no se pudo desarrollar una documentación más detallada. Sin embargo, se ha intentado que el código esté bien comentado para facilitar su comprensión y mantenimiento, asegurando que los desarrolladores puedan entender su funcionamiento de manera clara y directa.
 
 ## Mejoras
-Aunque el proyecto cumple con las funcionalidades básicas, existen varias áreas de mejora que podrían optimizar la experiencia de usuario y la eficiencia del sistema. Algunas posibles mejoras incluyen:
+Aunque el proyecto cumple con las funcionalidades para la practica, existen varias áreas de mejora que podrían optimizar la experiencia de usuario y la eficiencia del sistema. Algunas posibles mejoras incluyen:
 
 - **Pruebas automatizadas**: Implementar pruebas unitarias y de integración para asegurar la calidad del código y la estabilidad a largo plazo.
-- **Optimización de rendimiento**: Mejorar el rendimiento de la carga de datos y las consultas a la base de datos para manejar un mayor volumen de información.
-- **Interfaz de usuario**: Mejorar la accesibilidad y la experiencia de usuario, implementando un diseño más intuitivo y amigable.
-Notificaciones y alertas: Agregar notificaciones en tiempo real para la gestión de datos y alertas cuando se realicen cambios importantes.
 
+- **Optimización de rendimiento**: Mejorar el rendimiento de la carga de datos y las consultas a la base de datos para manejar un mayor volumen de información.
+
+- **Interfaz de usuario**: Mejorar la accesibilidad y la experiencia de usuario, implementando un diseño más intuitivo y amigable.
+Notificaciones y alertas: Agregar más notificaciones en tiempo real para la gestión de datos y alertas cuando se realicen cambios importantes.
+
+- **Más funcionalidades**:
+    - Implementar búsqueda por nombre.
+    - Añadir paginación de resultados.
+    - Permitir la eliminación de usuarios.
+    - Mejorar la seguridad restringiendo las llamadas a la API (intentado sin éxito).
+
+- **Documentación**: Desarrollar documentación funcional detallada.
+
+- **API REST**: Optimizar las rutas y considerar separar la API en un proyecto independiente, lo que permitiría desacoplarla del front-end para una mayor flexibilidad y escalabilidad.
+
+## Valoracion personal de la práctica
+Desarrollar esta web me ha permitido experimentar el proceso completo de FullStack. La parte del Front-end, realizada con plantillas TWIG y Bootstrap, me ayudó a entender mejor cómo se gestionan los datos entre el frontend y el backend.
+
+Configurar tanto Gettext como Twig fue un desafío, pero muy satisfactorio cuando finalmente funcionaron.
+
+El desarrollo del backend y la API, separándola del frontend, me encantó. La tecnología API REST me impresionó mucho.
+
+No conocía la seguridad web, y utilizar JWT me permitió aprender mucho, aunque me da rabia no haber logrado proteger las llamadas a la API sin autentificar.
+
+En general, considero que he aprendido muchísimo y esta ha sido la práctica que más me ha gustado del Grado Superior en Desarrollo de Aplicaciones Web. Intentaré recuperar este proyecto y mejorarlo para incluirlo en mi portafolio.
+
+## Nota obtenida de la práctica
+Sin evaluar /10
 
 ## Autores
 
