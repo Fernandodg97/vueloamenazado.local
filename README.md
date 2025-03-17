@@ -168,7 +168,7 @@ No se realizan pruebas, ya que la web muestra el contenido de forma satisfactori
 
 ![Imagen del envío de JSON DELETE utilizando Web](imgReadme/DELETEWeb.png)
 
-![Imagen de despues del envío de JSON DELETE utilizando Web](imgReadme/AfterDELETEWeb.png)
+![Imagen de despues del envío de JSON DELETE utilizando Web](imgReadme/BeforePOSTWeb.png)
 
 ### Gestión de Sesiones y Cookies 
 
