@@ -362,7 +362,7 @@ No conocía la seguridad web, y utilizar JWT me permitió aprender mucho, aunque
 En general, considero que he aprendido muchísimo y esta ha sido la práctica que más me ha gustado del Grado Superior en Desarrollo de Aplicaciones Web. Intentaré recuperar este proyecto y mejorarlo para incluirlo en mi portafolio.
 
 ## Nota obtenida de la práctica
-Sin evaluar /10
+10 /10
 
 ## Autores
 
