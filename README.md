@@ -148,6 +148,7 @@ No se realizan pruebas, ya que la web muestra el contenido de forma satisfactori
 ![Imagen de antes del envío de JSON POST utilizando Web](imgReadme/BeforePOSTWeb.png)
 
 ### Estado despues de la prueba POST:
+![Imagen de antes del envío de JSON POST utilizando Web](imgReadme/POSTWeb.png)
 
 ![Imagen de despues del envío de JSON POST utilizando Web](imgReadme/AfterPOSTWeb.png)
 
