@@ -148,7 +148,7 @@ No se realizan pruebas, ya que la web muestra el contenido de forma satisfactori
 ![Imagen de antes del envío de JSON POST utilizando Web](imgReadme/BeforePOSTWeb.png)
 
 ### Estado despues de la prueba POST:
-![Imagen de antes del envío de JSON POST utilizando Web](imgReadme/POSTWeb.png)
+![Imagen del envío de JSON POST utilizando Web](imgReadme/POSTWeb.png)
 
 ![Imagen de despues del envío de JSON POST utilizando Web](imgReadme/AfterPOSTWeb1.png)
 
@@ -165,6 +165,8 @@ No se realizan pruebas, ya que la web muestra el contenido de forma satisfactori
 ![Imagen de antes del envío de JSON DELETE utilizando Web](imgReadme/BeforeDELETEWeb.png)
 
 ### Estado despues de la prueba DELETE:
+
+![Imagen del envío de JSON DELETE utilizando Web](imgReadme/DELETEWeb.png)
 
 ![Imagen de despues del envío de JSON DELETE utilizando Web](imgReadme/AfterDELETEWeb.png)
 
