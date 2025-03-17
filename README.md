@@ -138,6 +138,34 @@ Se realizan las llamadas a la API utilizando Postman para comprobar su funcionam
 ![Imagen de envío de JSON por DELETE utilizando Postman](imgReadme/DELETEPostman.png)
 
 ### Recuperar, añadir, editar y eliminar (web)
+Se realizan las llamadas a la API utilizando la web para comprobar su funcionamiento después de la integración. No se incluyen imágenes de todas las pruebas, solo una muestra.
+
+### GET
+No se realizan pruebas, ya que la web muestra el contenido de forma satisfactoria.
+
+### Estado antes de la prueba POST:
+
+![Imagen de antes del envío de JSON POST utilizando Web](imgReadme/BeforePOSTWeb.png)
+
+### Estado despues de la prueba POST:
+
+![Imagen de despues del envío de JSON POST utilizando Web](imgReadme/AfterPOSTWeb.png)
+
+### Estado antes de la prueba PATCH:
+
+![Imagen de antes del envío de JSON PATCH utilizando Web](imgReadme/BeforePATCHWeb.png)
+
+### Estado despues de la prueba PATCH:
+
+![Imagen de despues del envío de JSON PATCH utilizando Web](imgReadme/AfterPATCHWeb.png)
+
+### Estado antes de la prueba DELETE:
+
+![Imagen de antes del envío de JSON DELETE utilizando Web](imgReadme/BeforeDELETEWeb.png)
+
+### Estado despues de la prueba DELETE:
+
+![Imagen de despues del envío de JSON DELETE utilizando Web](imgReadme/AfterDELETEWeb.png)
 
 ### Gestión de Sesiones y Cookies 
 
