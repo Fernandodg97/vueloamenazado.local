@@ -98,10 +98,6 @@ Se creó un modelo de datos estructurado para almacenar la información obtenida
 
 ## Rutas API
 
-### API
-
-- Ruta no accesible
-
 ### Pájaros
 
 #### GET
