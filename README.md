@@ -157,7 +157,7 @@ Se creó un modelo de datos estructurado para almacenar la información obtenida
 
 #### GET
 - vueloamenazado.local/api/avistamientos (Devuelve todos los avistamientos).
-- vueloamenazado.local/api/avistamientos/IDavistamiento (Devuelve un lugar por su ID).
+- vueloamenazado.local/api/avistamientos/IDavistamiento (Devuelve un avistamiento por su ID).
 
 #### POST
 - vueloamenazado.local/api/avistamientos/IDavistamiento (Añade un avistamiento por su id).
