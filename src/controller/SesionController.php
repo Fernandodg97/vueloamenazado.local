@@ -63,7 +63,9 @@ class SessionController {
     
                 if ($user && password_verify($password, $user->password)) {
                     // La autenticación es correcta
-                    session_start();
+                    if (session_status() === PHP_SESSION_NONE) {
+                        session_start();
+                    }
                     
                     $_SESSION['user_id'] = $user->id;
                     $_SESSION['username'] = $username;
@@ -91,7 +93,9 @@ class SessionController {
     }
 
     public static function userLogout() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         session_destroy();
         setcookie("token", "", time() - 3600, "/"); // Eliminar cookie
         setcookie("jwt", "", time() - 3600, "/"); // Eliminar cookie

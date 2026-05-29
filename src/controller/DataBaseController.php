@@ -2,10 +2,10 @@
 
 class DatabaseController {
 
-    private static $host = "localhost"; // Dirección del host de la base de datos
-    private static $username = "usuario"; // Nombre de usuario para la conexión
-    private static $password = "usuario"; // Contraseña para la conexión
-    private static $dbname = "wikiagapornis"; // Nombre de la base de datos
+    private static $host = null;
+    private static $username = null;
+    private static $password = null;
+    private static $dbname = null;
     private static $options = array(
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Modo de errores de PDO
         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8" // Establecer la codificación de caracteres a UTF-8
@@ -36,9 +36,13 @@ class DatabaseController {
 
     // Crea la conexión con la base de datos.
     private function connect() {
+        $host = getenv('DB_HOST');
+        $username = getenv('DB_USER');
+        $password = getenv('DB_PASS');
+        $dbname = getenv('DB_NAME');
         try {
             // Crear una nueva conexión PDO con los parámetros especificados
-            $connection = new PDO('mysql:host=' . self::$host . ';dbname=' . self::$dbname, self::$username, self::$password, self::$options);
+            $connection = new PDO('mysql:host=' . $host . ';dbname=' . $dbname, $username, $password, self::$options);
             return $connection; // Devuelve la conexión PDO.
         } catch (PDOException $error) {
             // En caso de error en la conexión, lanza una excepción con el mensaje del error.

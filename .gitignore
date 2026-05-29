@@ -1,0 +1,18 @@
+# Dependencias
+/vendor/
+/public/assets/
+
+# Entorno y secretos
+.env
+
+# Archivos compilados de traducción (binarios generados)
+*.mo
+
+# Logs y archivos temporales
+*.log
+test_*.php
+public/diagnostico.php
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

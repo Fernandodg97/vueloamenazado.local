@@ -1,12 +1,14 @@
 <?php
-// Iniciamos la sesión
-session_start();
+// Iniciamos la sesión si no está ya iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Cargamos Composer autoload
 require_once '../vendor/autoload.php';
 
 // Configuración de Twig
-$loader = new \Twig\Loader\FilesystemLoader('templates');
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../public/templates');
 $twig = new \Twig\Environment($loader, [
     'cache' => false, // Desactivar caché en desarrollo (en producción usa una ruta de caché)
     'autoescape' => 'html', // Escapar automáticamente para seguridad (recomendado)
@@ -20,13 +22,18 @@ $twig->addExtension(new \Twig\Extension\DebugExtension());
 class GettextExtension extends \Twig\Extension\AbstractExtension {
     public function getFilters() {
         return [
-            new \Twig\TwigFilter('gettext', 'gettext'),
+            new \Twig\TwigFilter('gettext', function($text) {
+                return _translate($text);
+            }),
         ];
     }
 }
 
 // Añadir el filtro de gettext a Twig
 $twig->addExtension(new GettextExtension());
+
+// Añadir variables globales para Twig
+$twig->addGlobal('lang', $GLOBALS['lang'] ?? 'es');
 
 // Limpiar las variables de sesión después de cargarlas
 function clearSessionMessages() {
