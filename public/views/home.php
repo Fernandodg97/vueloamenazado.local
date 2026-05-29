@@ -7,7 +7,7 @@ $letra = isset($_GET['letra']) ? $_GET['letra'] : '';
 
 try {
     // Llamada a la API
-    $url = "http://www.vueloamenazado.local/api/pajaros";
+    $url = "vueloamenazadolocal-production.up.railway.app";
     $response = file_get_contents($url);
     
     if ($response === FALSE) {
@@ -39,7 +39,7 @@ if (is_array($pajaros)) {
     foreach ($pajaros as $pajaro) {
         if (isset($pajaro['id_pajaro'])) {
             $idPajaro = $pajaro['id_pajaro'];
-            $urlPajaro = "http://www.vueloamenazado.local/api/pajaros/$idPajaro/datos";
+            $urlPajaro = "/api/pajaros/$idPajaro/datos";
             $responsePajaro = file_get_contents($urlPajaro);
             $datosPajaro = json_decode($responsePajaro, true);
             
