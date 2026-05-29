@@ -14,9 +14,12 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Obtener el idioma: primero de URL, luego de sesión, luego default
 if (isset($_GET['lang'])) {
-    $lang = $_GET['lang'];
-} elseif (isset($_SESSION['lang'])) {
-    $lang = $_SESSION['lang'];
+    $lang = $_GET['lang']; 
+    setcookie('lang', $lang, time() + 2592000, '/');
+    header("Location: " . strtok($_SERVER['REQUEST_URI'], '?'));
+    exit();
+} elseif (isset($_COOKIE['lang'])) {
+    $lang = $_COOKIE['lang'];
 } else {
     $lang = 'es';
 }
