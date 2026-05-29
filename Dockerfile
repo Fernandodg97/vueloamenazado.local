@@ -32,6 +32,9 @@ RUN docker-php-ext-install pdo pdo_mysql gettext
 # Habilitar el módulo rewrite de Apache (mod_rewrite) para soportar el routing dinámico del index.php
 RUN a2enmod rewrite
 
+# Evitar conflicto "More than one MPM loaded"
+RUN a2dismod mpm_event || true && a2enmod mpm_prefork
+
 # Copiar la herramienta Composer desde la imagen oficial para la gestión de dependencias
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
