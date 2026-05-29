@@ -33,7 +33,7 @@ RUN docker-php-ext-install pdo pdo_mysql gettext
 RUN a2enmod rewrite
 
 # Evitar conflicto "More than one MPM loaded"
-RUN a2dismod mpm_event || true && a2enmod mpm_prefork
+RUN a2dismod mpm_event mpm_worker mpm_itk 2>/dev/null || true && a2enmod mpm_prefork
 
 # Copiar la herramienta Composer desde la imagen oficial para la gestión de dependencias
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
