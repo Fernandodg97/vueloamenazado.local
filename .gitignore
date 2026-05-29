@@ -1,0 +1,5 @@
+/vendor/
+.env
+*.log
+test_*.php
+public/diagnostico.php
