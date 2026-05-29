@@ -5,8 +5,8 @@
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
 $baseUrl = $protocol . $_SERVER['HTTP_HOST'];
 
-// 2. URL interna para que Docker hable consigo mismo sin salir a Windows
-$internalBaseUrl = "http://web:80";
+// 2. URL interna para llamadas a la API (mismo contenedor)
+$internalBaseUrl = 'http://localhost:' . (getenv('PORT') ?: '80');
 
 // Inicializar variables
 $pajaros = [];  // Variable para almacenar la lista de pájaros obtenidos desde la API
@@ -75,8 +75,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" || $_SERVER["REQUEST_METHOD"] == "PATCH
     //     : "http://www.vueloamenazado.local/api/pajaros";  // Si no, creamos un nuevo pájaro
 
      $url = $idPajaro
-        ? "/api/pajaros/$idPajaro"  // Si hay id, actualizamos
-        : "/api/pajaros";  // Si no, creamos un nuevo pájaro
+        ? $internalBaseUrl . "/api/pajaros/$idPajaro"
+        : $internalBaseUrl . "/api/pajaros";
 
     // Realizar la solicitud HTTP
     $response = file_get_contents($url, false, $context);
@@ -112,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"])) {
 
     // Definir la URL con el idPajaro para realizar la eliminación de los avistamientos
     // $urlEliminarAvistamiento = "http://www.vueloamenazado.local/api/avistamientos/$idEliminar";
-    $urlEliminarAvistamiento = "/api/avistamientos/$idEliminar";
+    $urlEliminarAvistamiento = $internalBaseUrl . "/api/avistamientos/$idEliminar";
     
     // Enviar la solicitud DELETE
     $response = file_get_contents($urlEliminarAvistamiento, false, $context);
@@ -134,7 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"])) {
 
     // Definir la URL con el idPajaro para realizar la eliminación de los datos
     // $url = "http://www.vueloamenazado.local/api/datos/$idEliminar";
-    $url = "/api/datos/$idEliminar";
+    $url = $internalBaseUrl . "/api/datos/$idEliminar";
 
     // Enviar la solicitud DELETE
     $response = file_get_contents($url, false, $context);
@@ -155,7 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"])) {
 
     // Definir la URL de la API para eliminar el pájaro
     // $url = "http://www.vueloamenazado.local/api/pajaros/$idEliminar";
-    $url = "/api/pajaros/$idEliminar";
+    $url = $internalBaseUrl . "/api/pajaros/$idEliminar";
 
     // Realizar la solicitud DELETE
     $response = file_get_contents($url, false, $context);

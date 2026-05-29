@@ -1,4 +1,7 @@
 <?php
+// URL base interna para llamadas a la API (mismo contenedor)
+$apiBaseUrl = 'http://localhost:' . (getenv('PORT') ?: '80');
+
 // Inicializar la variable
 $pajaros = [];
 
@@ -7,16 +10,16 @@ $letra = isset($_GET['letra']) ? $_GET['letra'] : '';
 
 try {
     // Llamada a la API
-    $url = "vueloamenazadolocal-production.up.railway.app";
+    $url = $apiBaseUrl . "/api/pajaros";
     $response = file_get_contents($url);
-    
+
     if ($response === FALSE) {
         throw new Exception("Error al obtener datos de la API");
     }
-    
+
     // Decodificar JSON
     $pajaros = json_decode($response, true);
-    
+
     if (json_last_error() !== JSON_ERROR_NONE) {
         throw new Exception("Error al decodificar JSON: " . json_last_error_msg());
     }
@@ -32,17 +35,17 @@ try {
     error_log("Error: " . $e->getMessage());
 }
 
-// Obtener lista de estados de conservacion 
+// Obtener lista de estados de conservacion
 $estadosConservacion = [];
 
 if (is_array($pajaros)) {
     foreach ($pajaros as $pajaro) {
         if (isset($pajaro['id_pajaro'])) {
             $idPajaro = $pajaro['id_pajaro'];
-            $urlPajaro = "/api/pajaros/$idPajaro/datos";
+            $urlPajaro = $apiBaseUrl . "/api/pajaros/$idPajaro/datos";
             $responsePajaro = file_get_contents($urlPajaro);
             $datosPajaro = json_decode($responsePajaro, true);
-            
+
             // Verificar si la respuesta es un array y tiene al menos un elemento
             if (is_array($datosPajaro) && count($datosPajaro) > 0) {
                 $primerDato = $datosPajaro[0]; // Tomar el primer elemento del array
@@ -59,7 +62,7 @@ $conteoEstados = array_count_values($estadosConservacion);
 
 // Contar los pájaros filtrados
 try {
-$totalPajaros = count($pajaros);
+    $totalPajaros = count($pajaros);
 } catch (Exception $e) {
     error_log("Error: " . $e->getMessage());
 }
