@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }else{
 
         // Llamar a la función exist
-        if( SessionController::exist($username, $email)){
+        if( !SessionController::exist($username, $email)){
 
             // Llamar a la función userSignUp
             if( SessionController::userSignUp($username, $email, $password)){
