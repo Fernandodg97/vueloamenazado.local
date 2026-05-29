@@ -260,4 +260,16 @@ msgid "Grupo"
 msgid "group"
 
 msgid "No se encontraron detalles para el pájaro con ID: %s"
-msgstr "No details found for the bird with ID: %s"
+msgstr "No se encontraron detalles para el pájaro con ID: %s"
+
+msgid "Estado de Conservación de las Especies en Riesgo"
+msgstr "Estado de Conservación de las Especies en Riesgo"
+
+msgid "Selecciona el tipo de gráfico"
+msgstr "Selecciona el tipo de gráfico"
+
+msgid "Circular"
+msgstr "Circular"
+
+msgid "Barras"
+msgstr "Barras"

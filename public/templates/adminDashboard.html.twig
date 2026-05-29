@@ -49,8 +49,8 @@
 
     <!-- Contenedor para los botones de cambio de idioma -->
     <div class="d-flex justify-content-between">
-        <a href="?lang=es" class="btn btn-primary">{{ "Español"|gettext }}</a>
-        <a href="?lang=en" class="btn btn-primary">{{ "English"|gettext }}</a>
+        <a href="/" class="btn btn-primary">{{ "Español"|gettext }}</a>
+        <a href="/?lang=en" class="btn btn-primary">{{ "English"|gettext }}</a>
     </div>
 
     <!-- Título de la página de administración -->
@@ -58,9 +58,9 @@
     
     <!-- Enlace a la sección para editar lugares -->
     <nav class="mb-3">
-        <a href="http://www.vueloamenazado.local/admin/lugares" class="btn btn-primary">{{ "Editar Lugares"|gettext }}</a>
+        <a href="/admin/lugares" class="btn btn-primary">{{ "Editar Lugares"|gettext }}</a>
         <a href="register" class="btn btn-secondary">{{ "Registrarse"|gettext }}</a>
-        <a href="http://www.vueloamenazado.local/logout" class="btn btn-danger">{{ "Cerrar sesión"|gettext }}</a>
+        <a href="/logout" class="btn btn-danger">{{ "Cerrar sesión"|gettext }}</a>
 
     </nav>
 
@@ -156,7 +156,7 @@
                             <td>
                                 <!-- Botones para realizar acciones (Detalles, Guardar, Eliminar) -->
                                 <div class="d-flex flex-column gap-2">
-                                    <a href="http://www.vueloamenazado.local/admin/pajaros/{{ pajaro.id_pajaro }}" class="btn btn-info">{{ "Detalles"|gettext }}</a>
+                                    <a href="/admin/pajaros/{{ pajaro.id_pajaro }}" class="btn btn-info">{{ "Detalles"|gettext }}</a>
                                     <a href="?eliminar={{ pajaro.id_pajaro }}" class="btn btn-danger" onclick="return confirm('{{ '¿Seguro que quieres eliminar este pájaro? Se eliminaran Pajaro, Datos y Avistamientos.'|gettext }}')">{{ "Eliminar"|gettext }}</a>
                                 </div>
                             </td>

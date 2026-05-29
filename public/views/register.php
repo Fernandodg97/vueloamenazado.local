@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Llamar a la función userSignUp
             if( SessionController::userSignUp($username, $email, $password)){
                 header("Location: /login"); 
+                exit();
             }else {
                 // Si el login falla, establecer un error en la sesión
                 $_SESSION['error'] = "Registro fallido";
