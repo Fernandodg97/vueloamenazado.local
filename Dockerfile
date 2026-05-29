@@ -57,5 +57,11 @@ RUN composer install --no-interaction --optimize-autoloader --no-dev
 # Ajustar los permisos de propiedad de los archivos para el usuario de Apache (www-data)
 RUN chown -R www-data:www-data /var/www/html
 
+# Copiar y dar permisos al script de arranque
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Exponer el puerto estándar HTTP (80)
 EXPOSE 80
+
+CMD ["/usr/local/bin/docker-entrypoint.sh"]
