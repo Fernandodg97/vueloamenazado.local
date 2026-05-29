@@ -23,12 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: /login"); 
                 exit();
             }else {
-                // Si el login falla, establecer un error en la sesión
+                // Si el registro falla, establecer un error en la sesión
                 $_SESSION['error'] = "Registro fallido";
             }
             
         }else {
-            // Si el login falla, establecer un error en la sesión
+            // Si el login registro, establecer un error en la sesión
             $_SESSION['error'] = "Registro fallido";
         }
 

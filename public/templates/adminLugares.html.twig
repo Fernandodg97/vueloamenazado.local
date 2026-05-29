@@ -124,13 +124,11 @@
       <!-- Título principal de la página, en el centro -->
       <h1 class="mb-4 text-center">{{ 'Panel de Administración' | gettext }}</h1>
       
-      <!-- Opciones de idioma en la parte superior -->
-     <div class="d-flex justify-content-between">
-        <!-- Botón para cambiar el idioma a español -->
-        <a href="/" class="btn btn-primary">{{ "Español"|gettext }}</a>
-        <!-- Botón para cambiar el idioma a inglés -->
-        <a href="/?lang=en" class="btn btn-primary">{{ "English"|gettext }}</a>
-      </div>
+      <!-- Selección de idioma -->
+        <div class="d-flex justify-content-between">
+            <a href="?lang=es" class="btn btn-primary">{{ "Español"|gettext }}</a>
+            <a href="?lang=en" class="btn btn-primary">{{ "Inglés"|gettext }}</a>
+        </div>
 
       <!-- Título de la sección para agregar un nuevo lugar -->
       <div class="section-title mt-4">{{ 'Agregar Nuevo Lugar' | gettext }}</div>

@@ -14,9 +14,13 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Obtener el idioma: primero de URL, luego de sesión, luego default
 if (isset($_GET['lang'])) {
-    $lang = $_GET['lang']; 
+    $lang = $_GET['lang'];
     setcookie('lang', $lang, time() + 2592000, '/');
-    header("Location: " . strtok($_SERVER['REQUEST_URI'], '?'));
+    $url = strtok($_SERVER['REQUEST_URI'], '?');
+    if (isset($_GET['letra'])) {
+        $url = $url . '?letra=' . $_GET['letra'];
+    }
+    header("Location: " . $url);
     exit();
 } elseif (isset($_COOKIE['lang'])) {
     $lang = $_COOKIE['lang'];
@@ -27,7 +31,8 @@ if (isset($_GET['lang'])) {
 $GLOBALS['lang'] = $lang;
 
 // Función para cargar traducciones desde archivos .mo
-function load_translations($lang) {
+function load_translations($lang)
+{
     static $cache = [];
 
     if (isset($cache[$lang])) {
@@ -134,7 +139,8 @@ function load_translations($lang) {
 }
 
 // Función gettext personalizada
-function _translate($text) {
+function _translate($text)
+{
     global $lang;
     static $translations = [];
 
@@ -147,7 +153,8 @@ function _translate($text) {
 
 // Redefinir gettext
 if (!function_exists('gettext')) {
-    function gettext($text) {
+    function gettext($text)
+    {
         return _translate($text);
     }
 }

@@ -182,9 +182,9 @@
     <div class="container mt-5">
       <!-- Selección de idioma -->
       <div class="d-flex justify-content-between">
-        <a href="/{% if letra_seleccionada %}?letra={{ letra_seleccionada }}{% endif %}" class="btn btn-primary">{{ "Español" | gettext }}</a>
-        <a href="/?lang=en{% if letra_seleccionada %}&letra={{ letra_seleccionada }}{% endif %}" class="btn btn-primary">{{ "English" | gettext }}</a>
-      </div>
+        <a href="?lang=es{% if letra_seleccionada %}&letra={{ letra_seleccionada }}{% endif %}" class="btn btn-primary">{{ "Español" | gettext }}</a>
+        <a href="?lang=en{% if letra_seleccionada %}&letra={{ letra_seleccionada }}{% endif %}" class="btn btn-primary">{{ "English" | gettext }}</a>
+      </div> 
 
       <!-- Título principal -->
       <div class="mt-4 text-center">
