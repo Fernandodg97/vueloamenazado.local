@@ -26,9 +26,6 @@ if (isset($_GET['lang'])) {
 
 $GLOBALS['lang'] = $lang;
 
-// Guardar en sesión para que persista
-$_SESSION['lang'] = $lang;
-
 // Función para cargar traducciones desde archivos .mo
 function load_translations($lang) {
     static $cache = [];
