@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // Configuración de CORS para permitir solicitudes desde cualquier origen
 header("Access-Control-Allow-Origin: *"); // Permite solicitudes desde cualquier dominio
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS"); // Define los métodos HTTP permitidos
@@ -15,6 +17,16 @@ $request = $_SERVER['REQUEST_URI'];
 if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
     http_response_code(200); // Responde con un código 200 OK para permitir la solicitud
     exit(); // Termina la ejecución del script
+}
+
+// Seguridad: proteger métodos no GET
+if ($_SERVER["REQUEST_METHOD"] !== "GET") {
+    $jwt = $_SESSION['jwt'] ?? null;
+    if (!$jwt || !SessionController::verifyJWT($jwt, SessionController::getSecretKey())) {
+        http_response_code(401);
+        echo json_encode(["error" => "Unauthorized"]);
+        exit();
+    }
 }
 
 ###################################################################################################################

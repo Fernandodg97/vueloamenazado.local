@@ -9,6 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = htmlspecialchars($_POST["password"]);
 
     if (SessionController::userLogIn($username, $password)) {
+        $_SESSION['jwt'] = $_COOKIE['jwt'];
         redirect("/admin");
     } else {
         // Si el login falla, establecer un error en la sesión
