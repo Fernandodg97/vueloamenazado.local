@@ -1,6 +1,7 @@
 <?php
 // URL base interna para llamadas a la API (mismo contenedor)
 $apiBaseUrl = 'http://localhost:' . (getenv('PORT') ?: '80');
+$jwt = $_SESSION['jwt'] ?? $_COOKIE['jwt'] ?? null;
 
 // Inicializar variables
 $lugar = null;
@@ -62,7 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $options = [
                 'http' => [
                     'method' => 'PATCH',
-                    'header' => 'Content-Type: application/json',
+                    'header' => 'Content-Type: application/json
+Authorization: Bearer ' . ($_SESSION['jwt'] ?? ''),
                     'content' => $data,
                 ]
             ];
@@ -79,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $urlDelete = $apiBaseUrl . '/api/lugares/' . $id;
             $options = [
                 'http' => [
-                    'method' => 'DELETE',
+                    'method' => 'DELETE', 'header' => 'Authorization: Bearer ' . ($_SESSION['jwt'] ?? ''),
                 ]
             ];
             $context = stream_context_create($options);
@@ -100,7 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $options = [
             'http' => [
                 'method' => 'POST',
-                'header' => 'Content-Type: application/json',
+                'header' => 'Content-Type: application/json
+Authorization: Bearer ' . ($_SESSION['jwt'] ?? ''),
                 'content' => $data,
             ]
         ];

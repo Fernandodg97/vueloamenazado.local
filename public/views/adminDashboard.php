@@ -1,5 +1,4 @@
 <?php
-//print_r($_SESSION);
 
 // 1. Detectar de manera dinámica el protocolo (http o https) y el dominio actual con su puerto
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
@@ -11,6 +10,7 @@ $internalBaseUrl = 'http://localhost:' . (getenv('PORT') ?: '80');
 // Inicializar variables
 $pajaros = [];  // Variable para almacenar la lista de pájaros obtenidos desde la API
 $mensaje = "";  // Variable para almacenar mensajes de éxito o error
+$jwt = $_SESSION['jwt'] ?? $_COOKIE['jwt'] ?? null;
 
 // Obtener lista de pájaros
 try {
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" || $_SERVER["REQUEST_METHOD"] == "PATCH
     $como_identificar = $_POST["como_identificar"] ?? '';  // Descripción de cómo identificar al pájaro
     $canto_audio = $_POST["canto_audio"] ?? '';  // URL del audio del canto
 
-    var_dump($_POST); // Verificar que todos los datos del formulario se están enviando correctamente
+    //var_dump($_POST); // Verificar que todos los datos del formulario se están enviando correctamente
 
     // Convertir los datos en un formato JSON para enviarlos a la API
     $data = json_encode([
@@ -60,11 +60,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" || $_SERVER["REQUEST_METHOD"] == "PATCH
         "canto_audio" => $canto_audio
     ]);
 
+   
+
     // Crear el contexto para la solicitud HTTP
     $context = stream_context_create([
         "http" => [
             "method" => $method,  // Usar POST o PATCH según corresponda
-            "header" => "Content-Type: application/json",  // Especificar que el contenido es JSON
+            "header" => "Content-Type: application/json\r\nAuthorization: Bearer " . $jwt,  // Especificar que el contenido es JSON
             "content" => $data  // Los datos del formulario en formato JSON
         ]
     ]);
@@ -106,7 +108,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"])) {
     // Crear el contexto para la solicitud DELETE
     $context = stream_context_create([
         "http" => [
-            "method" => "DELETE"
+            "method" => "DELETE",
+            "header" => "Content-Type: application/json\r\nAuthorization: Bearer " . $jwt,
         ]
     ]);
 
@@ -128,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"])) {
     $context = stream_context_create([
         "http" => [
             "method" => "DELETE",
-            "header" => "Content-Type: application/json"
+            "header" => "Content-Type: application/json\r\nAuthorization: Bearer " . $jwt,
         ]
     ]);
 
@@ -149,7 +152,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"])) {
     // Crear el contexto para la solicitud DELETE
     $context = stream_context_create([
         "http" => [
-            "method" => "DELETE"  // Método HTTP para eliminar
+            "method" => "DELETE",
+            "header" => "Content-Type: application/json\r\nAuthorization: Bearer " . $jwt,
         ]
     ]);
 

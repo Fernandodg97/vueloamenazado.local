@@ -1,6 +1,7 @@
 <?php
 // URL base interna para llamadas a la API (mismo contenedor)
 $apiBaseUrl = 'http://localhost:' . (getenv('PORT') ?: '80');
+$jwt = $_SESSION['jwt'] ?? $_COOKIE['jwt'] ?? null;
 
 // Inicializar variables
 $pajaro = null;
@@ -81,7 +82,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["actualizar_pajaro"])) 
     $context = stream_context_create([
         "http" => [
             "method" => "PATCH",
-            "header" => "Content-Type: application/json",
+            "header" => "Content-Type: application/json
+Authorization: Bearer " . ($_SESSION["jwt"] ?? ""),
             "content" => $data
         ]
     ]);
@@ -114,7 +116,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["actualizar_datos_pajar
     $context = stream_context_create([
         "http" => [
             "method" => $method,
-            "header" => "Content-Type: application/json",
+            "header" => "Content-Type: application/json
+Authorization: Bearer " . ($_SESSION["jwt"] ?? ""),
             "content" => $data
         ]
     ]);
@@ -143,7 +146,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["accion"]) && $_POST["a
         $context = stream_context_create([
             "http" => [
                 "method" => "POST",
-                "header" => "Content-Type: application/json",
+                "header" => "Content-Type: application/json
+Authorization: Bearer " . ($_SESSION["jwt"] ?? ""),
                 "content" => $data
             ]
         ]);
@@ -169,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["eliminar"]) && $_GET["el
 
     if (!empty($idPajaro) && !empty($idLugar)) {
         $urlEliminarAvistamiento = $apiBaseUrl . "/api/avistamientos/$idPajaro/$idLugar";
-        $context = stream_context_create(["http" => ["method" => "DELETE"]]);
+        $context = stream_context_create(["http" => ["method" => "DELETE", "header" => "Authorization: Bearer " . ($_SESSION["jwt"] ?? "")]]);
         $response = file_get_contents($urlEliminarAvistamiento, false, $context);
         $mensaje = $response !== false ? "Avistamiento eliminado correctamente." : "Error al eliminar avistamiento.";
 

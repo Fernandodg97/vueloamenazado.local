@@ -1,6 +1,9 @@
 RewriteEngine On
 RewriteBase /
 
+# Pasar el header Authorization a PHP (Apache lo elimina por defecto)
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php [QSA,L]

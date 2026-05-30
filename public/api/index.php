@@ -22,6 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
 // Seguridad: proteger métodos no GET
 if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     $jwt = $_SESSION['jwt'] ?? null;
+    if (!$jwt && isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        $jwt = str_replace('Bearer ', '', $_SERVER['HTTP_AUTHORIZATION']);
+    }
     if (!$jwt || !SessionController::verifyJWT($jwt, SessionController::getSecretKey())) {
         http_response_code(401);
         echo json_encode(["error" => "Unauthorized"]);
