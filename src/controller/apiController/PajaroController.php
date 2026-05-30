@@ -89,7 +89,7 @@ class PajaroController
             $statement->bindValue(':grupo', $data['grupo']); 
             $statement->bindValue(':imagen', $data['imagen']);
             $statement->bindValue(':como_identificar', $data['como_identificar']);
-            $statement->bindValue(':canto_audio', ['canto_audio']);
+            $statement->bindValue(':canto_audio', $data['canto_audio']);
 
             // Ejecutar la consulta SQL y verificar si la inserción fue exitosa
             if ($statement->execute()) {

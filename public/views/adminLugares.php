@@ -63,8 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $options = [
                 'http' => [
                     'method' => 'PATCH',
-                    'header' => 'Content-Type: application/json
-Authorization: Bearer ' . ($_SESSION['jwt'] ?? ''),
+                    'header' => "Content-Type: application/json\r\nAuthorization: Bearer " . ($jwt ?? ''),
                     'content' => $data,
                 ]
             ];
@@ -102,8 +101,7 @@ Authorization: Bearer ' . ($_SESSION['jwt'] ?? ''),
         $options = [
             'http' => [
                 'method' => 'POST',
-                'header' => 'Content-Type: application/json
-Authorization: Bearer ' . ($_SESSION['jwt'] ?? ''),
+                'header' => "Content-Type: application/json\r\nAuthorization: Bearer " . ($jwt ?? ''),
                 'content' => $data,
             ]
         ];

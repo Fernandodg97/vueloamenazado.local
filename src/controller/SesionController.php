@@ -258,7 +258,7 @@ class SessionController {
 
     public static function getSecretKey() {
         // .env file placed in the root directory
-        $dotenv = Dotenv\Dotenv::createImmutable("../");
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
         $dotenv->load();
         
         return $_ENV['JWT_SECRET_KEY'];
