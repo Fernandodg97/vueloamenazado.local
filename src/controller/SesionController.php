@@ -76,7 +76,9 @@ class SessionController {
                     self::generateSessionToken($user);
                     
                     // Creamos y guardamos el token jwt en una cookie segura
+                    $jwt = self::createJWT();
                     SessionController::createSecureCookie("jwt", self::createJWT(), time() + (86400 * 30), "/"); // 30 días
+                    $_SESSION['jwt'] = $jwt;
                     return true;
 
                 } else {
