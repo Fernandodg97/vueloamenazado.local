@@ -1,5 +1,80 @@
 # README - Práctica M08 - Creación de una página web dinámica en PHP - vueloamenazado.local
 
+---
+
+### 👋 Para recruiters
+
+Proyecto fullstack desarrollado como práctica de Grado Superior en DAW y posteriormente **mejorado y desplegado en producción** de forma autónoma.
+
+**Stack:** PHP 8.2 · MySQL · Apache · Docker · Twig · Bootstrap · Chart.js · JWT · Railway
+
+**Destacado:**
+- 🌐 **Desplegado en producción:** https://vueloamenazadolocal-production.up.railway.app
+- 🔐 **API REST protegida** con autenticación JWT (POST/PATCH/DELETE requieren login)
+- 🐳 **Dockerizado** con configuración personalizada de Apache para entorno cloud
+- 🌍 **Internacionalización** español/inglés con sistema de cookies
+- 📊 **Gráficas interactivas** con Chart.js
+- ✅ **Nota original: 10/10** — mejorado posteriormente de forma independiente
+
+> Las mejoras post-práctica están documentadas en la sección [🚀 Mejoras Post-Práctica](#-mejoras-post-práctica).
+
+---
+
+## 🚀 Mejoras Post-Práctica
+
+Este proyecto fue retomado después de obtener la nota final con el objetivo de llevarlo a producción y resolver problemas técnicos pendientes. A continuación se detallan las mejoras realizadas y lo aprendido en el proceso.
+
+### 🌐 Despliegue en producción con Railway
+
+El proyecto fue desplegado en [Railway](https://railway.app), una plataforma gratuita que soporta Docker y MySQL. Este proceso implicó:
+
+- Configurar el `Dockerfile` existente para que Railway lo detectara correctamente.
+- Resolver un conflicto de MPM en Apache (`mpm_event` vs `mpm_prefork`) que impedía arrancar el contenedor.
+- Adaptar Apache para escuchar en el puerto dinámico que Railway inyecta via la variable de entorno `$PORT`.
+- Crear un script de arranque (`docker-entrypoint.sh`) para aplicar la configuración en runtime.
+- Cargar la base de datos MySQL en Railway mediante Docker y el cliente MySQL.
+- Configurar variables de entorno para la conexión a la base de datos y el JWT.
+
+**URL de producción:** https://vueloamenazadolocal-production.up.railway.app
+
+### 🔧 Corrección de errores en producción
+
+Al desplegar, se detectaron errores que no eran visibles en local:
+
+- **URLs hardcodeadas**: Todos los views usaban `http://www.vueloamenazado.local` como base para las llamadas a la API. En producción esto causaba timeouts de 15 segundos y errores 502. Se corrigieron para usar `http://localhost:$PORT` dinámicamente.
+- **Bootstrap local**: Los templates cargaban Bootstrap desde una ruta local (`/public/assets/`) que no existía en producción. Se migró a CDN.
+- **Parámetros de URL perdidos**: Al cambiar de idioma, parámetros como `letra` y el tipo de gráfico seleccionado se perdían. Se corrigió conservándolos en la redirección.
+
+### 🔐 Seguridad de la API
+
+Se resolvió el problema pendiente de proteger los endpoints de escritura de la API REST:
+
+- Los métodos POST, PATCH y DELETE ahora requieren autenticación.
+- Se usa el JWT almacenado en sesión para verificar la identidad del usuario en llamadas servidor-a-servidor, ya que las cookies del navegador no se propagan en llamadas internas PHP.
+- Los endpoints GET siguen siendo públicos para permitir la carga de datos sin autenticación.
+
+### 🍪 Sistema de idioma mejorado
+
+El cambio de idioma se gestionaba mediante `?lang=` en la URL, lo que exponía el parámetro permanentemente. Se mejoró para:
+
+- Guardar el idioma seleccionado en una cookie con duración de 30 días.
+- Redirigir tras el cambio para limpiar la URL.
+- Conservar otros parámetros activos (filtro de letra, tipo de gráfico) durante la redirección.
+
+### ✨ Mejoras de UX
+
+- Botón de "subir al inicio" añadido en todos los templates.
+- El tipo de gráfico (circular/barras) se mantiene al cambiar de idioma o aplicar filtros.
+
+### 📚 Lo aprendido
+
+- Por qué la seguridad de la API no funcionaba originalmente: las llamadas internas PHP no envían cookies del navegador, por lo que la verificación basada en cookies siempre fallaba.
+- La importancia de gestionar el estado del usuario (selecciones, preferencias) en cookies o sesión para que persista entre navegaciones.
+- El proceso completo de despliegue a producción: desde Docker hasta resolución de errores específicos del entorno de Railway.
+- La diferencia entre errores visibles solo en producción (URLs hardcodeadas, puertos dinámicos) y errores detectables en local.
+
+---
+
 ![Imagen de la página principal de la web.](imgReadme/vueloamenazado.png)
 
 Esta práctica consiste en una **página web dinámica en PHP** la cual extrae los datos de [www.rspb.org.uk](https://www.rspb.org.uk) utilizando scraping con Selenium. [Link al proyecto: wselenium](https://github.com/Fernandodg97/wselenium). 
@@ -363,59 +438,6 @@ En general, considero que he aprendido muchísimo y esta ha sido la práctica qu
 
 ## Nota obtenida de la práctica
 10 /10
-
-## 🚀 Mejoras Post-Práctica
-
-Este proyecto fue retomado después de obtener la nota final con el objetivo de llevarlo a producción y resolver problemas técnicos pendientes. A continuación se detallan las mejoras realizadas y lo aprendido en el proceso.
-
-### 🌐 Despliegue en producción con Railway
-
-El proyecto fue desplegado en [Railway](https://railway.app), una plataforma gratuita que soporta Docker y MySQL. Este proceso implicó:
-
-- Configurar el `Dockerfile` existente para que Railway lo detectara correctamente.
-- Resolver un conflicto de MPM en Apache (`mpm_event` vs `mpm_prefork`) que impedía arrancar el contenedor.
-- Adaptar Apache para escuchar en el puerto dinámico que Railway inyecta via la variable de entorno `$PORT`.
-- Crear un script de arranque (`docker-entrypoint.sh`) para aplicar la configuración en runtime.
-- Cargar la base de datos MySQL en Railway mediante Docker y el cliente MySQL.
-- Configurar variables de entorno para la conexión a la base de datos y el JWT.
-
-**URL de producción:** https://vueloamenazadolocal-production.up.railway.app
-
-### 🔧 Corrección de errores en producción
-
-Al desplegar, se detectaron errores que no eran visibles en local:
-
-- **URLs hardcodeadas**: Todos los views usaban `http://www.vueloamenazado.local` como base para las llamadas a la API. En producción esto causaba timeouts de 15 segundos y errores 502. Se corrigieron para usar `http://localhost:$PORT` dinámicamente.
-- **Bootstrap local**: Los templates cargaban Bootstrap desde una ruta local (`/public/assets/`) que no existía en producción. Se migró a CDN.
-- **Parámetros de URL perdidos**: Al cambiar de idioma, parámetros como `letra` y el tipo de gráfico seleccionado se perdían. Se corrigió conservándolos en la redirección.
-
-### 🔐 Seguridad de la API
-
-Se resolvió el problema pendiente de proteger los endpoints de escritura de la API REST:
-
-- Los métodos POST, PATCH y DELETE ahora requieren autenticación.
-- Se usa el JWT almacenado en sesión para verificar la identidad del usuario en llamadas servidor-a-servidor, ya que las cookies del navegador no se propagan en llamadas internas PHP.
-- Los endpoints GET siguen siendo públicos para permitir la carga de datos sin autenticación.
-
-### 🍪 Sistema de idioma mejorado
-
-El cambio de idioma se gestionaba mediante `?lang=` en la URL, lo que exponía el parámetro permanentemente. Se mejoró para:
-
-- Guardar el idioma seleccionado en una cookie con duración de 30 días.
-- Redirigir tras el cambio para limpiar la URL.
-- Conservar otros parámetros activos (filtro de letra, tipo de gráfico) durante la redirección.
-
-### ✨ Mejoras de UX
-
-- Botón de "subir al inicio" añadido en todos los templates.
-- El tipo de gráfico (circular/barras) se mantiene al cambiar de idioma o aplicar filtros.
-
-### 📚 Lo aprendido
-
-- Por qué la seguridad de la API no funcionaba originalmente: las llamadas internas PHP no envían cookies del navegador, por lo que la verificación basada en cookies siempre fallaba.
-- La importancia de gestionar el estado del usuario (selecciones, preferencias) en cookies o sesión para que persista entre navegaciones.
-- El proceso completo de despliegue a producción: desde Docker hasta resolución de errores específicos del entorno de Railway.
-- La diferencia entre errores visibles solo en producción (URLs hardcodeadas, puertos dinámicos) y errores detectables en local.
 
 ## Autores
 
