@@ -16,7 +16,16 @@ Proyecto fullstack desarrollado como práctica de Grado Superior en DAW y poster
 - 📊 **Gráficas interactivas** con Chart.js
 - ✅ **Nota original: 10/10** — mejorado posteriormente de forma independiente
 
-> Las mejoras post-práctica están documentadas en la sección [🚀 Mejoras Post-Práctica](#-mejoras-post-práctica).
+> 📖 Este README documenta en detalle el stack técnico, las decisiones de arquitectura, las pruebas realizadas y el proceso completo de despliegue. Si quieres ver cómo resuelvo problemas reales, te recomiendo leerlo completo.
+
+### 🔑 Acceso rápido a la demo
+
+| Ruta | Descripción | Credenciales |
+|---|---|---|
+| [`/`](https://vueloamenazadolocal-production.up.railway.app/) | Página principal | — |
+| [`/login`](https://vueloamenazadolocal-production.up.railway.app/login) | Inicio de sesión | Usuario: `user` · Contraseña: `user` |
+| [`/register`](https://vueloamenazadolocal-production.up.railway.app/register) | Registro de nuevos usuarios | — |
+| [`/admin`](https://vueloamenazadolocal-production.up.railway.app/admin) | Panel de administración | Requiere login |
 
 ---
 
