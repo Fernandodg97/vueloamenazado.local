@@ -17,8 +17,13 @@ if (isset($_GET['lang'])) {
     $lang = $_GET['lang'];
     setcookie('lang', $lang, time() + 2592000, '/');
     $url = strtok($_SERVER['REQUEST_URI'], '?');
+    $url = strtok($_SERVER['REQUEST_URI'], '?');
     if (isset($_GET['letra'])) {
         $url = $url . '?letra=' . $_GET['letra'];
+    }
+    if (isset($_GET['chart'])) {
+        $separador = strpos($url, '?') !== false ? '&' : '?';
+        $url = $url . $separador . 'chart=' . $_GET['chart'];
     }
     header("Location: " . $url);
     exit();

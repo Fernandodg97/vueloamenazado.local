@@ -124,6 +124,18 @@
     </div>
 
     <!-- Vincular JS de Bootstrap desde la carpeta bootstrap -->
+        <!-- BOTÓN PARA SUBIR AL INICIO -->
+    <button id="btnScrollToTop" class="btn btn-primary position-fixed bottom-0 end-0 m-4 d-none" title="Subir al inicio" style="z-index: 1050; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">▲</button>
+    <script>
+      const btnScrollToTop = document.getElementById("btnScrollToTop");
+      window.addEventListener("scroll", function () {
+        if (window.scrollY > 300) { btnScrollToTop.classList.remove("d-none"); }
+        else { btnScrollToTop.classList.add("d-none"); }
+      });
+      btnScrollToTop.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

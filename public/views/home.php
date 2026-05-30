@@ -8,6 +8,9 @@ $pajaros = [];
 // Obtener la letra seleccionada desde la URL
 $letra = isset($_GET['letra']) ? $_GET['letra'] : '';
 
+// Obtener grafico seleccionado desde la URL
+$chart = $_GET['chart'] ?? 'pie';
+
 try {
     // Llamada a la API
     $url = $apiBaseUrl . "/api/pajaros";
@@ -74,4 +77,5 @@ echo $twig->render('home.html.twig', [
     'pajaros' => $pajaros,
     'letra_seleccionada' => $letra,
     'conteo_estados' => $conteoEstados,
+    'chart' => $chart,
 ]);
