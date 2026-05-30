@@ -82,6 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" || $_SERVER["REQUEST_METHOD"] == "PATCH
 
     // Realizar la solicitud HTTP
     $response = file_get_contents($url, false, $context);
+    //var_dump($response);
 
     // Verificar si la solicitud fue exitosa
     if ($response !== false) {
