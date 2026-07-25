@@ -58,6 +58,16 @@ Al terminar el trial gratuito de Railway, se migró la app a **Render** (contene
 
 **URL de producción:** https://vueloamenazado-local.onrender.com
 
+### ⚡ Corrección de cuelgues en producción (llamadas HTTP internas)
+
+Tras la migración, la página principal y el detalle de cada pájaro tardaban minutos en cargar o directamente no respondían. La causa no era el cold-start de Render, sino un problema de arquitectura:
+
+- Varias vistas (`home.php`, `detallePajaro.php`) obtenían los datos de su propia API haciendo peticiones HTTP a sí mismas (`file_get_contents` contra `localhost`) en lugar de llamar directamente a los controladores PHP.
+- La home, además, hacía esa llamada **una vez por cada pájaro** (265 peticiones HTTP secuenciales) solo para calcular las estadísticas de conservación.
+- Con los pocos workers de Apache disponibles en el plan gratuito de Render, una petición podía agotar la capacidad del servidor esperando una respuesta de sí mismo, provocando cuelgues indefinidos.
+
+**Solución:** sustituir las llamadas HTTP internas por llamadas directas a los controladores (mismo proceso, sin red), y agrupar en PHP los datos de conservación con una sola consulta en vez de 265. Tiempo de carga de la home: de un cuelgue indefinido a **~0.4s** en producción.
+
 ### 🔧 Corrección de errores en producción
 
 Al desplegar, se detectaron errores que no eran visibles en local:
@@ -94,6 +104,7 @@ El cambio de idioma se gestionaba mediante `?lang=` en la URL, lo que exponía e
 - El proceso completo de despliegue a producción: desde Docker hasta resolución de errores específicos de cada proveedor cloud.
 - La diferencia entre errores visibles solo en producción (URLs hardcodeadas, puertos dinámicos) y errores detectables en local.
 - Que parametrizar host/puerto/credenciales de la base de datos desde el primer día hace que migrar de proveedor (Railway → Render + Aiven) sea un cambio de configuración, no de código.
+- Que una app nunca debería hacerse peticiones HTTP a sí misma para obtener sus propios datos: además del coste de red innecesario, puede agotar los workers del servidor y colgarlo por completo bajo recursos limitados.
 
 ---
 
