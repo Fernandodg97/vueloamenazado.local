@@ -6,10 +6,10 @@
 
 Proyecto fullstack desarrollado como práctica de Grado Superior en DAW y posteriormente **mejorado y desplegado en producción** de forma autónoma.
 
-**Stack:** PHP 8.2 · MySQL · Apache · Docker · Twig · Bootstrap · Chart.js · JWT · Railway
+**Stack:** PHP 8.2 · MySQL (Aiven) · Apache · Docker · Twig · Bootstrap · Chart.js · JWT · Render
 
 **Destacado:**
-- 🌐 **Desplegado en producción:** https://vueloamenazadolocal-production.up.railway.app
+- 🌐 **Desplegado en producción:** https://vueloamenazado-local.onrender.com
 - 🔐 **API REST protegida** con autenticación JWT (POST/PATCH/DELETE requieren login)
 - 🐳 **Dockerizado** con configuración personalizada de Apache para entorno cloud
 - 🌍 **Internacionalización** español/inglés con sistema de cookies
@@ -22,10 +22,12 @@ Proyecto fullstack desarrollado como práctica de Grado Superior en DAW y poster
 
 | Ruta | Descripción | Credenciales |
 |---|---|---|
-| [`/`](https://vueloamenazadolocal-production.up.railway.app/) | Página principal | — |
-| [`/login`](https://vueloamenazadolocal-production.up.railway.app/login) | Inicio de sesión | Usuario: `user` · Contraseña: `user` |
-| [`/register`](https://vueloamenazadolocal-production.up.railway.app/register) | Registro de nuevos usuarios | — |
-| [`/admin`](https://vueloamenazadolocal-production.up.railway.app/admin) | Panel de administración | Requiere login |
+| [`/`](https://vueloamenazado-local.onrender.com/) | Página principal | — |
+| [`/login`](https://vueloamenazado-local.onrender.com/login) | Inicio de sesión | Usuario: `user` · Contraseña: `user` |
+| [`/register`](https://vueloamenazado-local.onrender.com/register) | Registro de nuevos usuarios | — |
+| [`/admin`](https://vueloamenazado-local.onrender.com/admin) | Panel de administración | Requiere login |
+
+> ⏱️ El servicio está en el plan gratuito de Render y "duerme" tras inactividad; la primera petición puede tardar ~30-50s.
 
 ---
 
@@ -33,18 +35,28 @@ Proyecto fullstack desarrollado como práctica de Grado Superior en DAW y poster
 
 Este proyecto fue retomado después de obtener la nota final con el objetivo de llevarlo a producción y resolver problemas técnicos pendientes. A continuación se detallan las mejoras realizadas y lo aprendido en el proceso.
 
-### 🌐 Despliegue en producción con Railway
+### 🌐 Primer despliegue en producción con Railway
 
-El proyecto fue desplegado en [Railway](https://railway.app), una plataforma gratuita que soporta Docker y MySQL. Este proceso implicó:
+El proyecto se desplegó inicialmente en [Railway](https://railway.app), una plataforma gratuita que soporta Docker y MySQL. Este proceso implicó:
 
 - Configurar el `Dockerfile` existente para que Railway lo detectara correctamente.
 - Resolver un conflicto de MPM en Apache (`mpm_event` vs `mpm_prefork`) que impedía arrancar el contenedor.
-- Adaptar Apache para escuchar en el puerto dinámico que Railway inyecta via la variable de entorno `$PORT`.
+- Adaptar Apache para escuchar en el puerto dinámico que la plataforma inyecta via la variable de entorno `$PORT`.
 - Crear un script de arranque (`docker-entrypoint.sh`) para aplicar la configuración en runtime.
 - Cargar la base de datos MySQL en Railway mediante Docker y el cliente MySQL.
 - Configurar variables de entorno para la conexión a la base de datos y el JWT.
 
-**URL de producción:** https://vueloamenazadolocal-production.up.railway.app
+> Tras acabar el periodo de prueba gratuito de Railway, el proyecto se migró a Render + Aiven (ver siguiente sección).
+
+### 🔄 Migración a Render + Aiven
+
+Al terminar el trial gratuito de Railway, se migró la app a **Render** (contenedor Docker) y la base de datos a **Aiven** (MySQL gestionado, tier gratuito permanente). Como la conexión a MySQL y el manejo de `$PORT` ya estaban parametrizados por variables de entorno, la migración de código fue mínima, pero surgieron problemas específicos del nuevo proveedor:
+
+- **Timeout de conexión a MySQL**: la conexión PDO no especificaba puerto, así que siempre usaba el 3306 por defecto. Aiven expone MySQL en un puerto no estándar (asignado por servicio), así que las conexiones nunca llegaban a establecerse. Se añadió `DB_PORT` como variable de entorno configurable.
+- **SSL obligatorio**: Aiven exige TLS en la conexión. Se añadió el certificado CA al proyecto y se configuró `PDO::MYSQL_ATTR_SSL_CA` para habilitarlo automáticamente cuando el certificado está presente.
+- **Restricción de clave primaria al importar el dump**: Aiven exige `sql_require_primary_key` por defecto, y la tabla `Avistamientos` (relación muchos-a-muchos) no tenía primary key definida. Se desactivó la restricción a nivel de sesión únicamente durante la importación del dump.
+
+**URL de producción:** https://vueloamenazado-local.onrender.com
 
 ### 🔧 Corrección de errores en producción
 
@@ -79,8 +91,9 @@ El cambio de idioma se gestionaba mediante `?lang=` en la URL, lo que exponía e
 
 - Por qué la seguridad de la API no funcionaba originalmente: las llamadas internas PHP no envían cookies del navegador, por lo que la verificación basada en cookies siempre fallaba.
 - La importancia de gestionar el estado del usuario (selecciones, preferencias) en cookies o sesión para que persista entre navegaciones.
-- El proceso completo de despliegue a producción: desde Docker hasta resolución de errores específicos del entorno de Railway.
+- El proceso completo de despliegue a producción: desde Docker hasta resolución de errores específicos de cada proveedor cloud.
 - La diferencia entre errores visibles solo en producción (URLs hardcodeadas, puertos dinámicos) y errores detectables en local.
+- Que parametrizar host/puerto/credenciales de la base de datos desde el primer día hace que migrar de proveedor (Railway → Render + Aiven) sea un cambio de configuración, no de código.
 
 ---
 
