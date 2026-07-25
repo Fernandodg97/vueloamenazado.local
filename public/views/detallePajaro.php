@@ -1,9 +1,6 @@
 <?php
 //print_r($_SESSION);
 
-// URL base interna para llamadas a la API (mismo contenedor)
-$apiBaseUrl = 'http://localhost:' . (getenv('PORT') ?: '80');
-
 // Obtener el ID del pájaro desde la URL utilizando una expresión regular
 $request = strtok($_SERVER['REQUEST_URI'], '?');
 preg_match('/^\/pajaros\/(\d+)$/', $request, $matches);
@@ -22,27 +19,25 @@ $pajaro = null;
 $datos = null;
 $avistamientos = [];
 
-// Consultar detalles del pájaro
+// Consultar detalles del pájaro (llamadas directas al controlador, sin HTTP contra el propio servidor)
 try {
-    $pajaroJson = file_get_contents($apiBaseUrl . "/api/pajaros/$idPajaro");
-    $pajaro = json_decode($pajaroJson, true);
+    $pajaro = PajaroController::getPajaroId($idPajaro, PajaroController::OBJECT);
 
-    if ($pajaro) {
-        $datosJson = file_get_contents($apiBaseUrl . "/api/pajaros/$idPajaro/datos");
-        $datosArray = json_decode($datosJson, true);
-        $datos = $datosArray[0] ?? null;
+    if (is_array($pajaro)) {
+        $datosArray = DatosController::getDatosIdPajaro($idPajaro, DatosController::OBJECT);
+        $datos = is_array($datosArray) ? ($datosArray[0] ?? null) : null;
 
-        $avistamientosJson = file_get_contents($apiBaseUrl . "/api/pajaros/$idPajaro/avistamientos");
-        $avistamientosIds = json_decode($avistamientosJson, true);
+        $avistamientosIds = AvistamientosController::getAvistamientosId($idPajaro, AvistamientosController::OBJECT);
 
         $avistamientos = [];
-        foreach ($avistamientosIds as $avistamiento) {
-            if (isset($avistamiento['id_lugar'])) {
-                $idLugar = $avistamiento['id_lugar'];
-                $lugarJson = file_get_contents($apiBaseUrl . "/api/lugares/$idLugar");
-                $lugar = json_decode($lugarJson, true);
-                if ($lugar) {
-                    $avistamientos[] = $lugar;
+        if (is_array($avistamientosIds)) {
+            foreach ($avistamientosIds as $avistamiento) {
+                if (isset($avistamiento['id_lugar'])) {
+                    $idLugar = $avistamiento['id_lugar'];
+                    $lugar = LugaresController::getLugaresId($idLugar, LugaresController::OBJECT);
+                    if (is_array($lugar)) {
+                        $avistamientos[] = $lugar;
+                    }
                 }
             }
         }

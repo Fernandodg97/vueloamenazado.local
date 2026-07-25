@@ -1,7 +1,4 @@
 <?php
-// URL base interna para llamadas a la API (mismo contenedor)
-$apiBaseUrl = 'http://localhost:' . (getenv('PORT') ?: '80');
-
 // Inicializar la variable
 $pajaros = [];
 
@@ -12,19 +9,11 @@ $letra = isset($_GET['letra']) ? $_GET['letra'] : '';
 $chart = $_GET['chart'] ?? 'pie';
 
 try {
-    // Llamada a la API
-    $url = $apiBaseUrl . "/api/pajaros";
-    $response = file_get_contents($url);
+    // Llamada directa al controlador (mismo proceso, sin HTTP contra el propio servidor)
+    $pajaros = PajaroController::getPajaro(PajaroController::OBJECT);
 
-    if ($response === FALSE) {
-        throw new Exception("Error al obtener datos de la API");
-    }
-
-    // Decodificar JSON
-    $pajaros = json_decode($response, true);
-
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        throw new Exception("Error al decodificar JSON: " . json_last_error_msg());
+    if (!is_array($pajaros)) {
+        throw new Exception("Error al obtener datos de los pájaros");
     }
 
     // Filtrar por la letra seleccionada
@@ -38,23 +27,25 @@ try {
     error_log("Error: " . $e->getMessage());
 }
 
-// Obtener lista de estados de conservacion
+// Obtener lista de estados de conservacion.
+// Una sola consulta con todos los datos, indexada en PHP por id_pajaro,
+// en vez de una consulta por cada pájaro (evita 265 consultas secuenciales).
 $estadosConservacion = [];
 
-if (is_array($pajaros)) {
-    foreach ($pajaros as $pajaro) {
-        if (isset($pajaro['id_pajaro'])) {
-            $idPajaro = $pajaro['id_pajaro'];
-            $urlPajaro = $apiBaseUrl . "/api/pajaros/$idPajaro/datos";
-            $responsePajaro = file_get_contents($urlPajaro);
-            $datosPajaro = json_decode($responsePajaro, true);
+$todosDatos = DatosController::getDatos(DatosController::OBJECT);
+if (is_array($todosDatos) && is_array($pajaros)) {
+    $datosPorPajaro = [];
+    foreach ($todosDatos as $dato) {
+        if (isset($dato['id_pajaro'])) {
+            $datosPorPajaro[$dato['id_pajaro']][] = $dato;
+        }
+    }
 
-            // Verificar si la respuesta es un array y tiene al menos un elemento
-            if (is_array($datosPajaro) && count($datosPajaro) > 0) {
-                $primerDato = $datosPajaro[0]; // Tomar el primer elemento del array
-                if (isset($primerDato['estado_conservacion'])) {
-                    $estadosConservacion[] = $primerDato['estado_conservacion'];
-                }
+    foreach ($pajaros as $pajaro) {
+        if (isset($pajaro['id_pajaro']) && !empty($datosPorPajaro[$pajaro['id_pajaro']])) {
+            $primerDato = $datosPorPajaro[$pajaro['id_pajaro']][0];
+            if (isset($primerDato['estado_conservacion'])) {
+                $estadosConservacion[] = $primerDato['estado_conservacion'];
             }
         }
     }
