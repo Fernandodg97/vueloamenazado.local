@@ -37,12 +37,22 @@ class DatabaseController {
     // Crea la conexión con la base de datos.
     private function connect() {
         $host = getenv('DB_HOST');
+        $port = getenv('DB_PORT') ?: '3306'; // Puerto configurable: Aiven, por ejemplo, no usa el 3306 por defecto.
         $username = getenv('DB_USER');
         $password = getenv('DB_PASS');
         $dbname = getenv('DB_NAME');
+
+        $options = self::$options;
+        $caPath = __DIR__ . '/../db/aiven-ca.pem';
+        if (file_exists($caPath)) {
+            // Habilita SSL cuando hay certificado disponible (requerido por proveedores como Aiven).
+            $options[PDO::MYSQL_ATTR_SSL_CA] = $caPath;
+            $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+        }
+
         try {
             // Crear una nueva conexión PDO con los parámetros especificados
-            $connection = new PDO('mysql:host=' . $host . ';dbname=' . $dbname, $username, $password, self::$options);
+            $connection = new PDO('mysql:host=' . $host . ';port=' . $port . ';dbname=' . $dbname, $username, $password, $options);
             return $connection; // Devuelve la conexión PDO.
         } catch (PDOException $error) {
             // En caso de error en la conexión, lanza una excepción con el mensaje del error.
